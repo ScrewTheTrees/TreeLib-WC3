@@ -1,0 +1,112 @@
+﻿STRING 1
+{
+Player 1
+}
+
+STRING 2
+{
+Force 1
+}
+
+STRING 3
+{
+ShitpostCoop
+}
+
+STRING 4
+{
+1-4
+}
+
+STRING 5
+{
+Nondescript
+}
+
+STRING 6
+{
+Unknown
+}
+
+STRING 7
+{
+Player 2
+}
+
+STRING 8
+{
+Player 3
+}
+
+STRING 9
+{
+Player 4
+}
+
+STRING 10
+{
+Player 13
+}
+
+STRING 11
+{
+Player 14
+}
+
+STRING 12
+{
+Player 15
+}
+
+STRING 13
+{
+Player 16
+}
+
+STRING 14
+{
+Force 2
+}
+
+STRING 15
+// Destructibles: B000 (Pathing Blocker Horizontal (Ground)), Name (Name)
+{
+Pathing Blocker Horizontal (Ground)
+}
+
+STRING 16
+// Destructibles: B001 (Pathing Blocker Vertical(Ground)), Name (Name)
+{
+Pathing Blocker Vertical(Ground)
+}
+
+STRING 20
+// Units: h000 (FeetMen), Name (Name)
+{
+FeetMen
+}
+
+STRING 21
+// Units: h000 (FeetMen), EditorSuffix (Name - Editor Suffix)
+{
+(Wave 1)
+}
+
+STRING 22
+// Units: E000 (Priestess of the Moon), Propernames (Proper Names)
+{
+Cum
+}
+
+STRING 23
+// Abilities: A000 (ExecuteAttack), Tip (Tooltip - Normal)
+{
+ExecuteAttack
+}
+
+STRING 24
+// Abilities: A000 (ExecuteAttack), Name (Name)
+{
+ExecuteAttack
+}
+

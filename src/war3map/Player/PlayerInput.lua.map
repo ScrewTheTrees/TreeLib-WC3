@@ -1,0 +1,1 @@
+{"version":3,"sources":["PlayerInput.ts"],"names":[],"mappings":";AAAA;MAAa;AAAb;AAAA;AAAA;AAAA;AAAA;;;;;;;AACI,cAAqB;AACrB,gBAAuB;AACvB,gBAAuB;AACvB,iBAAwB;;AAGxB;AACI,WAAO,CAAC,WAAW,aAAa,aAAa;;AAGjD;UACQ,IAAI;UACJ,IAAI;OACJ;AAAS,aAAK;;OACd;AAAW,aAAK;;OAChB;AAAW,YAAK;;OAChB;AAAY,YAAK;;UACjB,UAAW,UAAU,GAAG;AAC5B,YAAQ,CAAC,UAAU,MAAW","file":"PlayerInput.lua","sourceRoot":".."}
