@@ -1,5 +1,4 @@
 -- Lua Library inline imports
---[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
 function __TS__ArrayPush(arr, ...)
     local items = ({...})
     for ____, item in ipairs(items) do
@@ -23,7 +22,7 @@ function ShitEx.new(...)
 end
 function ShitEx.prototype.____constructor(self)
 end
-function ShitEx.seperateNumbers(self, input)
+function ShitEx.separateNumbers(self, input)
     local lastChar = ""
     local result = {}
     local build = ""

@@ -16,25 +16,37 @@ end
 function Logger.LogVerbose(self, ...)
     local params = ({...})
     if self.doLogVerbose then
-        print("Verbose: ", table.unpack(params))
+        print(
+            "Verbose: ",
+            table.unpack(params)
+        )
     end
 end
 function Logger.LogDebug(self, ...)
     local params = ({...})
     if self.doLogDebug then
-        print("Debug: ", table.unpack(params))
+        print(
+            "Debug: ",
+            table.unpack(params)
+        )
     end
 end
 function Logger.LogWarning(self, ...)
     local params = ({...})
     if self.doLogWarning then
-        print("Warning: ", table.unpack(params))
+        print(
+            "Warning: ",
+            table.unpack(params)
+        )
     end
 end
 function Logger.LogCritical(self, ...)
     local params = ({...})
     if self.doLogCritical then
-        print("Critical: ", table.unpack(params))
+        print(
+            "Critical: ",
+            table.unpack(params)
+        )
     end
 end
 Logger.doLogVerbose = false

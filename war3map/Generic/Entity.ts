@@ -1,23 +1,31 @@
 import {Timers} from "./Timers";
+import {Logger} from "./Logger";
 
+/**
+ * Entities are great for when you need logic executed continuously.
+ * Loops in intervals of 0.01 and 1 seconds.
+ */
 export abstract class Entity {
     private static entities: Entity[] = [];
     private static entityLoop: Function;
 
+    private _internalTimer: number = 0;
+    private _timerDelay: number = 0.01;
+
     protected constructor() {
         if (Entity.entityLoop == null) {
             Entity.entityLoop = () => {
-                Entity.entities.forEach((entity) => {
-                    entity._updateEntity();
-                });
+                Entity.entities.forEach((entity) =>
+                    xpcall(() => {
+                        entity._internalTimer += 0.01;
+                        if (entity._internalTimer >= entity._timerDelay) {
+                            entity["step"]();
+                        }
+                    }, () => Logger.LogCritical));
             };
-            Timers.addFastTimerCallback("entityLoop",Entity.entityLoop);
+            Timers.getInstance().addFastTimerCallback(Entity.entityLoop);
         }
         Entity.entities.push(this);
-    }
-
-    private _updateEntity() {
-        this["step"]();
     }
 
     abstract step(): void;
@@ -27,6 +35,5 @@ export abstract class Entity {
         if (index != -1) {
             Entity.entities.splice(index, 1);
         }
-
     }
 }

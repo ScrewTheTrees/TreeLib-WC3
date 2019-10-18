@@ -1,5 +1,4 @@
 -- Lua Library inline imports
---[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
 function __TS__ArrayForEach(arr, callbackFn)
     do
         local i = 0
@@ -10,7 +9,6 @@ function __TS__ArrayForEach(arr, callbackFn)
     end
 end
 
---[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
 function __TS__ArrayPush(arr, ...)
     local items = ({...})
     for ____, item in ipairs(items) do
@@ -19,7 +17,6 @@ function __TS__ArrayPush(arr, ...)
     return #arr
 end
 
---[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
 function __TS__ArrayIndexOf(arr, searchElement, fromIndex)
     local len = #arr
     if len == 0 then
@@ -53,24 +50,28 @@ function __TS__ArrayIndexOf(arr, searchElement, fromIndex)
     return -1
 end
 
---[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
-function __TS__ArraySplice(list, start, deleteCount, ...)
-    local items = ({...})
+function __TS__ArraySplice(list, ...)
     local len = #list
+    local actualArgumentCount = select("#", ...)
+    local start = select(1, ...)
+    local deleteCount = select(2, ...)
     local actualStart
     if start < 0 then
         actualStart = math.max(len + start, 0)
     else
         actualStart = math.min(start, len)
     end
-    local itemCount = #items
+    local itemCount = math.max(actualArgumentCount - 2, 0)
     local actualDeleteCount
-    if not start then
+    if actualArgumentCount == 0 then
         actualDeleteCount = 0
-    elseif not deleteCount then
+    elseif actualArgumentCount == 1 then
         actualDeleteCount = len - actualStart
     else
-        actualDeleteCount = math.min(math.max(deleteCount, 0), len - actualStart)
+        actualDeleteCount = math.min(
+            math.max(deleteCount or 0, 0),
+            len - actualStart
+        )
     end
     local out = {}
     do
@@ -120,8 +121,8 @@ function __TS__ArraySplice(list, start, deleteCount, ...)
         end
     end
     local j = actualStart
-    for ____, e in ipairs(items) do
-        list[j + 1] = e
+    for i = 3, actualArgumentCount do
+        list[j + 1] = select(i, ...)
         j = j + 1
     end
     do
@@ -135,8 +136,10 @@ function __TS__ArraySplice(list, start, deleteCount, ...)
 end
 
 local ____exports = {}
-local __TSTL_Timers = require("war3map.Generic.Timers")
-local Timers = __TSTL_Timers.Timers
+local ____Timers = require("war3map.Generic.Timers")
+local Timers = ____Timers.Timers
+local ____Logger = require("war3map.Generic.Logger")
+local Logger = ____Logger.Logger
 ____exports.Entity = {}
 local Entity = ____exports.Entity
 Entity.name = "Entity"
@@ -150,18 +153,28 @@ function Entity.new(...)
     return self
 end
 function Entity.prototype.____constructor(self)
+    self._internalTimer = 0
+    self._timerDelay = 0.01
     if ____exports.Entity.entityLoop == nil then
         ____exports.Entity.entityLoop = function()
-            __TS__ArrayForEach(____exports.Entity.entities, function(____, entity)
-                entity:_updateEntity()
-            end)
+            __TS__ArrayForEach(
+                ____exports.Entity.entities,
+                function(____, entity) return ({
+                    xpcall(
+                        function()
+                            entity._internalTimer = entity._internalTimer + 0.01
+                            if entity._internalTimer >= entity._timerDelay then
+                                entity.step(entity)
+                            end
+                        end,
+                        function() return Logger.LogCritical end
+                    )
+                }) end
+            )
         end
-        Timers:addFastTimerCallback("entityLoop", ____exports.Entity.entityLoop)
+        Timers:getInstance():addFastTimerCallback(____exports.Entity.entityLoop)
     end
     __TS__ArrayPush(____exports.Entity.entities, self)
-end
-function Entity.prototype._updateEntity(self)
-    self.step(self)
 end
 function Entity.prototype.remove(self)
     local index = __TS__ArrayIndexOf(____exports.Entity.entities, self)

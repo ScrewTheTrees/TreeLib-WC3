@@ -1,3 +1,8 @@
+/**
+ * My wrapper for Locations, contains some useful helper functions and cleaning up of locations.
+ */
+import {Delay} from "./Delay";
+
 export class Point {
     public x: number;
     public y: number;
@@ -8,7 +13,7 @@ export class Point {
     }
 
     public distanceTo(target: Point): number {
-        return (math.sqrt(this.x - target.x) + math.sqrt(this.y - target.y));
+        return math.sqrt(((this.x - target.x) * (this.x - target.x)) + ((this.y - target.y) * (this.y - target.y)));
     }
 
     public directionTo(target: Point) {
@@ -16,14 +21,33 @@ export class Point {
         return (radians * 180 / Math.PI);
     }
 
-    public toLocation() {
-        return Location(this.x, this.y);
+    public updateToLocation(inputLoc: location) {
+        this.x = GetLocationX(inputLoc);
+        this.y = GetLocationY(inputLoc);
+    }
+
+    public updateToLocationClean(inputLoc: location) {
+        this.x = GetLocationX(inputLoc);
+        this.y = GetLocationY(inputLoc);
+        RemoveLocation(inputLoc);
     }
 
     public polarProject(distance: number, angle: number): Point {
         let x = this.x + distance * math.cos(angle * bj_DEGTORAD);
         let y = this.y + distance * math.sin(angle * bj_DEGTORAD);
         return new Point(x, y);
+    }
+
+    public toLocation() {
+        return Location(this.x, this.y);
+    }
+
+    public toLocationClean() {
+        let loc = Location(this.x, this.y);
+        Delay.getInstance().addDelay(() => {
+            RemoveLocation(loc);
+        }, 0.1);
+        return loc;
     }
 
     public static fromLocation(inputLoc: location) {
@@ -33,6 +57,13 @@ export class Point {
     public static fromLocationClean(inputLoc: location) {
         let point = new Point(GetLocationX(inputLoc), GetLocationY(inputLoc));
         RemoveLocation(inputLoc);
+        return point;
+    }
+
+    public static fromUnit(inputU: unit) {
+        let loc = GetUnitLoc(inputU);
+        let point = new Point(GetLocationX(loc), GetLocationY(loc));
+        RemoveLocation(loc);
         return point;
     }
 
@@ -64,5 +95,10 @@ export class Point {
         let dx = this.x - xx;
         let dy = this.y - yy;
         return Math.sqrt(dx * dx + dy * dy);
+    }
+
+
+    public toString(): string {
+        return "point {x:" + this.x + ", y:" + this.y + " }";
     }
 }

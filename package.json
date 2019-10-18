@@ -1,24 +1,23 @@
 {
-  "name": "shitpostcoop",
+  "name": "generics",
   "author": "Fredrik Grimmenhag (ScrewTheTrees)",
   "description": "Quality package.",
   "version": "1.0.0",
   "scripts": {
     "fullRecompile": "npm run clean && npm run compileTypescript && npm run compileMap",
-    "compileMap": "butt.bat",
+    "compileMap": "ceres run ShitpostCoop.w3x",
     "compileTypescript": "tstl -p tsconfig.json",
-    "clean": "rimraf src/* && rimraf target/*",
-    "copyAssets": "cpx Assets/war3mapImported/**/* maps/ShitpostCoop.w3x/war3mapImported"
+    "clean": "rimraf src/* && rimraf target/*"
   },
   "directories": {
     "lib": "lib"
   },
   "main": "main.ts",
   "dependencies": {
-    "typescript": "^3.5.1",
-    "typescript-to-lua": "^0.21.1",
-    "lua-types": "^2.4.0",
-    "rimraf": "^2.6.3",
+    "typescript": "^3.6.4",
+    "typescript-to-lua": "^0.28.0",
+    "lua-types": "^2.6.2",
+    "rimraf": "^2.7.1",
     "cpx": "^1.5.0"
   }
 }

@@ -2,6 +2,10 @@ import {Logger} from "./Logger";
 
 _G.__hooks = {};
 
+/**
+ * In order to prevent things falling out of scope, you can hook them to global,
+ * That way the garbage collector wont ever remove it.
+ */
 export class Hooks {
     public static get(name: string): object | undefined {
         return _G.__hooks[name];

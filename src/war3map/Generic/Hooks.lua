@@ -1,6 +1,6 @@
 local ____exports = {}
-local __TSTL_Logger = require("war3map.Generic.Logger")
-local Logger = __TSTL_Logger.Logger
+local ____Logger = require("war3map.Generic.Logger")
+local Logger = ____Logger.Logger
 _G.__hooks = {}
 ____exports.Hooks = {}
 local Hooks = ____exports.Hooks
@@ -21,6 +21,8 @@ function Hooks.get(self, name)
 end
 function Hooks.set(self, name, value)
     _G.__hooks[name] = value
-    Logger:LogDebug("Hooked: " .. tostring(name))
+    Logger:LogDebug(
+        "Hooked: " .. tostring(name)
+    )
 end
 return ____exports

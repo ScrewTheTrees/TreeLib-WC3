@@ -12,18 +12,34 @@ function Point.new(...)
     return self
 end
 function Point.prototype.____constructor(self, x, y)
+    self.__loc = nil
     self.x = x
     self.y = y
 end
 function Point.prototype.distanceTo(self, target)
-    return (math.sqrt(self.x - target.x) + math.sqrt(self.y - target.y))
+    return math.sqrt(((self.x - target.x) * (self.x - target.x)) + ((self.y - target.y) * (self.y - target.y)))
 end
 function Point.prototype.directionTo(self, target)
     local radians = math.atan(target.y - self.y, target.x - self.x)
     return (radians * 180 / math.pi)
 end
+function Point.prototype.cleanseLastLocation(self)
+    if self.__loc ~= nil then
+        RemoveLocation(self.__loc)
+    end
+end
 function Point.prototype.toLocation(self)
-    return Location(self.x, self.y)
+    self.__loc = Location(self.x, self.y)
+    return self.__loc
+end
+function Point.prototype.updateToLocation(self, inputLoc)
+    self.x = GetLocationX(inputLoc)
+    self.y = GetLocationY(inputLoc)
+end
+function Point.prototype.updateToLocationClean(self, inputLoc)
+    self.x = GetLocationX(inputLoc)
+    self.y = GetLocationY(inputLoc)
+    RemoveLocation(inputLoc)
 end
 function Point.prototype.polarProject(self, distance, angle)
     local x = self.x + distance * math.cos(angle * bj_DEGTORAD)
@@ -31,11 +47,26 @@ function Point.prototype.polarProject(self, distance, angle)
     return ____exports.Point.new(x, y)
 end
 function Point.fromLocation(self, inputLoc)
-    return ____exports.Point.new(GetLocationX(inputLoc), GetLocationY(inputLoc))
+    return ____exports.Point.new(
+        GetLocationX(inputLoc),
+        GetLocationY(inputLoc)
+    )
 end
 function Point.fromLocationClean(self, inputLoc)
-    local point = ____exports.Point.new(GetLocationX(inputLoc), GetLocationY(inputLoc))
+    local point = ____exports.Point.new(
+        GetLocationX(inputLoc),
+        GetLocationY(inputLoc)
+    )
     RemoveLocation(inputLoc)
+    return point
+end
+function Point.fromUnit(self, inputU)
+    local loc = GetUnitLoc(inputU)
+    local point = ____exports.Point.new(
+        GetLocationX(loc),
+        GetLocationY(loc)
+    )
+    RemoveLocation(loc)
     return point
 end
 function Point.prototype.distanceToLine(self, lineStart, lineEnd)
@@ -64,5 +95,8 @@ function Point.prototype.distanceToLine(self, lineStart, lineEnd)
     local dx = self.x - xx
     local dy = self.y - yy
     return math.sqrt(dx * dx + dy * dy)
+end
+function Point.prototype.__tostring(self)
+    return "point {x:" .. tostring(self.x) .. ", y:" .. tostring(self.y) .. " }"
 end
 return ____exports
