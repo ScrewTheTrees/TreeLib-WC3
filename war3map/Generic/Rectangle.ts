@@ -1,3 +1,5 @@
+import {Delay} from "./Delay";
+
 /**
  * My wrapper for Rects
  */
@@ -12,6 +14,14 @@ export class Rectangle {
         this.y = y;
         this.x2 = x2;
         this.y2 = y2;
+    }
+
+    public toRectClean() {
+        let rect = Rect(this.x, this.y, this.x2, this.y2);
+        Delay.getInstance().addDelay(() => {
+            RemoveRect(rect);
+        }, 0.1);
+        return rect;
     }
 
     public toRect() {

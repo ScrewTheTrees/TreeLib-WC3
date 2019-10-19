@@ -18,9 +18,7 @@ export class Timers {
     }
 
     private fastTimerCallbacks: Function[] = [];
-    private secondTimerCallbacks: Function[] = [];
     private readonly fastTimer: trigger;
-    private readonly secondTimer: trigger;
 
     private constructor() {
         this.fastTimer = CreateTrigger();
@@ -30,20 +28,9 @@ export class Timers {
                 callback();
             });
         });
-        this.secondTimer = CreateTrigger();
-        TriggerRegisterTimerEvent(this.secondTimer, 1, true);
-        TriggerAddAction(this.secondTimer, () => {
-            this.secondTimerCallbacks.forEach((callback) => {
-                callback();
-            });
-        });
     }
 
     public addFastTimerCallback(func: Function) {
         this.fastTimerCallbacks.push(func);
-    }
-
-    public addSecondTimerCallback(func: Function) {
-        this.secondTimerCallbacks.push(func);
     }
 }

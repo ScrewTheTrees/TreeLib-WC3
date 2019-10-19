@@ -19,17 +19,18 @@ export class Delay extends Entity {
         super();
     }
 
-
     private queue: DelayDto[] = [];
 
     step(): void {
-        this.queue.forEach((queueDto, index) => {
+        for (let _index in this.queue) {
+            let index = tonumber(_index) || 0;
+            let queueDto = this.queue[index];
             queueDto.age += 0.01;
             if (queueDto.age >= queueDto.delay) {
                 queueDto.function();
-                this.queue.splice(index, 1);
+                this.queue.splice( index, 1);
             }
-        });
+        }
     }
 
     public addDelay(f: Function, delaySeconds: number) {
