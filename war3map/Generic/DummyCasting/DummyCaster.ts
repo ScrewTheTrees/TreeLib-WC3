@@ -6,6 +6,7 @@ import {WeaponIndex} from "../Wrappers/WeaponIndex";
 
 export class DummyCaster extends Entity {
     private static instance: DummyCaster;
+
     public static getInstance() {
         if (this.instance == null) {
             this.instance = new DummyCaster();
@@ -40,17 +41,18 @@ export class DummyCaster extends Entity {
 
     private getNonExpended(castingUnit: unit): Caster {
         let cast: Caster | null = null;
-        this.allCasters.forEach((caster) => {
+        for (let caster of this.allCasters) {
             if (caster.isAvailable(GetOwningPlayer(castingUnit))) {
                 cast = caster;
+                break;
             }
-        });
+        }
         if (cast != null) {
             return cast;
         }
         cast = new Caster(castingUnit);
         this.allCasters.push(cast);
-        Logger.LogVerbose("Allocated new Dummy caster, total", this.allCasters.length, "casters");
+        Logger.LogVerbose("Allocated new Dummy caster for", GetOwningPlayer(castingUnit), ", total", this.allCasters.length, "casters");
         return cast;
     }
 
