@@ -3,14 +3,14 @@ import {Logger} from "./Logger";
 
 /**
  * Entities are great for when you need logic executed continuously.
- * Loops in intervals of 0.01 and 1 seconds.
+ * Loops in intervals of 0.01 , changeable with timerdelay
  */
 export abstract class Entity {
     private static entities: Entity[] = [];
     private static entityLoop: Function;
 
     private _internalTimer: number = 0;
-    private _timerDelay: number = 0.01;
+    protected _timerDelay: number = 0.01;
 
     protected constructor() {
         if (Entity.entityLoop == null) {

@@ -1,6 +1,6 @@
-import {Entity} from "./Entity";
-import {Hooks} from "./Hooks";
-import {DelayDto} from "./DataContainers/DelayDto";
+import {Entity} from "../Entity";
+import {Hooks} from "../Hooks";
+import {DelayDto} from "./DelayDto";
 
 /**
  * The Delay Executes the sent function after a defined delay.

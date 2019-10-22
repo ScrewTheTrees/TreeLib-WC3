@@ -1,269 +1,281 @@
-import {WeaponIndex} from "../DataContainers/WeaponIndex";
+import {WeaponIndex} from "./WeaponIndex";
 
-export class UnitBuilder {
-    protected readonly target: unit;
+export class Unit {
+    public readonly wrappedUnit: unit;
 
-    constructor(target: unit) {
-        this.target = target;
+    constructor(wrappedUnit: unit) {
+        this.wrappedUnit = wrappedUnit;
     }
 
     public SetPosition(x: number, y: number): this {
-        SetUnitX(this.target, x);
-        SetUnitY(this.target, y);
+        SetUnitX(this.wrappedUnit, x);
+        SetUnitY(this.wrappedUnit, y);
         return this;
     }
 
     public SetFacing(facing: number) {
-        SetUnitFacing(this.target, facing);
+        SetUnitFacing(this.wrappedUnit, facing);
         return this;
     }
 
     public SetMoveSpeed(speed: number) {
-        SetUnitMoveSpeed(this.target, speed);
+        SetUnitMoveSpeed(this.wrappedUnit, speed);
         return this;
     }
 
     public SetFlyHeight(height: number, rate: number) {
-        SetUnitFlyHeight(this.target, height, rate);
+        SetUnitFlyHeight(this.wrappedUnit, height, rate);
         return this;
     }
 
     public SetPropWindow(facing: number) {
-        SetUnitPropWindow(this.target, facing);
+        SetUnitPropWindow(this.wrappedUnit, facing);
         return this;
     }
 
     public SetAcquireRange(range: number) {
-        SetUnitAcquireRange(this.target, range);
+        SetUnitAcquireRange(this.wrappedUnit, range);
         return this;
     }
 
     public SetCreepGuard(doGuard: boolean) {
-        SetUnitCreepGuard(this.target, doGuard);
+        SetUnitCreepGuard(this.wrappedUnit, doGuard);
         return this;
     }
 
     public SetOwner(whichPlayer: player, changeColor: boolean) {
-        SetUnitOwner(this.target, whichPlayer, changeColor);
+        SetUnitOwner(this.wrappedUnit, whichPlayer, changeColor);
         return this;
     }
 
     public SetColor(whichColor: playercolor) {
-        SetUnitColor(this.target, whichColor);
+        SetUnitColor(this.wrappedUnit, whichColor);
         return this;
     }
 
     public SetScaleXYZ(scaleX: number, scaleY: number, scaleZ: number) {
-        SetUnitScale(this.target, scaleX, scaleY, scaleZ);
+        SetUnitScale(this.wrappedUnit, scaleX, scaleY, scaleZ);
         return this;
     }
 
     public SetScale(scale: number) {
-        SetUnitScale(this.target, scale, scale, scale);
+        SetUnitScale(this.wrappedUnit, scale, scale, scale);
         return this;
     }
 
     public SetTimeScale(scale: number) {
-        SetUnitTimeScale(this.target, scale);
+        SetUnitTimeScale(this.wrappedUnit, scale);
         return this;
     }
 
     public SetBlendTime(blend: number) {
-        SetUnitTimeScale(this.target, blend);
+        SetUnitTimeScale(this.wrappedUnit, blend);
         return this;
     }
 
     public SetVertexColor(red: number, green: number, blue: number, alpha: number) {
-        SetUnitVertexColor(this.target, red, green, blue, alpha);
+        SetUnitVertexColor(this.wrappedUnit, red, green, blue, alpha);
         return this;
     }
 
     public AddAnimationProperties(animProperties: string, add: boolean) {
-        AddUnitAnimationProperties(this.target, animProperties, add);
+        AddUnitAnimationProperties(this.wrappedUnit, animProperties, add);
         return this;
     }
 
     public SetRescuable(whichPlayer: player, flag: boolean, range: number) {
-        SetUnitRescuable(this.target, whichPlayer, flag);
-        SetUnitRescueRange(this.target, range);
+        SetUnitRescuable(this.wrappedUnit, whichPlayer, flag);
+        SetUnitRescueRange(this.wrappedUnit, range);
     }
 
     public DecAbilityLevel(abilityCode: number): this {
-        DecUnitAbilityLevel(this.target, abilityCode);
+        DecUnitAbilityLevel(this.wrappedUnit, abilityCode);
         return this;
     }
 
     public IncAbilityLevel(abilityCode: number): this {
-        IncUnitAbilityLevel(this.target, abilityCode);
+        IncUnitAbilityLevel(this.wrappedUnit, abilityCode);
         return this;
     }
 
     public SetAbilityLevel(abilityCode: number, level: number): this {
-        SetUnitAbilityLevel(this.target, abilityCode, level);
+        SetUnitAbilityLevel(this.wrappedUnit, abilityCode, level);
         return this;
     }
 
     public SetExplode(doExplode: boolean): this {
-        SetUnitExploded(this.target, doExplode);
+        SetUnitExploded(this.wrappedUnit, doExplode);
         return this;
     }
 
     public SetInvulnerable(isInvulnerable: boolean): this {
-        SetUnitInvulnerable(this.target, isInvulnerable);
+        SetUnitInvulnerable(this.wrappedUnit, isInvulnerable);
         return this;
     }
 
     public Pause(doPause: boolean): this {
-        PauseUnit(this.target, doPause);
+        PauseUnit(this.wrappedUnit, doPause);
         return this;
     }
 
     public SetPathing(isPathable: boolean): this {
-        SetUnitPathing(this.target, isPathable);
+        SetUnitPathing(this.wrappedUnit, isPathable);
         return this;
     }
 
     public Select(doSelect: boolean): this {
-        SelectUnit(this.target, doSelect);
+        SelectUnit(this.wrappedUnit, doSelect);
         return this;
     }
 
     public ShareVision(toPlayer: player, shareVision: boolean): this {
-        UnitShareVision(this.target, toPlayer, shareVision);
+        UnitShareVision(this.wrappedUnit, toPlayer, shareVision);
         return this;
     }
 
     public SuspendDecay(toPlayer: player, disableDecay: boolean): this {
-        UnitSuspendDecay(this.target, disableDecay);
+        UnitSuspendDecay(this.wrappedUnit, disableDecay);
         return this;
     }
 
     public AddType(type: unittype): this {
-        UnitAddType(this.target, type);
+        UnitAddType(this.wrappedUnit, type);
         return this;
     }
 
     public AddAbility(abilityId: number): this {
-        UnitAddAbility(this.target, abilityId);
+        UnitAddAbility(this.wrappedUnit, abilityId);
         return this;
     }
 
     public MakeAbilityPermanent(isPermanent: boolean, abilityId: number): this {
-        UnitMakeAbilityPermanent(this.target, isPermanent, abilityId);
+        UnitMakeAbilityPermanent(this.wrappedUnit, isPermanent, abilityId);
         return this;
     }
 
     public Sleep(doSleep: boolean): this {
-        UnitAddSleep(this.target, doSleep);
+        UnitAddSleep(this.wrappedUnit, doSleep);
         return this;
     }
 
     public SleepPermanent(doSleep: boolean): this {
-        UnitAddSleepPerm(this.target, doSleep);
+        UnitAddSleepPerm(this.wrappedUnit, doSleep);
         return this;
     }
 
     public WakeUp(): this {
-        UnitWakeUp(this.target);
+        UnitWakeUp(this.wrappedUnit);
         return this;
     }
 
     public SetTimedLife(buffId: number, duration: number): this {
-        UnitApplyTimedLife(this.target, buffId, duration);
+        UnitApplyTimedLife(this.wrappedUnit, buffId, duration);
         return this;
     }
 
     public SetIgnoreAlarm(doIgnore: boolean): this {
-        UnitIgnoreAlarm(this.target, doIgnore);
+        UnitIgnoreAlarm(this.wrappedUnit, doIgnore);
         return this;
     }
 
     public ResetCooldown(): this {
-        UnitResetCooldown(this.target);
+        UnitResetCooldown(this.wrappedUnit);
         return this;
     }
 
     public SetConstructionProgress(constructionPercentage: number): this {
-        UnitSetConstructionProgress(this.target, constructionPercentage);
+        UnitSetConstructionProgress(this.wrappedUnit, constructionPercentage);
         return this;
     }
 
     public SetUpgradeProgress(upgradePercentage: number): this {
-        UnitSetUpgradeProgress(this.target, upgradePercentage);
+        UnitSetUpgradeProgress(this.wrappedUnit, upgradePercentage);
         return this;
     }
 
     public SetMaxHealth(health: number): this {
-        BlzSetUnitMaxHP(this.target, health);
+        BlzSetUnitMaxHP(this.wrappedUnit, health);
         return this;
     }
 
     public SetMaxMana(mana: number): this {
-        BlzSetUnitMaxMana(this.target, mana);
+        BlzSetUnitMaxMana(this.wrappedUnit, mana);
         return this;
     }
 
     public SetName(name: string): this {
-        BlzSetUnitName(this.target, name);
+        BlzSetUnitName(this.wrappedUnit, name);
         return this;
     }
 
     public SetBaseDamage(baseDamage: number, weaponIndex: WeaponIndex): this {
-        BlzSetUnitBaseDamage(this.target, baseDamage, weaponIndex);
+        BlzSetUnitBaseDamage(this.wrappedUnit, baseDamage, weaponIndex);
         return this;
     }
 
     public SetDiceNumber(dice: number, weaponIndex: WeaponIndex): this {
-        BlzSetUnitDiceNumber(this.target, dice, weaponIndex);
+        BlzSetUnitDiceNumber(this.wrappedUnit, dice, weaponIndex);
         return this;
     }
 
     public SetDiceSides(dice: number, weaponIndex: WeaponIndex): this {
-        BlzSetUnitDiceSides(this.target, dice, weaponIndex);
+        BlzSetUnitDiceSides(this.wrappedUnit, dice, weaponIndex);
         return this;
     }
 
     public SetAttackCooldown(cooldown: number, weaponIndex: WeaponIndex): this {
-        BlzSetUnitAttackCooldown(this.target, cooldown, weaponIndex);
+        BlzSetUnitAttackCooldown(this.wrappedUnit, cooldown, weaponIndex);
         return this;
     }
 
     public SetArmor(armor: number): this {
-        BlzSetUnitArmor(this.target, armor);
+        BlzSetUnitArmor(this.wrappedUnit, armor);
         return this;
     }
 
     public SetBooleanField(field: unitbooleanfield, value: boolean) {
-        BlzSetUnitBooleanField(this.target, field, value);
+        BlzSetUnitBooleanField(this.wrappedUnit, field, value);
+        return this;
     }
 
     public SetIntegerField(field: unitintegerfield, value: number) {
-        BlzSetUnitIntegerField(this.target, field, value);
+        BlzSetUnitIntegerField(this.wrappedUnit, field, value);
+        return this;
     }
 
     public SetRealField(field: unitrealfield, value: number) {
-        BlzSetUnitRealField(this.target, field, value);
+        BlzSetUnitRealField(this.wrappedUnit, field, value);
+        return this;
     }
 
     public SetStringField(field: unitstringfield, value: string) {
-        BlzSetUnitStringField(this.target, field, value);
+        BlzSetUnitStringField(this.wrappedUnit, field, value);
+        return this;
     }
 
 
     public SetWeaponBooleanField(field: unitweaponbooleanfield, value: boolean, index: WeaponIndex) {
-        BlzSetUnitWeaponBooleanField(this.target, field, index, value);
+        BlzSetUnitWeaponBooleanField(this.wrappedUnit, field, index, value);
+        return this;
     }
 
     public SetWeaponIntegerField(field: unitweaponintegerfield, value: number, index: WeaponIndex) {
-        BlzSetUnitWeaponIntegerField(this.target, field, index, value);
+        BlzSetUnitWeaponIntegerField(this.wrappedUnit, field, index, value);
+        return this;
     }
 
     public SetWeaponRealField(field: unitweaponrealfield, value: number, index: WeaponIndex) {
-        BlzSetUnitWeaponRealField(this.target, field, index, value);
+        BlzSetUnitWeaponRealField(this.wrappedUnit, field, index, value);
+        return this;
     }
 
     public SetWeaponStringField(field: unitweaponstringfield, value: string, index: WeaponIndex) {
-        BlzSetUnitWeaponStringField(this.target, field, index, value);
+        BlzSetUnitWeaponStringField(this.wrappedUnit, field, index, value);
+        return this;
     }
 
+    public SetUnitState(state: unitstate, value: number) {
+        SetUnitState(this.wrappedUnit, state, value);
+        return this;
+    }
 }
