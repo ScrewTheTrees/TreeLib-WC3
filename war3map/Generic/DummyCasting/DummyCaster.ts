@@ -99,17 +99,17 @@ class Caster {
     public inactiveFor: number = 0;
 
     constructor(castingUnit: unit) {
-        let newUnit = new Unit(CreateUnit(GetOwningPlayer(castingUnit), FourCC("hpea"), 0, 0, bj_UNIT_FACING))
-            .SetMaxHealth(10000)
-            .SetMaxMana(10000)
-            .SetUnitState(UNIT_STATE_LIFE, 10000)
-            .SetUnitState(UNIT_STATE_MANA, 10000)
-            .SetInvulnerable(true)
-            .SetAcquireRange(0)
-            .SetWeaponBooleanField(UNIT_WEAPON_BF_ATTACKS_ENABLED, false, WeaponIndex.WEAPON_1)
-            .SetWeaponBooleanField(UNIT_WEAPON_BF_ATTACKS_ENABLED, false, WeaponIndex.WEAPON_2)
-            .SetStringField(UNIT_SF_SHADOW_IMAGE_UNIT, "")
-            .SetBooleanField(UNIT_BF_HIDE_MINIMAP_DISPLAY, true);
+        let newUnit = new Unit(CreateUnit(GetOwningPlayer(castingUnit), FourCC("hpea"), 0, 0, bj_UNIT_FACING));
+        newUnit.maxHealth = 10000;
+        newUnit.maxMana = 10000;
+        newUnit.acquireRange = 0;
+        newUnit.health = 10000;
+        newUnit.mana = 10000;
+        newUnit.invulnerable = true;
+        newUnit.SetWeaponBooleanField(UNIT_WEAPON_BF_ATTACKS_ENABLED, false, WeaponIndex.WEAPON_1);
+        newUnit.SetWeaponBooleanField(UNIT_WEAPON_BF_ATTACKS_ENABLED, false, WeaponIndex.WEAPON_2);
+        newUnit.SetStringField(UNIT_SF_SHADOW_IMAGE_UNIT, "");
+        newUnit.SetBooleanField(UNIT_BF_HIDE_MINIMAP_DISPLAY, true);
 
         this.unit = newUnit.wrappedUnit;
         this.expended = 0;

@@ -5,65 +5,54 @@ export class Hero extends Unit {
         super(wrappedUnit);
     }
 
-    public SetStrength(amount: number, isPermanent: boolean): this {
+    public SetStrength(amount: number, isPermanent: boolean) {
         SetHeroStr(this.wrappedUnit, amount, isPermanent);
-        return this;
     }
 
-    public SetAgility(amount: number, isPermanent: boolean): this {
+    public SetAgility(amount: number, isPermanent: boolean) {
         SetHeroAgi(this.wrappedUnit, amount, isPermanent);
-        return this;
     }
 
-    public SetIntelligence(amount: number, isPermanent: boolean): this {
+    public SetIntelligence(amount: number, isPermanent: boolean) {
         SetHeroInt(this.wrappedUnit, amount, isPermanent);
-        return this;
     }
 
-    public StripLevels(amount: number): this {
+    public StripLevels(amount: number) {
         UnitStripHeroLevel(this.wrappedUnit, amount);
-        return this;
     }
 
-    public SetXP(xp: number, showGFX: boolean): this {
+    public SetXP(xp: number, showGFX: boolean) {
         SetHeroXP(this.wrappedUnit, xp, showGFX);
-        return this;
     }
 
-    public ModifySkillPoints(skillPointDelta: number): this {
+    public ModifySkillPoints(skillPointDelta: number) {
         UnitModifySkillPoints(this.wrappedUnit, skillPointDelta);
-        return this;
     }
 
-    public AddXP(xp: number, showGFX: boolean): this {
+    public AddXP(xp: number, showGFX: boolean) {
         AddHeroXP(this.wrappedUnit, xp, showGFX);
-        return this;
     }
 
-    public AddLevel(level: number, showGFX: boolean): this {
+    public AddLevel(level: number, showGFX: boolean) {
         SetHeroLevel(this.wrappedUnit, level, showGFX);
-        return this;
     }
 
-    public SuspendXPGain(doFreeze: boolean): this {
+    public SuspendXPGain(doFreeze: boolean) {
         SuspendHeroXP(this.wrappedUnit, doFreeze);
-        return this;
     }
 
-    public SelectHeroSkill(abilityCode: number): this {
+    public SelectHeroSkill(abilityCode: number) {
         SelectHeroSkill(this.wrappedUnit, abilityCode);
-        return this;
     }
 
-    public Revive(x: number, y: number, doGFX: boolean): this {
+    public Revive(x: number, y: number, doGFX: boolean) {
         ReviveHero(this.wrappedUnit, x, y, doGFX);
-        return this;
     }
 
-    public SetProperName(heroProperName: string): this {
+    set heroProperName(heroProperName: string) {
         BlzSetHeroProperName(this.wrappedUnit, heroProperName);
-        return this;
     }
-
-
+    get heroProperName() {
+        return GetHeroProperName(this.wrappedUnit);
+    }
 }
