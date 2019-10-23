@@ -15,6 +15,7 @@ export class Delay extends Entity {
         }
         return this.instance;
     }
+
     private constructor() {
         super();
     }
@@ -22,13 +23,13 @@ export class Delay extends Entity {
     private queue: DelayDto[] = [];
 
     step(): void {
-        for (let _index in this.queue) {
+        for (let _index = 0; _index < this.queue.length; _index++) {
             let index = tonumber(_index) || 0;
             let queueDto = this.queue[index];
             queueDto.age += 0.01;
             if (queueDto.age >= queueDto.delay) {
                 queueDto.function();
-                this.queue.splice( index, 1);
+                this.queue.splice(index, 1);
             }
         }
     }
@@ -36,6 +37,7 @@ export class Delay extends Entity {
     public addDelay(f: Function, delaySeconds: number) {
         this.addDelayFrom(new DelayDto(f, delaySeconds));
     }
+
     public addDelayFrom(delayDto: DelayDto) {
         this.queue.push(delayDto);
     }
