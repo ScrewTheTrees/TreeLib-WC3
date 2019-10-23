@@ -39,7 +39,7 @@ export class DamageDetectionSystem {
      * Register a callback that recives an object used for getting and manipulating damage data before damage calculation.
      * Includes damage, damagetypes, target, caster, aliasedCaster (if casted by dummy)
      */
-    public registerBeforeHitEvent(callback: (hitObject: DamageBeforeHitContainer) => void): any {
+    public registerBeforeCalculation(callback: (hitObject: DamageBeforeHitContainer) => void): any {
         this.beforeHitCallbacks.push(new BeforeHitCallback(callback));
         return this.afterHitCallbacks.length - 1;
     }
@@ -47,7 +47,7 @@ export class DamageDetectionSystem {
      * Register a callback that recives an object used for getting and manipulating damage data after damage calculations.
      * Includes damage, damagetypes, target, caster, aliasedCaster (if casted by dummy)
      */
-    public registerAfterHitEvent(callback: (hitObject: DamageHitContainer) => void): any {
+    public registerAfterCalculation(callback: (hitObject: DamageHitContainer) => void): any {
         this.afterHitCallbacks.push(new AfterHitCallback(callback));
         return this.afterHitCallbacks.length - 1;
     }
