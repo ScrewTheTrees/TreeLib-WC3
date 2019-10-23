@@ -33,6 +33,16 @@ export class DamageHitContainer {
         BlzSetEventDamage(damage);
     }
 
+    get damageType() {
+        return this._damageType;
+    }
+    get attackType() {
+        return this._attackType;
+    }
+    get weaponType() {
+        return this._weaponType;
+    }
+
     public toString(): string {
         let builder = new StringBuilder();
         builder.append("{")

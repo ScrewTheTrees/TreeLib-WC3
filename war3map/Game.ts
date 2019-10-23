@@ -8,6 +8,8 @@ export class Game {
         });
         DamageDetectionSystem.getInstance().registerAfterHitEvent((hitObject) => {
             Logger.LogDebug("afterHit", hitObject.toString());
+            Logger.LogDebug(hitObject.damageType);
+            Logger.LogDebug(hitObject.eventDamage);
         });
     }
 }
