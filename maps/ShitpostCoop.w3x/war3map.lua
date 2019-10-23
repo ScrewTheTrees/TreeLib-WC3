@@ -38,6 +38,51 @@ gg_trg_Untitled_Trigger_001 = nil
 function InitGlobals()
 end
 
+function CreateUnitsForPlayer0()
+    local p = Player(0)
+    local u
+    local unitID
+    local t
+    local life
+    u = CreateUnit(p, FourCC("Hamg"), -812.8, -2085.5, 36.608)
+end
+
+function CreateUnitsForPlayer1()
+    local p = Player(1)
+    local u
+    local unitID
+    local t
+    local life
+    u = CreateUnit(p, FourCC("hfoo"), -949.0, -1516.5, 95.727)
+    u = CreateUnit(p, FourCC("hkni"), -753.8, -1526.7, 201.880)
+    u = CreateUnit(p, FourCC("hrif"), -566.7, -1533.5, 31.378)
+    u = CreateUnit(p, FourCC("hpea"), -1111.2, -1465.1, 277.457)
+end
+
+function CreateNeutralPassiveBuildings()
+    local p = Player(PLAYER_NEUTRAL_PASSIVE)
+    local u
+    local unitID
+    local t
+    local life
+    u = CreateUnit(p, FourCC("nfoh"), -1024.0, -1152.0, 270.000)
+    u = CreateUnit(p, FourCC("nmoo"), -640.0, -1152.0, 270.000)
+end
+
+function CreatePlayerBuildings()
+end
+
+function CreatePlayerUnits()
+    CreateUnitsForPlayer0()
+    CreateUnitsForPlayer1()
+end
+
+function CreateAllUnits()
+    CreateNeutralPassiveBuildings()
+    CreatePlayerBuildings()
+    CreatePlayerUnits()
+end
+
 function CreateRegions()
     local we
     gg_rct_route1spawn = Rect(-3552.0, 2272.0, -3104.0, 2400.0)
@@ -242,6 +287,7 @@ function main()
     SetAmbientNightSound("DalaranNight")
     SetMapMusic("Music", true, 0)
     CreateRegions()
+    CreateAllUnits()
     InitBlizzard()
     InitGlobals()
     InitCustomTriggers()
