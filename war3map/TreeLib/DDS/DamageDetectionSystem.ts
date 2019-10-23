@@ -1,6 +1,5 @@
 import {Hooks} from "../Hooks";
 import {DamageHitContainer} from "./DamageHitContainer";
-import {Logger} from "../Logger";
 import {DamageBeforeHitContainer} from "./DamageBeforeHitContainer";
 import {BeforeHitCallback} from "./BeforeHitCallback";
 import {AfterHitCallback} from "./AfterHitCallback";

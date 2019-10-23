@@ -44,19 +44,6 @@ export class Random {
         return ((val - minFrom) / (maxFrom - minFrom)) * (maxTo - minTo) + minTo;
     }
 
-    private static hashCode(str: string): number {
-        let hash = 0;
-        if (str) {
-            const l = str.length;
-            for (let i = 0; i < l; i++) {
-                hash = ((hash << 5) - hash) + str.charCodeAt(i);
-                hash |= 0;
-                hash = Random.xorshift(hash);
-            }
-        }
-        return Random.getSafeSeed(hash);
-    }
-
     private static getSafeSeed(seed: number) {
         if (seed === 0) return 1;
         return seed;

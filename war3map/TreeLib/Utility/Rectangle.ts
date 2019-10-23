@@ -1,4 +1,4 @@
-import {Delay} from "./Utility/Delay";
+import {Delay} from "./Delay";
 
 /**
  * My wrapper for Rects

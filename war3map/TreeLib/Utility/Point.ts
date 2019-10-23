@@ -1,7 +1,7 @@
 /**
  * My wrapper for Locations, contains some useful helper functions and cleaning up of locations.
  */
-import {Delay} from "./Utility/Delay";
+import {Delay} from "./Delay";
 
 export class Point {
     public x: number;

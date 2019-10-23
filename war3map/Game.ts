@@ -1,5 +1,5 @@
-import {DamageDetectionSystem} from "./Generic/DDS/DamageDetectionSystem";
-import {Logger} from "./Generic/Logger";
+import {DamageDetectionSystem} from "./TreeLib/DDS/DamageDetectionSystem";
+import {Logger} from "./TreeLib/Logger";
 
 export class Game {
     constructor() {
