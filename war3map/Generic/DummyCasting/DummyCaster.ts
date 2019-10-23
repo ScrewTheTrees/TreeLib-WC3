@@ -30,7 +30,7 @@ export class DummyCaster extends Entity {
         return this.aliases[GetHandleId(caster)] != null;
     }
 
-    public getUnitCredited(caster: unit): unit {
+    public getActualUnit(caster: unit): unit {
         return this.aliases[GetHandleId(caster)];
     }
 
@@ -123,20 +123,20 @@ class Caster {
     }
 
     public issueTargetInstant(abilityId: number, orderString: string, target: widget, castingUnit: unit) {
+        DummyCaster.getInstance().addAlias(this.unit, castingUnit);
         this.addAbility(abilityId);
         IssueTargetOrder(this.unit, orderString, target);
         this.expended = 1;
         this.inactiveFor = 0;
-        DummyCaster.getInstance().addAlias(this.unit, castingUnit);
     }
 
     public issueTargetChannel(abilityId: number, orderString: string, target: widget, castingUnit: unit) {
+        DummyCaster.getInstance().addAlias(this.unit, castingUnit);
         this.addAbility(abilityId);
         IssueTargetOrder(this.unit, orderString, target);
         let abil = BlzGetUnitAbility(this.unit, abilityId);
         this.expended = BlzGetAbilityRealLevelField(abil, ABILITY_RLF_DURATION_NORMAL, 0);
         this.inactiveFor = 0;
-        DummyCaster.getInstance().addAlias(this.unit, castingUnit);
     }
 
     public isAvailable(owner: player) {

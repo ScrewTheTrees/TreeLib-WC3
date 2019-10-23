@@ -1,5 +1,9 @@
 import {Hooks} from "../Hooks";
 import {DamageHitContainer} from "./DamageHitContainer";
+import {Logger} from "../Logger";
+import {DamageBeforeHitContainer} from "./DamageBeforeHitContainer";
+import {BeforeHitCallback} from "./BeforeHitCallback";
+import {AfterHitCallback} from "./AfterHitCallback";
 
 export class DamageDetectionSystem {
     private static instance: DamageDetectionSystem;
@@ -15,6 +19,9 @@ export class DamageDetectionSystem {
     private readonly beforeHit: trigger;
     private readonly afterHit: trigger;
 
+    private readonly beforeHitCallbacks: BeforeHitCallback[] = [];
+    private readonly afterHitCallbacks: AfterHitCallback[] = [];
+
     private constructor() {
         this.beforeHit = CreateTrigger();
         this.afterHit = CreateTrigger();
@@ -29,15 +36,34 @@ export class DamageDetectionSystem {
         TriggerAddAction(this.afterHit, () => this.onAfterHit());
     }
 
-    //TODO: Implement functionality to register new natives.
+    /**
+     * Register a callback that recives an object used for getting and manipulating damage data.
+     * Includes damage, damagetypes, target, caster, aliasedCaster (if casted by dummy)
+     */
+    public registerBeforeHitEvent(callback: (hitObject: DamageBeforeHitContainer) => void): number {
+        this.beforeHitCallbacks.push(new BeforeHitCallback(callback));
+        return this.afterHitCallbacks.length - 1;
+    }
+
+    public registerAfterHitEvent(callback: (hitObject: DamageHitContainer) => void): number {
+        this.afterHitCallbacks.push(new AfterHitCallback(callback));
+        return this.afterHitCallbacks.length - 1;
+    }
+
 
     private onBeforeHit() {
-        const beforeHit = DamageHitContainer.fromCurrentEvent();
-        //TODO: Implement hit logic
+        const beforeHit = new DamageBeforeHitContainer();
+
+        for (let hitCall of this.beforeHitCallbacks) {
+            hitCall.callback(beforeHit);
+        }
     }
 
     private onAfterHit() {
-        const afterHit = DamageHitContainer.fromCurrentEvent();
-        //TODO: Implement hit logic
+        const afterHit = new DamageHitContainer();
+
+        for (let hitCall of this.afterHitCallbacks) {
+            hitCall.callback(afterHit);
+        }
     }
 }
