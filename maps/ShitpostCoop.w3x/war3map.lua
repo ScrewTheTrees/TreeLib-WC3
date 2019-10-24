@@ -1,40 +1,6 @@
-gg_rct_route1spawn = nil
-gg_rct_route1waypoint1 = nil
-gg_rct_route1waypoint2 = nil
-gg_rct_route1waypoint3 = nil
-gg_rct_route1waypoint4 = nil
-gg_rct_route1waypoint5 = nil
-gg_rct_route1waypoint6 = nil
-gg_rct_route1waypoint7 = nil
-gg_rct_route1end = nil
-gg_rct_route2spawn = nil
-gg_rct_route2waypoint1 = nil
-gg_rct_route2waypoint2 = nil
-gg_rct_route2waypoint3 = nil
-gg_rct_route2waypoint4 = nil
-gg_rct_route2waypoint5 = nil
-gg_rct_route2end = nil
-gg_rct_route3spawn = nil
-gg_rct_route3end = nil
-gg_rct_route3waypoint1 = nil
-gg_rct_route3waypoint2 = nil
-gg_rct_route3waypoint3 = nil
-gg_rct_route3waypoint4 = nil
-gg_rct_route3waypoint5 = nil
-gg_rct_route3waypoint6 = nil
-gg_rct_route3waypoint7 = nil
-gg_rct_route1waypoint8 = nil
-gg_rct_route1waypoint9 = nil
-gg_rct_route2waypoint6 = nil
-gg_rct_route2waypoint7 = nil
-gg_rct_route2waypoint8 = nil
-gg_rct_route2waypoint9 = nil
-gg_rct_route3waypoint8 = nil
-gg_rct_route3waypoint9 = nil
-gg_rct_route3waypoint10 = nil
-gg_rct_route3waypoint12 = nil
-gg_rct_route3waypoint11 = nil
 gg_trg_Untitled_Trigger_001 = nil
+gg_unit_Hamg_0003 = nil
+gg_unit_hkni_0010 = nil
 function InitGlobals()
 end
 
@@ -44,8 +10,8 @@ function CreateUnitsForPlayer0()
     local unitID
     local t
     local life
-    u = CreateUnit(p, FourCC("Hamg"), -812.8, -2085.5, 94.804)
-    u = CreateUnit(p, FourCC("hrif"), -954.1, -2077.6, 81.096)
+    gg_unit_Hamg_0003 = CreateUnit(p, FourCC("Hamg"), -820.8, -2289.2, 94.804)
+    u = CreateUnit(p, FourCC("hrif"), -962.1, -2281.3, 81.096)
 end
 
 function CreateUnitsForPlayer1()
@@ -55,10 +21,11 @@ function CreateUnitsForPlayer1()
     local t
     local life
     u = CreateUnit(p, FourCC("hfoo"), -932.0, -1594.1, -80.306)
-    u = CreateUnit(p, FourCC("hkni"), -736.9, -1604.3, 260.635)
+    gg_unit_hkni_0010 = CreateUnit(p, FourCC("hkni"), -828.5, -1952.2, 260.635)
     u = CreateUnit(p, FourCC("hrif"), -549.7, -1611.1, 243.641)
     u = CreateUnit(p, FourCC("hpea"), -1090.4, -1576.2, -66.837)
     u = CreateUnit(p, FourCC("Hpal"), -1245.8, -1523.4, -57.793)
+    u = CreateUnit(p, FourCC("hkni"), -734.7, -1598.0, 260.635)
 end
 
 function CreateUnitsForPlayer2()
@@ -80,8 +47,8 @@ function CreateNeutralPassiveBuildings()
     local unitID
     local t
     local life
-    u = CreateUnit(p, FourCC("nfoh"), -1024.0, -1152.0, 270.000)
-    u = CreateUnit(p, FourCC("nmoo"), -640.0, -1152.0, 270.000)
+    u = CreateUnit(p, FourCC("nfoh"), -1088.0, -1216.0, 270.000)
+    u = CreateUnit(p, FourCC("nfoh"), -576.0, -1216.0, 270.000)
 end
 
 function CreatePlayerBuildings()
@@ -99,53 +66,9 @@ function CreateAllUnits()
     CreatePlayerUnits()
 end
 
-function CreateRegions()
-    local we
-    gg_rct_route1spawn = Rect(-3552.0, 2272.0, -3104.0, 2400.0)
-    gg_rct_route1waypoint1 = Rect(-3552.0, 576.0, -3104.0, 704.0)
-    gg_rct_route1waypoint2 = Rect(-2912.0, 544.0, -2784.0, 992.0)
-    gg_rct_route1waypoint3 = Rect(1728.0, 544.0, 1856.0, 992.0)
-    gg_rct_route1waypoint4 = Rect(1440.0, 256.0, 1888.0, 384.0)
-    gg_rct_route1waypoint5 = Rect(1440.0, -3264.0, 1888.0, -3136.0)
-    gg_rct_route1waypoint6 = Rect(704.0, -3296.0, 832.0, -2848.0)
-    gg_rct_route1waypoint7 = Rect(672.0, -2240.0, 1120.0, -2112.0)
-    gg_rct_route1end = Rect(-2944.0, -896.0, -2688.0, -640.0)
-    we = AddWeatherEffect(gg_rct_route1end, FourCC("FDrh"))
-    EnableWeatherEffect(we, true)
-    gg_rct_route2spawn = Rect(-1504.0, 2272.0, -1056.0, 2400.0)
-    gg_rct_route2waypoint1 = Rect(-1504.0, -192.0, -1056.0, -64.0)
-    gg_rct_route2waypoint2 = Rect(-864.0, -224.0, -736.0, 224.0)
-    gg_rct_route2waypoint3 = Rect(2496.0, -224.0, 2624.0, 224.0)
-    gg_rct_route2waypoint4 = Rect(2208.0, -512.0, 2656.0, -384.0)
-    gg_rct_route2waypoint5 = Rect(2208.0, -4032.0, 2656.0, -3904.0)
-    gg_rct_route2end = Rect(-2944.0, -1664.0, -2688.0, -1408.0)
-    we = AddWeatherEffect(gg_rct_route2end, FourCC("FDrh"))
-    EnableWeatherEffect(we, true)
-    gg_rct_route3spawn = Rect(672.0, 2272.0, 1120.0, 2400.0)
-    gg_rct_route3end = Rect(-2944.0, -1280.0, -2688.0, -1024.0)
-    we = AddWeatherEffect(gg_rct_route3end, FourCC("FDrh"))
-    EnableWeatherEffect(we, true)
-    gg_rct_route3waypoint1 = Rect(672.0, 384.0, 1120.0, 512.0)
-    gg_rct_route3waypoint2 = Rect(672.0, -960.0, 1120.0, -832.0)
-    gg_rct_route3waypoint3 = Rect(1280.0, -992.0, 1408.0, -544.0)
-    gg_rct_route3waypoint4 = Rect(3264.0, -992.0, 3392.0, -544.0)
-    gg_rct_route3waypoint5 = Rect(2976.0, -1728.0, 3424.0, -1600.0)
-    gg_rct_route3waypoint6 = Rect(2688.0, -1760.0, 2816.0, -1312.0)
-    gg_rct_route3waypoint7 = Rect(704.0, -1760.0, 832.0, -1312.0)
-    gg_rct_route1waypoint8 = Rect(-448.0, -2528.0, -320.0, -2080.0)
-    gg_rct_route1waypoint9 = Rect(-480.0, -704.0, -32.0, -576.0)
-    gg_rct_route2waypoint6 = Rect(704.0, -4064.0, 832.0, -3616.0)
-    gg_rct_route2waypoint7 = Rect(672.0, -3456.0, 1120.0, -3328.0)
-    gg_rct_route2waypoint8 = Rect(672.0, -1504.0, 1152.0, -1376.0)
-    gg_rct_route2waypoint9 = Rect(256.0, -1760.0, 384.0, -1376.0)
-    gg_rct_route3waypoint8 = Rect(672.0, -2048.0, 1120.0, -1920.0)
-    gg_rct_route3waypoint9 = Rect(672.0, -3264.0, 1120.0, -3136.0)
-    gg_rct_route3waypoint10 = Rect(384.0, -3296.0, 512.0, -2848.0)
-    gg_rct_route3waypoint12 = Rect(-1632.0, -1088.0, -1184.0, -960.0)
-    gg_rct_route3waypoint11 = Rect(-1600.0, -3296.0, -1472.0, -2848.0)
-end
-
 function Trig_Untitled_Trigger_001_Actions()
+    BlzUnitInterruptAttack(gg_unit_Hamg_0003)
+    BlzUnitInterruptAttack(gg_unit_hkni_0010)
 end
 
 function InitTrig_Untitled_Trigger_001()
@@ -279,20 +202,17 @@ end
 function InitAllyPriorities()
     SetStartLocPrioCount(0, 3)
     SetStartLocPrio(0, 0, 1, MAP_LOC_PRIO_HIGH)
-    SetStartLocPrio(0, 1, 2, MAP_LOC_PRIO_HIGH)
-    SetStartLocPrio(0, 2, 3, MAP_LOC_PRIO_LOW)
-    SetStartLocPrioCount(1, 3)
-    SetStartLocPrio(1, 0, 0, MAP_LOC_PRIO_HIGH)
-    SetStartLocPrio(1, 1, 2, MAP_LOC_PRIO_LOW)
-    SetStartLocPrio(1, 2, 3, MAP_LOC_PRIO_HIGH)
-    SetStartLocPrioCount(2, 3)
-    SetStartLocPrio(2, 0, 0, MAP_LOC_PRIO_HIGH)
-    SetStartLocPrio(2, 1, 1, MAP_LOC_PRIO_LOW)
-    SetStartLocPrio(2, 2, 3, MAP_LOC_PRIO_HIGH)
-    SetStartLocPrioCount(3, 3)
-    SetStartLocPrio(3, 0, 0, MAP_LOC_PRIO_LOW)
-    SetStartLocPrio(3, 1, 1, MAP_LOC_PRIO_HIGH)
-    SetStartLocPrio(3, 2, 2, MAP_LOC_PRIO_HIGH)
+    SetStartLocPrio(0, 1, 2, MAP_LOC_PRIO_LOW)
+    SetStartLocPrio(0, 2, 3, MAP_LOC_PRIO_HIGH)
+    SetStartLocPrioCount(1, 2)
+    SetStartLocPrio(1, 0, 2, MAP_LOC_PRIO_LOW)
+    SetStartLocPrio(1, 1, 3, MAP_LOC_PRIO_HIGH)
+    SetStartLocPrioCount(2, 2)
+    SetStartLocPrio(2, 0, 1, MAP_LOC_PRIO_LOW)
+    SetStartLocPrio(2, 1, 3, MAP_LOC_PRIO_HIGH)
+    SetStartLocPrioCount(3, 2)
+    SetStartLocPrio(3, 0, 1, MAP_LOC_PRIO_HIGH)
+    SetStartLocPrio(3, 1, 2, MAP_LOC_PRIO_HIGH)
 end
 
 function main()
@@ -302,7 +222,6 @@ function main()
     SetAmbientDaySound("DalaranDay")
     SetAmbientNightSound("DalaranNight")
     SetMapMusic("Music", true, 0)
-    CreateRegions()
     CreateAllUnits()
     InitBlizzard()
     InitGlobals()
@@ -315,7 +234,7 @@ function config()
     SetPlayers(8)
     SetTeams(8)
     SetGamePlacement(MAP_PLACEMENT_TEAMS_TOGETHER)
-    DefineStartLocation(0, -2304.0, -1024.0)
+    DefineStartLocation(0, -832.0, -2112.0)
     DefineStartLocation(1, -1856.0, -1024.0)
     DefineStartLocation(2, -2304.0, -1472.0)
     DefineStartLocation(3, -1856.0, -1472.0)

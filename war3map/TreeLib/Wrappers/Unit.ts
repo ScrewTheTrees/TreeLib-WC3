@@ -279,4 +279,8 @@ export class Unit {
     get invulnerable() {
         return BlzIsUnitInvulnerable(this.wrappedUnit);
     }
+
+    Show(doShow: boolean) {
+        ShowUnit(this.wrappedUnit, doShow);
+    }
 }

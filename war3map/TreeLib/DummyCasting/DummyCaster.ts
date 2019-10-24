@@ -3,6 +3,7 @@ import {Entity} from "../Entity";
 import {Logger} from "../Logger";
 import {Unit} from "../Wrappers/Unit";
 import {WeaponIndex} from "../Wrappers/WeaponIndex";
+import {Point} from "../Utility/Point";
 
 export class DummyCaster extends Entity {
     private static instance: DummyCaster;
@@ -17,6 +18,7 @@ export class DummyCaster extends Entity {
 
     private allCasters: Caster[] = [];
     private aliases: any = {};
+    public unitTypeBase = "hgyr";
 
     public addAlias(caster: unit, credit: unit) {
         this.aliases[GetHandleId(caster)] = credit;
@@ -80,6 +82,8 @@ export class DummyCaster extends Entity {
         });
     }
 
+    private internalSecond = 0;
+
     step(): void {
         this.allCasters.forEach((caster) => {
             if (caster.expended >= 0) {
@@ -89,6 +93,12 @@ export class DummyCaster extends Entity {
                 Logger.LogVerbose("Cleaned caster", caster.lastAbility, caster.expended)
             }
         });
+
+        this.internalSecond += 0.01;
+        if (this.internalSecond >= 1) {
+            this.secondStep();
+            this.internalSecond = 0;
+        }
     }
 }
 
@@ -99,17 +109,7 @@ class Caster {
     public inactiveFor: number = 0;
 
     constructor(castingUnit: unit) {
-        let newUnit = new Unit(CreateUnit(GetOwningPlayer(castingUnit), FourCC("hpea"), 0, 0, bj_UNIT_FACING));
-        newUnit.maxHealth = 10000;
-        newUnit.maxMana = 10000;
-        newUnit.acquireRange = 0;
-        newUnit.health = 10000;
-        newUnit.mana = 10000;
-        newUnit.invulnerable = true;
-        newUnit.SetWeaponBooleanField(UNIT_WEAPON_BF_ATTACKS_ENABLED, false, WeaponIndex.WEAPON_1);
-        newUnit.SetWeaponBooleanField(UNIT_WEAPON_BF_ATTACKS_ENABLED, false, WeaponIndex.WEAPON_2);
-        newUnit.SetStringField(UNIT_SF_SHADOW_IMAGE_UNIT, "");
-        newUnit.SetBooleanField(UNIT_BF_HIDE_MINIMAP_DISPLAY, true);
+        let newUnit = createDummyUnit(castingUnit);
 
         this.unit = newUnit.wrappedUnit;
         this.expended = 0;
@@ -123,20 +123,22 @@ class Caster {
     }
 
     public issueTargetInstant(abilityId: number, orderString: string, target: widget, castingUnit: unit) {
+        this.issueTargetInstantOrigin(abilityId, orderString, target, castingUnit, Point.fromLocationClean(GetUnitLoc(castingUnit)));
+    }
+
+    public issueTargetInstantOrigin(abilityId: number, orderString: string, target: widget, castingUnit: unit, origin: Point) {
         DummyCaster.getInstance().addAlias(this.unit, castingUnit);
         this.addAbility(abilityId);
+        SetUnitPositionLoc(this.unit, origin.toLocationClean());
         IssueTargetOrder(this.unit, orderString, target);
-        this.expended = 1;
+        this.expended = 2;
         this.inactiveFor = 0;
     }
 
     public issueTargetChannel(abilityId: number, orderString: string, target: widget, castingUnit: unit) {
-        DummyCaster.getInstance().addAlias(this.unit, castingUnit);
-        this.addAbility(abilityId);
-        IssueTargetOrder(this.unit, orderString, target);
+        this.issueTargetInstantOrigin(abilityId, orderString, target, castingUnit, Point.fromLocationClean(GetUnitLoc(castingUnit)));
         let abil = BlzGetUnitAbility(this.unit, abilityId);
-        this.expended = BlzGetAbilityRealLevelField(abil, ABILITY_RLF_DURATION_NORMAL, 0);
-        this.inactiveFor = 0;
+        this.expended = BlzGetAbilityRealLevelField(abil, ABILITY_RLF_DURATION_NORMAL, 0) + 2;
     }
 
     public isAvailable(owner: player) {
@@ -147,11 +149,34 @@ class Caster {
         this.expended = -1;
         this.lastAbility = 0;
         DummyCaster.getInstance().removeAlias(this.unit);
-
+        SetUnitX(this.unit, GetRectMaxX(GetEntireMapRect()) - 64);
+        SetUnitY(this.unit, GetRectMaxY(GetEntireMapRect()) - 64);
         UnitRemoveAbility(this.unit, this.lastAbility);
     }
 
     public remove() {
         RemoveUnit(this.unit);
     }
+}
+
+function createDummyUnit(castingUnit: unit) {
+    let newUnit = new Unit(CreateUnit(GetOwningPlayer(castingUnit), FourCC(DummyCaster.getInstance().unitTypeBase), 0, 0, bj_UNIT_FACING));
+    newUnit.maxHealth = 10000;
+    newUnit.maxMana = 10000;
+    newUnit.health = 10000;
+    newUnit.mana = 10000;
+    newUnit.acquireRange = 0;
+    newUnit.invulnerable = true;
+    newUnit.SetPathing(false);
+    newUnit.Show(false);
+    newUnit.SetWeaponBooleanField(UNIT_WEAPON_BF_ATTACKS_ENABLED, false, WeaponIndex.WEAPON_1);
+    newUnit.SetWeaponBooleanField(UNIT_WEAPON_BF_ATTACKS_ENABLED, false, WeaponIndex.WEAPON_2);
+    newUnit.SetStringField(UNIT_SF_SHADOW_IMAGE_UNIT, "");
+    newUnit.SetBooleanField(UNIT_BF_HIDE_MINIMAP_DISPLAY, true);
+    newUnit.SetRealField(UNIT_RF_CAST_BACK_SWING, 0.001);
+    newUnit.SetRealField(UNIT_RF_CAST_POINT, 0.001);
+    newUnit.SetRealField(UNIT_RF_SELECTION_SCALE, 0.001);
+    newUnit.SetRealField(UNIT_RF_SHADOW_IMAGE_HEIGHT, 0);
+    newUnit.SetRealField(UNIT_RF_SHADOW_IMAGE_WIDTH, 0);
+    return newUnit;
 }

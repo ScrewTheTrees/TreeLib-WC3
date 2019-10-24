@@ -1,5 +1,5 @@
-import {DummyCaster} from "../DummyCasting/DummyCaster";
 import {StringBuilder} from "../Utility/StringBuilder";
+import {DummyCaster} from "../DummyCasting/DummyCaster";
 
 export class DamageHitContainer {
     public actualUnit: unit;

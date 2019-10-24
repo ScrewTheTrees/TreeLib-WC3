@@ -5,6 +5,8 @@ import {AttackingPlayerDDSFilter} from "./TreeLib/DDS/Filters/AttackingPlayerDDS
 import {AttackingUnitIsHeroDDSFilter} from "./TreeLib/DDS/Filters/AttackingUnitIsHeroDDSFilter";
 import {AttackedUnitIsHeroDDSFilter} from "./TreeLib/DDS/Filters/AttackedUnitIsHeroDDSFilter";
 import {AttackedPlayersDDSFilter} from "./TreeLib/DDS/Filters/AttackedPlayersDDSFilter";
+import {Delay} from "./TreeLib/Utility/Delay";
+import {DummyCaster} from "./TreeLib/DummyCasting/DummyCaster";
 
 export class Game {
     constructor() {
@@ -28,5 +30,10 @@ export class Game {
 
         redAttacksAnyone.addFilter(new AttackingPlayerDDSFilter(Player(0)));
         redAttacksAnyone.addFilter(new AttackedPlayersDDSFilter([Player(1), Player(2)]));
+
+        Delay.getInstance().addDelay(() => {
+            DummyCaster.getInstance().castAtUnitInstant(FourCC("ACf3"),
+                "fingerofdeath", _G["gg_unit_hkni_0010"], _G["gg_unit_Hamg_0003"]);
+        }, 5);
     }
 }
