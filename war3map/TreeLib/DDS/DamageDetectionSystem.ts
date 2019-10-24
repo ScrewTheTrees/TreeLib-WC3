@@ -63,20 +63,28 @@ export class DamageDetectionSystem {
 
     private readonly hitContainer = new DamageHitContainer();
 
+    private resolveHitContainer() {
+        if (this.allowRecursiveDDS) {
+            return new DamageHitContainer();
+        } else {
+            this.hitContainer.updateContainer();
+            return this.hitContainer;
+        }
+    }
+
     private onBeforeHit() {
-        this.hitContainer.updateContainer();
         this.onHitExecute(this.beforeHitCallbacks);
         this.locked = false;
     }
 
     private onAfterHit() {
-        this.hitContainer.updateContainer();
         this.onHitExecute(this.afterHitCallbacks);
         this.locked = false;
     }
-    private isPassingFilters(hitCall: HitCallback) {
+
+    private isPassingFilters(hitCall: HitCallback, hitContainer: DamageHitContainer) {
         for (let filter of hitCall.filters) {
-            if (!filter.runFilter(this.hitContainer)) {
+            if (!filter.runFilter(hitContainer)) {
                 return false;
             }
         }
@@ -85,11 +93,12 @@ export class DamageDetectionSystem {
 
     private onHitExecute(hitCallbacks: HitCallback[]) {
         if (!this.isLocked()) {
+            let hitContainer = this.resolveHitContainer();
             for (let hitCall of hitCallbacks) {
                 this.locked = true;
                 xpcall(() => {
-                    if (this.isPassingFilters(hitCall)) {
-                        hitCall.callback(this.hitContainer);
+                    if (this.isPassingFilters(hitCall, hitContainer)) {
+                        hitCall.callback(hitContainer);
                     }
                 }, () => Logger.LogCritical);
                 this.locked = false;
