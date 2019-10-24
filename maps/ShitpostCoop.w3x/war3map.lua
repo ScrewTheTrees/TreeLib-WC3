@@ -44,7 +44,8 @@ function CreateUnitsForPlayer0()
     local unitID
     local t
     local life
-    u = CreateUnit(p, FourCC("Hamg"), -812.8, -2085.5, 36.608)
+    u = CreateUnit(p, FourCC("Hamg"), -812.8, -2085.5, 94.804)
+    u = CreateUnit(p, FourCC("hrif"), -954.1, -2077.6, 81.096)
 end
 
 function CreateUnitsForPlayer1()
@@ -53,10 +54,24 @@ function CreateUnitsForPlayer1()
     local unitID
     local t
     local life
-    u = CreateUnit(p, FourCC("hfoo"), -949.0, -1516.5, 95.727)
-    u = CreateUnit(p, FourCC("hkni"), -753.8, -1526.7, 201.880)
-    u = CreateUnit(p, FourCC("hrif"), -566.7, -1533.5, 31.378)
-    u = CreateUnit(p, FourCC("hpea"), -1111.2, -1465.1, 277.457)
+    u = CreateUnit(p, FourCC("hfoo"), -932.0, -1594.1, -80.306)
+    u = CreateUnit(p, FourCC("hkni"), -736.9, -1604.3, 260.635)
+    u = CreateUnit(p, FourCC("hrif"), -549.7, -1611.1, 243.641)
+    u = CreateUnit(p, FourCC("hpea"), -1090.4, -1576.2, -66.837)
+    u = CreateUnit(p, FourCC("Hpal"), -1245.8, -1523.4, -57.793)
+end
+
+function CreateUnitsForPlayer2()
+    local p = Player(2)
+    local u
+    local unitID
+    local t
+    local life
+    u = CreateUnit(p, FourCC("hpea"), -1085.4, -1430.0, -71.337)
+    u = CreateUnit(p, FourCC("hfoo"), -927.0, -1447.9, -82.601)
+    u = CreateUnit(p, FourCC("hkni"), -731.8, -1458.1, 262.115)
+    u = CreateUnit(p, FourCC("hrif"), -544.7, -1464.8, 248.135)
+    u = CreateUnit(p, FourCC("Hblm"), -417.2, -1538.6, 237.137)
 end
 
 function CreateNeutralPassiveBuildings()
@@ -75,6 +90,7 @@ end
 function CreatePlayerUnits()
     CreateUnitsForPlayer0()
     CreateUnitsForPlayer1()
+    CreateUnitsForPlayer2()
 end
 
 function CreateAllUnits()

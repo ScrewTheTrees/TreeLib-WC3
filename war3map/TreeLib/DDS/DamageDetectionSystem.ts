@@ -1,8 +1,7 @@
 import {Hooks} from "../Hooks";
 import {DamageHitContainer} from "./DamageHitContainer";
-import {DamageBeforeHitContainer} from "./DamageBeforeHitContainer";
-import {BeforeHitCallback} from "./BeforeHitCallback";
-import {AfterHitCallback} from "./AfterHitCallback";
+import {HitCallback} from "./HitCallback";
+import {Logger} from "../Logger";
 
 export class DamageDetectionSystem {
     private static instance: DamageDetectionSystem;
@@ -18,8 +17,8 @@ export class DamageDetectionSystem {
     private readonly beforeHit: trigger;
     private readonly afterHit: trigger;
 
-    private readonly beforeHitCallbacks: BeforeHitCallback[] = [];
-    private readonly afterHitCallbacks: AfterHitCallback[] = [];
+    private readonly beforeHitCallbacks: HitCallback[] = [];
+    private readonly afterHitCallbacks: HitCallback[] = [];
 
     private constructor() {
         this.beforeHit = CreateTrigger();
@@ -39,33 +38,62 @@ export class DamageDetectionSystem {
      * Register a callback that recives an object used for getting and manipulating damage data before damage calculation.
      * Includes damage, damagetypes, target, caster, aliasedCaster (if casted by dummy)
      */
-    public registerBeforeCalculation(callback: (hitObject: DamageBeforeHitContainer) => void): any {
-        this.beforeHitCallbacks.push(new BeforeHitCallback(callback));
-        return this.afterHitCallbacks.length - 1;
+    public registerBeforeDamageCalculation(callback: (hitObject: DamageHitContainer) => void) {
+        let hitCall = new HitCallback(callback);
+        this.beforeHitCallbacks.push(hitCall);
+        return hitCall;
     }
+
     /**
      * Register a callback that recives an object used for getting and manipulating damage data after damage calculations.
      * Includes damage, damagetypes, target, caster, aliasedCaster (if casted by dummy)
      */
-    public registerAfterCalculation(callback: (hitObject: DamageHitContainer) => void): any {
-        this.afterHitCallbacks.push(new AfterHitCallback(callback));
-        return this.afterHitCallbacks.length - 1;
+    public registerAfterDamageCalculation(callback: (hitObject: DamageHitContainer) => void) {
+        let hitCall = new HitCallback(callback);
+        this.afterHitCallbacks.push(hitCall);
+        return hitCall;
     }
 
+    public allowRecursiveDDS = false;
+    private locked = false;
+
+    private isLocked() {
+        return (this.locked && !this.allowRecursiveDDS);
+    }
+
+    private readonly hitContainer = new DamageHitContainer();
 
     private onBeforeHit() {
-        const beforeHit = new DamageBeforeHitContainer();
-
-        for (let hitCall of this.beforeHitCallbacks) {
-            hitCall.callback(beforeHit);
-        }
+        this.hitContainer.updateContainer();
+        this.onHitExecute(this.beforeHitCallbacks);
+        this.locked = false;
     }
 
     private onAfterHit() {
-        const afterHit = new DamageHitContainer();
+        this.hitContainer.updateContainer();
+        this.onHitExecute(this.afterHitCallbacks);
+        this.locked = false;
+    }
+    private isPassingFilters(hitCall: HitCallback) {
+        for (let filter of hitCall.filters) {
+            if (!filter.runFilter(this.hitContainer)) {
+                return false;
+            }
+        }
+        return true;
+    }
 
-        for (let hitCall of this.afterHitCallbacks) {
-            hitCall.callback(afterHit);
+    private onHitExecute(hitCallbacks: HitCallback[]) {
+        if (!this.isLocked()) {
+            for (let hitCall of hitCallbacks) {
+                this.locked = true;
+                xpcall(() => {
+                    if (this.isPassingFilters(hitCall)) {
+                        hitCall.callback(this.hitContainer);
+                    }
+                }, () => Logger.LogCritical);
+                this.locked = false;
+            }
         }
     }
 }
