@@ -20,6 +20,7 @@ export abstract class Entity {
                         entity._internalTimer += 0.01;
                         if (entity._internalTimer >= entity._timerDelay) {
                             entity.step();
+                            entity._internalTimer = 0;
                         }
                     }, () => Logger.LogCritical));
             };
