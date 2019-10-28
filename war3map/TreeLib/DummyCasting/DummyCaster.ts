@@ -4,6 +4,7 @@ import {Logger} from "../Logger";
 import {Unit} from "../Wrappers/Unit";
 import {WeaponIndex} from "../Wrappers/WeaponIndex";
 import {Point} from "../Utility/Point";
+import {Delay} from "../Utility/Delay";
 
 export class DummyCaster extends Entity {
     private static instance: DummyCaster;
@@ -36,9 +37,31 @@ export class DummyCaster extends Entity {
         return this.aliases[GetHandleId(caster)];
     }
 
-    public castAtUnitInstant(abilityId: number, orderString: string, target: unit, castingUnit: unit) {
+    public castAtWidgetInstant(abilityId: number, orderString: string, target: widget, castingUnit: unit,
+                               origin: Point = Point.fromWidget(castingUnit), level: number = 0, extraSeconds: number = 2) {
         let caster = this.getNonExpended(castingUnit);
-        caster.issueTargetInstant(abilityId, orderString, target, castingUnit);
+        caster.issueTargetInstant(abilityId, orderString, target, castingUnit, origin, level, extraSeconds);
+        return caster;
+    }
+
+    public channelAtWidget(abilityId: number, orderString: string, target: widget, castingUnit: unit,
+                           origin: Point = Point.fromWidget(castingUnit), level: number = 0, extraSeconds: number = 2) {
+        let caster = this.getNonExpended(castingUnit);
+        caster.issueTargetChannel(abilityId, orderString, target, castingUnit, origin, level, extraSeconds);
+        return caster;
+    }
+
+    public channelAtPoint(abilityId: number, orderString: string, target: Point, castingUnit: unit,
+                          level: number = 0, extraSeconds: number = 2) {
+        let caster = this.getNonExpended(castingUnit);
+        caster.issuePointOrder(abilityId, orderString, target, castingUnit, target, level, extraSeconds);
+        return caster;
+    }
+
+    public castImmediately(abilityId: number, orderString: string, castingUnit: unit, level: number = 0, extraSeconds: number = 2) {
+        let caster = this.getNonExpended(castingUnit);
+        caster.issueImmediateOrder(abilityId, orderString, castingUnit, level, extraSeconds);
+        return caster;
     }
 
     private getNonExpended(castingUnit: unit): Caster {
@@ -62,7 +85,7 @@ export class DummyCaster extends Entity {
         super();
     }
 
-    secondStep(): void {
+    private secondStep(): void {
         this.allCasters.forEach((caster) => {
             if (caster.expended <= 0) {
                 caster.inactiveFor += 1;
@@ -109,7 +132,7 @@ class Caster {
     public inactiveFor: number = 0;
 
     constructor(castingUnit: unit) {
-        let newUnit = createDummyUnit(castingUnit);
+        let newUnit = Caster.createDummyUnit(castingUnit);
 
         this.unit = newUnit.wrappedUnit;
         this.expended = 0;
@@ -117,28 +140,44 @@ class Caster {
         DummyCaster.getInstance().addAlias(this.unit, castingUnit);
     }
 
-    private addAbility(abilityId: number) {
+    private addAbility(abilityId: number, level: number, to: unit = this.unit) {
         this.lastAbility = abilityId;
-        UnitAddAbility(this.unit, abilityId);
+        UnitAddAbility(to, abilityId);
+        SetUnitAbilityLevel(to, abilityId, level);
     }
 
-    public issueTargetInstant(abilityId: number, orderString: string, target: widget, castingUnit: unit) {
-        this.issueTargetInstantOrigin(abilityId, orderString, target, castingUnit, Point.fromLocationClean(GetUnitLoc(castingUnit)));
-    }
-
-    public issueTargetInstantOrigin(abilityId: number, orderString: string, target: widget, castingUnit: unit, origin: Point) {
+    public issueTargetInstant(abilityId: number, orderString: string, target: widget, castingUnit: unit, origin: Point, level: number, extraSeconds: number) {
         DummyCaster.getInstance().addAlias(this.unit, castingUnit);
-        this.addAbility(abilityId);
+        this.addAbility(abilityId, level);
         SetUnitPositionLoc(this.unit, origin.toLocationClean());
         IssueTargetOrder(this.unit, orderString, target);
-        this.expended = 2;
+        this.expended = extraSeconds;
         this.inactiveFor = 0;
     }
 
-    public issueTargetChannel(abilityId: number, orderString: string, target: widget, castingUnit: unit) {
-        this.issueTargetInstantOrigin(abilityId, orderString, target, castingUnit, Point.fromLocationClean(GetUnitLoc(castingUnit)));
+    public issueTargetChannel(abilityId: number, orderString: string, target: widget, castingUnit: unit, origin: Point, level: number, extraSeconds: number) {
+        this.issueTargetInstant(abilityId, orderString, target, castingUnit, origin, level, extraSeconds);
         let abil = BlzGetUnitAbility(this.unit, abilityId);
-        this.expended = BlzGetAbilityRealLevelField(abil, ABILITY_RLF_DURATION_NORMAL, 0) + 2;
+        this.expended = BlzGetAbilityRealLevelField(abil, ABILITY_RLF_DURATION_NORMAL, GetUnitAbilityLevel(this.unit, abilityId)) + extraSeconds;
+    }
+
+    public issuePointOrder(abilityId: number, orderString: string, target: Point, castingUnit: unit, origin: Point, level: number, extraSeconds: number) {
+        DummyCaster.getInstance().addAlias(this.unit, castingUnit);
+        this.addAbility(abilityId, level);
+        let abil = BlzGetUnitAbility(this.unit, abilityId);
+        SetUnitPositionLoc(this.unit, origin.toLocationClean());
+        IssuePointOrder(this.unit, orderString, target.x, target.y);
+        this.expended = BlzGetAbilityRealLevelField(abil, ABILITY_RLF_DURATION_NORMAL, GetUnitAbilityLevel(this.unit, abilityId)) + extraSeconds;
+        this.inactiveFor = 0;
+    }
+
+    public issueImmediateOrder(abilityId: number, orderString: string, castingUnit: unit, level: number, extraSeconds: number) {
+        this.addAbility(abilityId, level, castingUnit);
+        IssueImmediateOrder(castingUnit, orderString);
+        let abil = BlzGetUnitAbility(castingUnit, abilityId);
+        Delay.getInstance().addDelay(() => {
+            UnitRemoveAbility(castingUnit, abilityId);
+        }, BlzGetAbilityRealLevelField(abil, ABILITY_RLF_DURATION_NORMAL, level) + extraSeconds);
     }
 
     public isAvailable(owner: player) {
@@ -157,26 +196,26 @@ class Caster {
     public remove() {
         RemoveUnit(this.unit);
     }
-}
 
-function createDummyUnit(castingUnit: unit) {
-    let newUnit = new Unit(CreateUnit(GetOwningPlayer(castingUnit), FourCC(DummyCaster.getInstance().unitTypeBase), 0, 0, bj_UNIT_FACING));
-    newUnit.maxHealth = 10000;
-    newUnit.maxMana = 10000;
-    newUnit.health = 10000;
-    newUnit.mana = 10000;
-    newUnit.acquireRange = 0;
-    newUnit.invulnerable = true;
-    newUnit.SetPathing(false);
-    newUnit.Show(false);
-    newUnit.SetWeaponBooleanField(UNIT_WEAPON_BF_ATTACKS_ENABLED, false, WeaponIndex.WEAPON_1);
-    newUnit.SetWeaponBooleanField(UNIT_WEAPON_BF_ATTACKS_ENABLED, false, WeaponIndex.WEAPON_2);
-    newUnit.SetStringField(UNIT_SF_SHADOW_IMAGE_UNIT, "");
-    newUnit.SetBooleanField(UNIT_BF_HIDE_MINIMAP_DISPLAY, true);
-    newUnit.SetRealField(UNIT_RF_CAST_BACK_SWING, 0.001);
-    newUnit.SetRealField(UNIT_RF_CAST_POINT, 0.001);
-    newUnit.SetRealField(UNIT_RF_SELECTION_SCALE, 0.001);
-    newUnit.SetRealField(UNIT_RF_SHADOW_IMAGE_HEIGHT, 0);
-    newUnit.SetRealField(UNIT_RF_SHADOW_IMAGE_WIDTH, 0);
-    return newUnit;
+    public static createDummyUnit(castingUnit: unit) {
+        let newUnit = new Unit(CreateUnit(GetOwningPlayer(castingUnit), FourCC(DummyCaster.getInstance().unitTypeBase), 0, 0, bj_UNIT_FACING));
+        newUnit.maxHealth = 10000;
+        newUnit.maxMana = 10000;
+        newUnit.health = 10000;
+        newUnit.mana = 10000;
+        newUnit.acquireRange = 0;
+        newUnit.invulnerable = true;
+        newUnit.SetPathing(false);
+        newUnit.Show(false);
+        newUnit.SetWeaponBooleanField(UNIT_WEAPON_BF_ATTACKS_ENABLED, false, WeaponIndex.WEAPON_1);
+        newUnit.SetWeaponBooleanField(UNIT_WEAPON_BF_ATTACKS_ENABLED, false, WeaponIndex.WEAPON_2);
+        newUnit.SetStringField(UNIT_SF_SHADOW_IMAGE_UNIT, "");
+        newUnit.SetBooleanField(UNIT_BF_HIDE_MINIMAP_DISPLAY, true);
+        newUnit.SetRealField(UNIT_RF_CAST_BACK_SWING, 0.001);
+        newUnit.SetRealField(UNIT_RF_CAST_POINT, 0.001);
+        newUnit.SetRealField(UNIT_RF_SELECTION_SCALE, 0.001);
+        newUnit.SetRealField(UNIT_RF_SHADOW_IMAGE_HEIGHT, 0);
+        newUnit.SetRealField(UNIT_RF_SHADOW_IMAGE_WIDTH, 0);
+        return newUnit;
+    }
 }

@@ -7,6 +7,7 @@ import {AttackingPlayersDDSFilter} from "./TreeLib/DDS/Filters/AttackingPlayersD
 import {Delay} from "./TreeLib/Utility/Delay";
 import {DummyCaster} from "./TreeLib/DummyCasting/DummyCaster";
 import {Players} from "./TreeLib/Structs/Players";
+import {Point} from "./TreeLib/Utility/Point";
 
 export class Game {
     constructor() {
@@ -33,9 +34,13 @@ export class Game {
         redAttacksAnyone.addFilter(AttackingPlayersDDSFilter.RED);
         redAttacksAnyone.addFilter(new AttackedPlayersDDSFilter(Players.BLUE, Players.TEAL));
 
+        let archmage = _G["gg_unit_Hamg_0003"];
+        let knight = _G["gg_unit_hkni_0010"];
+
         Delay.getInstance().addDelay(() => {
-            DummyCaster.getInstance().castAtUnitInstant(FourCC("ACf3"),
-                "fingerofdeath", _G["gg_unit_hkni_0010"], _G["gg_unit_Hamg_0003"]);
+            DummyCaster.getInstance().castAtWidgetInstant(FourCC("ACf3"), "fingerofdeath", knight, archmage);
+            DummyCaster.getInstance().castImmediately(FourCC("ACds"), "divineshield", archmage);
+            DummyCaster.getInstance().channelAtPoint(FourCC("ACfs"), "flamestrike", Point.fromWidget(archmage) ,archmage, 0, 15);
         }, 5);
     }
 }

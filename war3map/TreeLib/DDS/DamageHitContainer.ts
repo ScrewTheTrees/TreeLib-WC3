@@ -2,7 +2,7 @@ import {StringBuilder} from "../Utility/StringBuilder";
 import {DummyCaster} from "../DummyCasting/DummyCaster";
 
 export class DamageHitContainer {
-    public actualUnit: unit;
+    public rawAttackingUnit: unit;
     public attackingUnit: unit;
     public attackedUnit: unit;
     protected _damageNumber: number;
@@ -11,7 +11,7 @@ export class DamageHitContainer {
     protected _weaponType: weapontype;
 
     constructor() {
-        this.actualUnit = GetEventDamageSource();
+        this.rawAttackingUnit = GetEventDamageSource();
         this.attackingUnit = GetEventDamageSource();
         this.attackedUnit = BlzGetEventDamageTarget();
         this._damageNumber = GetEventDamage();
@@ -23,7 +23,7 @@ export class DamageHitContainer {
     }
 
     public updateContainer() {
-        this.actualUnit = GetEventDamageSource();
+        this.rawAttackingUnit = GetEventDamageSource();
         this.attackingUnit = GetEventDamageSource();
         this.attackedUnit = BlzGetEventDamageTarget();
         this._damageNumber = GetEventDamage();

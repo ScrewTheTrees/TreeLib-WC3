@@ -60,11 +60,8 @@ export class Point {
         return point;
     }
 
-    public static fromUnit(inputU: unit) {
-        let loc = GetUnitLoc(inputU);
-        let point = new Point(GetLocationX(loc), GetLocationY(loc));
-        RemoveLocation(loc);
-        return point;
+    public static fromWidget(inputU: widget) {
+        return new Point(GetWidgetX(inputU), GetWidgetY(inputU));
     }
 
     distanceToLine(lineStart: Point, lineEnd: Point) {
