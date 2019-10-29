@@ -20,7 +20,7 @@ export class UnitQueue implements Queue {
             let action = this.allActions[this.currentActionIndex];
             action.update(this.target);
             if (action.isFinished) {
-                Logger.LogVerbose("To next action: ", this.currentActionIndex + 1, "/", this.allActions.length);
+                Logger.LogVerbose("To next action: ", this.currentActionIndex + 2, "/", this.allActions.length);
                 this.currentActionIndex += 1;
                 if (this.currentActionIndex < this.allActions.length) {
                     let newAction = this.allActions[this.currentActionIndex];

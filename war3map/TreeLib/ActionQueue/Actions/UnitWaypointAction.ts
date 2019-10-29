@@ -19,13 +19,17 @@ export class UnitWaypointAction implements UnitAction {
         this.maxTime = maxTime;
     }
 
+    private updateTimer: number = 5;
+
     update(target: unit): void {
         this.timer += ActionQueueConfig.getInstance().timerDelay;
+        this.updateTimer += ActionQueueConfig.getInstance().timerDelay;
         if (Point.fromWidget(target).distanceTo(this.toPoint) <= this.acceptableDistance || this.timer > this.maxTime) {
             this.isFinished = true;
             Logger.LogVerbose("Finished waypoint");
-        } else if (GetUnitCurrentOrder(target) == 0) {
+        } else if (this.updateTimer >= 5) {
             IssuePointOrder(target, this.order, this.toPoint.x, this.toPoint.y); //Update order
+            this.updateTimer -= 5;
         }
     }
 
