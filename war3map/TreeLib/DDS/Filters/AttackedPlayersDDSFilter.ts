@@ -11,7 +11,7 @@ export class AttackedPlayersDDSFilter implements DDSFilter {
 
     runFilter(hitObject: DamageHitContainer): boolean {
         for (let play of this.attackedPlayers) {
-            if (GetOwningPlayer(hitObject.attackedUnit) == play) {
+            if (hitObject.attackedPlayer == play) {
                 return true;
             }
         }

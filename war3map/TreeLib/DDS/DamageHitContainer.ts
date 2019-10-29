@@ -36,6 +36,14 @@ export class DamageHitContainer {
         }
     }
 
+    get attackingPlayer() {
+        return GetOwningPlayer(this.attackingUnit);
+    }
+
+    get attackedPlayer() {
+        return GetOwningPlayer(this.attackedUnit);
+    }
+
     get eventDamage() {
         return this._damageNumber;
     }
