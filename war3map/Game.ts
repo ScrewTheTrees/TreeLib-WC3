@@ -12,6 +12,7 @@ import {ActionQueue} from "./TreeLib/ActionQueue/ActionQueue";
 import {UnitWaypointAction} from "./TreeLib/ActionQueue/Actions/UnitWaypointAction";
 import {WaypointOrders} from "./TreeLib/ActionQueue/Actions/WaypointOrders";
 import {UnitDeathAction} from "./TreeLib/ActionQueue/Actions/UnitDeathAction";
+import {UnitKillAction} from "./TreeLib/ActionQueue/Actions/UnitKillAction";
 
 export class Game {
     private dummyCaster: DummyCaster;
@@ -61,8 +62,8 @@ export class Game {
                 new UnitWaypointAction(new Point(870, -3064)),
                 new UnitWaypointAction(new Point(870, -1450), WaypointOrders.smart),
                 new UnitWaypointAction(new Point(2000, -1450), WaypointOrders.attack),
+                new UnitKillAction(archmage, 5),
                 new UnitDeathAction(true),
-                new UnitWaypointAction(new Point(870, -3064)),
             )
         }, 2, 5);
 

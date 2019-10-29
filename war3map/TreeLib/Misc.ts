@@ -58,3 +58,7 @@ export function InverseFourCC(input: number): string
 {
     return string.pack(">I4", input);
 }
+
+export function IsValidUnit(target: unit) {
+    return GetUnitTypeId(target) != 0;
+}

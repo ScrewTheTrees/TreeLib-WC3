@@ -1,6 +1,7 @@
 import {Queue} from "./Queue";
 import {UnitAction} from "../Actions/UnitAction";
 import {Logger} from "../../Logger";
+import {IsValidUnit} from "../../Misc";
 
 
 export class UnitQueue implements Queue {
@@ -33,7 +34,7 @@ export class UnitQueue implements Queue {
     }
 
     update(): void {
-        if (GetUnitTypeId(this.target) != 0) {
+        if (IsValidUnit(this.target)) {
             if (IsUnitAliveBJ(this.target)) {
                 this.performAction();
             }

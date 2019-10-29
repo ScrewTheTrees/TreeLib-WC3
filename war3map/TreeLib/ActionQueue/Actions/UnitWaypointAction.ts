@@ -2,21 +2,26 @@ import {UnitAction} from "./UnitAction";
 import {Point} from "../../Utility/Point";
 import {WaypointOrders} from "./WaypointOrders";
 import {Logger} from "../../Logger";
+import {ActionQueueConfig} from "../ActionQueueConfig";
 
 export class UnitWaypointAction implements UnitAction {
     isFinished: boolean = false;
     private readonly toPoint: Point;
     private readonly acceptableDistance: number;
     private readonly order: WaypointOrders;
+    private readonly maxTime: number;
+    private timer: number = 0;
 
-    constructor(toPoint: Point, order: WaypointOrders = WaypointOrders.smart, acceptableDistance: number = 32) {
+    constructor(toPoint: Point, order: WaypointOrders = WaypointOrders.smart, acceptableDistance: number = 32, maxTime: number = 300) {
         this.toPoint = toPoint;
         this.order = order;
         this.acceptableDistance = acceptableDistance;
+        this.maxTime = maxTime;
     }
 
     update(target: unit): void {
-        if (Point.fromWidget(target).distanceTo(this.toPoint) <= this.acceptableDistance) {
+        this.timer += ActionQueueConfig.getInstance().timerDelay;
+        if (Point.fromWidget(target).distanceTo(this.toPoint) <= this.acceptableDistance || this.timer > this.maxTime) {
             this.isFinished = true;
             Logger.LogVerbose("Finished waypoint");
         } else if (GetUnitCurrentOrder(target) == 0) {

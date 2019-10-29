@@ -4,6 +4,7 @@ import {Queue} from "./Queues/Queue";
 import {UnitQueue} from "./Queues/UnitQueue";
 import {UnitAction} from "./Actions/UnitAction";
 import {Logger} from "../Logger";
+import {ActionQueueConfig} from "./ActionQueueConfig";
 
 /**
  * ActionQueue is a system that allows you to create waypoints and a string of orders, like if a player would
@@ -23,10 +24,11 @@ export class ActionQueue extends Entity {
 
     constructor() {
         super();
-        this._timerDelay = 0.25;
+        this._timerDelay = ActionQueueConfig.getInstance().timerDelay;
     }
 
     step(): void {
+        this._timerDelay = ActionQueueConfig.getInstance().timerDelay;
         for (let i = 0; i < this.allQueues.length; i++) {
             let queue = this.allQueues[i];
             if (queue.isFinished) {
