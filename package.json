@@ -4,10 +4,16 @@
   "description": "Quality package.",
   "version": "1.0.0",
   "scripts": {
-    "fullRecompile": "npm run clean && npm run compileTypescript && npm run compileMap",
-    "compileMap": "ceres run ShitpostCoop.w3x",
+    "fullRecompile": "npm run clean && npm run compileTypescript && npm run createDirectory && npm run copyMap && npm run extractLua && npm run compileMap && npm run injectLua && npm run compact && npm run run",
+    "clean": "rimraf src/* && rimraf target/* && rimraf maps/Output && rimraf maps/Build",
     "compileTypescript": "tstl -p tsconfig.json",
-    "clean": "rimraf src/* && rimraf target/*"
+    "createDirectory": "mkdir maps\\Output > nul",
+    "copyMap": "copy %npm_package_config_devMap% %npm_package_config_outputMap% > nul",
+    "extractLua": "%npm_package_config_mpqEditor% extract %npm_package_config_devMap% war3map.lua maps\\Build",
+    "compileMap": "%npm_package_config_ceres% build Build",
+    "injectLua": "%npm_package_config_mpqEditor% add %npm_package_config_outputMap% target\\Build\\war3map.lua war3map.lua",
+    "compact": "%npm_package_config_mpqEditor% compact %npm_package_config_outputMap%",
+    "run": "%npm_package_config_wardir% -loadfile %INIT_CWD%\\maps\\Output\\Output.w3x"
   },
   "directories": {
     "lib": "lib"
@@ -18,5 +24,12 @@
     "typescript-to-lua": "^0.28.0",
     "lua-types": "^2.6.2",
     "rimraf": "^3.0.0"
+  },
+  "config": {
+    "wardir": "\"D:\\Games\\Warcraft III\\x86_64\\Warcraft III.exe\"",
+    "mpqEditor": "tools\\MPQEditor\\x64\\MPQEditor.exe",
+    "ceres": "tools\\ceres\\ceres.exe",
+    "devMap": "maps\\Dev\\Map.w3x",
+    "outputMap": "maps\\Output\\Output.w3x"
   }
 }
