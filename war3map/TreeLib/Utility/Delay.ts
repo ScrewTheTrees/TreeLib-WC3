@@ -29,13 +29,18 @@ export class Delay extends Entity {
             queueDto.age += 0.01;
             if (queueDto.age >= queueDto.delay) {
                 queueDto.function();
-                this.queue.splice(index, 1);
+                queueDto.repeatCounter += 1;
+                if (queueDto.repeatCounter >= queueDto.repeats) {
+                    this.queue.splice(index, 1);
+                } else {
+                    queueDto.age = 0;
+                }
             }
         }
     }
 
-    public addDelay(f: Function, delaySeconds: number) {
-        this.addDelayFrom(new DelayDto(f, delaySeconds));
+    public addDelay(f: Function, delaySeconds: number, repeats: number = 1) {
+        this.addDelayFrom(new DelayDto(f, delaySeconds, repeats));
     }
 
     public addDelayFrom(delayDto: DelayDto) {
