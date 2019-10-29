@@ -20,11 +20,11 @@ function CreateUnitsForPlayer1()
     local unitID
     local t
     local life
-    u = CreateUnit(p, FourCC("hfoo"), -932.0, -1594.1, -80.306)
+    u = CreateUnit(p, FourCC("hfoo"), -932.0, -1594.1, 279.694)
     gg_unit_hkni_0010 = CreateUnit(p, FourCC("hkni"), -828.5, -1952.2, 260.635)
     u = CreateUnit(p, FourCC("hrif"), -549.7, -1611.1, 243.641)
-    u = CreateUnit(p, FourCC("hpea"), -1090.4, -1576.2, -66.837)
-    u = CreateUnit(p, FourCC("Hpal"), -1245.8, -1523.4, -57.793)
+    u = CreateUnit(p, FourCC("hpea"), -1090.4, -1576.2, 293.163)
+    u = CreateUnit(p, FourCC("Hpal"), -1245.8, -1523.4, 302.207)
     u = CreateUnit(p, FourCC("hkni"), -734.7, -1598.0, 260.635)
 end
 
@@ -34,11 +34,20 @@ function CreateUnitsForPlayer2()
     local unitID
     local t
     local life
-    u = CreateUnit(p, FourCC("hpea"), -1085.4, -1430.0, -71.337)
-    u = CreateUnit(p, FourCC("hfoo"), -927.0, -1447.9, -82.601)
+    u = CreateUnit(p, FourCC("hpea"), -1085.4, -1430.0, 288.663)
+    u = CreateUnit(p, FourCC("hfoo"), -927.0, -1447.9, 277.399)
     u = CreateUnit(p, FourCC("hkni"), -731.8, -1458.1, 262.115)
     u = CreateUnit(p, FourCC("hrif"), -544.7, -1464.8, 248.135)
     u = CreateUnit(p, FourCC("Hblm"), -417.2, -1538.6, 237.137)
+end
+
+function CreateNeutralHostileBuildings()
+    local p = Player(PLAYER_NEUTRAL_AGGRESSIVE)
+    local u
+    local unitID
+    local t
+    local life
+    u = CreateUnit(p, FourCC("hcas"), 2432.0, -1536.0, 270.000)
 end
 
 function CreateNeutralPassiveBuildings()
@@ -61,6 +70,7 @@ function CreatePlayerUnits()
 end
 
 function CreateAllUnits()
+    CreateNeutralHostileBuildings()
     CreateNeutralPassiveBuildings()
     CreatePlayerBuildings()
     CreatePlayerUnits()
