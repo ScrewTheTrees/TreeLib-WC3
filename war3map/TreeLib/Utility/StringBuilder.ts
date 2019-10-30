@@ -1,3 +1,6 @@
+/**
+ * A simple stringbuilder that concats strings in the most efficent way possible.
+ */
 export class StringBuilder {
     private contentArray: string[] = [];
 

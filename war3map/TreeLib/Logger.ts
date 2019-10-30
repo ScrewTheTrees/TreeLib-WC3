@@ -1,6 +1,7 @@
 /**
  * Very basic logger, use booleans to turn specific levels of logging on and off
  * Generally you would want Debug turned on for DEV but disabled for release.
+ * And verbose on in worst case erroring.
  */
 export class Logger {
     static doLogVerbose = false;

@@ -3,6 +3,9 @@ import {Logger} from "../../Logger";
 import {ActionQueueConfig} from "../ActionQueueConfig";
 import {IsValidUnit} from "../../Misc";
 
+/**
+ * Try to kill a unit until it is dead, or the time runs out
+ */
 export class UnitKillAction implements UnitAction {
     isFinished: boolean = false;
     private readonly killUnit: unit;

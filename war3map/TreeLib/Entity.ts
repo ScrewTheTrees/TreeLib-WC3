@@ -3,7 +3,7 @@ import {Logger} from "./Logger";
 
 /**
  * Entities are great for when you need logic executed continuously.
- * Loops in intervals of 0.01 , changeable with timerdelay
+ * Loops in intervals of 0.01 , changeable with timerdelay on an entity level, at any time.
  */
 export abstract class Entity {
     private static entities: Entity[] = [];

@@ -3,7 +3,7 @@ import {Hooks} from "../Hooks";
 import {DelayDto} from "./DelayDto";
 
 /**
- * The Delay Executes the sent function after a defined delay.
+ * The Delay Executes the sent function after a defined delay. Can also be repeated X amount of times.
  */
 export class Delay extends Entity {
     private static instance: Delay;
@@ -23,8 +23,7 @@ export class Delay extends Entity {
     private queue: DelayDto[] = [];
 
     step(): void {
-        for (let _index = 0; _index < this.queue.length; _index++) {
-            let index = tonumber(_index) || 0;
+        for (let index = 0; index < this.queue.length; index++) {
             let queueDto = this.queue[index];
             queueDto.age += 0.01;
             if (queueDto.age >= queueDto.delay) {
@@ -32,6 +31,7 @@ export class Delay extends Entity {
                 queueDto.repeatCounter += 1;
                 if (queueDto.repeatCounter >= queueDto.repeats) {
                     this.queue.splice(index, 1);
+                    index -= 1;
                 } else {
                     queueDto.age = 0;
                 }

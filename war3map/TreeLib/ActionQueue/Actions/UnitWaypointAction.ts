@@ -4,6 +4,9 @@ import {WaypointOrders} from "./WaypointOrders";
 import {Logger} from "../../Logger";
 import {ActionQueueConfig} from "../ActionQueueConfig";
 
+/**
+ * Basic waypoint action, move, attack move, or smart your way over to a Point.
+ */
 export class UnitWaypointAction implements UnitAction {
     isFinished: boolean = false;
     private readonly toPoint: Point;

@@ -3,7 +3,9 @@ import {UnitAction} from "../Actions/UnitAction";
 import {Logger} from "../../Logger";
 import {IsValidUnit} from "../../Misc";
 
-
+/**
+ * A unit queue is a queue for a singular unit operating on its own.
+ */
 export class UnitQueue implements Queue {
     isFinished: boolean = false;
     private readonly target: unit;

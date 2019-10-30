@@ -1,6 +1,8 @@
 import {UnitAction} from "./UnitAction";
-import {Point} from "../../Utility/Point";
 
+/**
+ * An action that causes a unit to die and optionally be removed.
+ */
 export class UnitDeathAction implements UnitAction {
     private readonly remove: boolean;
     isFinished: boolean = false;

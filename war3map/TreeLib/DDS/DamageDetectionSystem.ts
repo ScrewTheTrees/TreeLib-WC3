@@ -3,6 +3,11 @@ import {DamageHitContainer} from "./DamageHitContainer";
 import {HitCallback} from "./HitCallback";
 import {Logger} from "../Logger";
 
+/**
+ * Simple streamlined DDS system where you can register callbacks and optionally add filters for quickly handling when units take damage.
+ * Callbacks will get a helpful Container where you can get, set and modify the DDS data.
+ * Works with the DummyCaster system to provide the casting unit instead of the dummy unit in the Container.
+ */
 export class DamageDetectionSystem {
     private static instance: DamageDetectionSystem;
 

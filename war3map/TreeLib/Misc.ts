@@ -1,5 +1,5 @@
 /**
- * This is just very Miscellaneous functions.
+ * This is just very Miscellaneous functions used for mostly movement and rotation.
  */
 
 export function linearInterpolate(start: number, end: number, maxStep: number = 1) {

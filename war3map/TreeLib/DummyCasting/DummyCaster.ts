@@ -6,6 +6,10 @@ import {WeaponIndex} from "../Wrappers/WeaponIndex";
 import {Point} from "../Utility/Point";
 import {Delay} from "../Utility/Delay";
 
+/**
+ * Dummy caster is a system where you can easily and quickly throw abilities without any setup or akin.
+ * It merges into the DDS system, allowing the DDS system to get the casting unit instead of the dummy.
+ */
 export class DummyCaster extends Entity {
     private static instance: DummyCaster;
 

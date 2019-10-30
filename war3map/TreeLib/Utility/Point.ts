@@ -1,5 +1,6 @@
 /**
- * My wrapper for Locations, contains some useful helper functions and cleaning up of locations.
+ * My wrapper for Locations, contains some useful helper functions and wrappers from other functions.
+ * In particular it provides functions that automatically cleans up the locations automatically.
  */
 import {Delay} from "./Delay";
 
@@ -62,6 +63,10 @@ export class Point {
 
     public static fromWidget(inputU: widget) {
         return new Point(GetWidgetX(inputU), GetWidgetY(inputU));
+    }
+
+    public static fromRectCenter(input: rect) {
+        return new Point(GetRectCenterX(input), GetRectCenterY(input));
     }
 
     distanceToLine(lineStart: Point, lineEnd: Point) {
