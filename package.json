@@ -2,18 +2,18 @@
   "name": "generics",
   "author": "Fredrik Grimmenhag (ScrewTheTrees)",
   "description": "Quality package.",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "scripts": {
     "fullRecompile": "npm run clean && npm run compileTypescript && npm run createDirectory && npm run copyMap && npm run extractLua && npm run compileMap && npm run injectLua && npm run compact && npm run run",
-    "clean": "rimraf src/* && rimraf target/* && rimraf maps/Output && rimraf maps/Build",
+    "clean": "rimraf src/* && rimraf target/* && rimraf maps/output && rimraf maps/build",
     "compileTypescript": "tstl -p tsconfig.json",
-    "createDirectory": "mkdir maps\\Output > nul",
+    "createDirectory": "mkdir maps\\output > nul",
     "copyMap": "copy %npm_package_config_devMap% %npm_package_config_outputMap% > nul",
-    "extractLua": "%npm_package_config_mpqEditor% extract %npm_package_config_devMap% war3map.lua maps\\Build",
-    "compileMap": "%npm_package_config_ceres% build Build",
-    "injectLua": "%npm_package_config_mpqEditor% add %npm_package_config_outputMap% target\\Build\\war3map.lua war3map.lua",
+    "extractLua": "%npm_package_config_mpqEditor% extract %npm_package_config_devMap% war3map.lua maps\\build",
+    "compileMap": "%npm_package_config_ceres% build build",
+    "injectLua": "%npm_package_config_mpqEditor% add %npm_package_config_outputMap% target\\build\\war3map.lua war3map.lua",
     "compact": "%npm_package_config_mpqEditor% compact %npm_package_config_outputMap%",
-    "run": "%npm_package_config_wardir% -loadfile %INIT_CWD%\\maps\\Output\\Output.w3x"
+    "run": "%npm_package_config_wardir% -loadfile %INIT_CWD%\\%npm_package_config_outputMap%"
   },
   "directories": {
     "lib": "lib"
@@ -30,6 +30,6 @@
     "mpqEditor": "tools\\MPQEditor\\x64\\MPQEditor.exe",
     "ceres": "tools\\ceres\\ceres.exe",
     "devMap": "maps\\Dev\\Map.w3x",
-    "outputMap": "maps\\Output\\Output.w3x"
+    "outputMap": "maps\\output\\output.w3x"
   }
 }
