@@ -5,9 +5,9 @@
   "version": "1.1.0",
   "scripts": {
     "fullRecompile": "npm run clean && npm run compileTypescript && npm run createDirectory && npm run copyMap && npm run extractLua && npm run compileMap && npm run injectLua && npm run compact && npm run run",
-    "clean": "rimraf src/* && rimraf target/* && rimraf maps/output && rimraf maps/build",
+    "clean": "rimraf src/* && rimraf target/* && rimraf maps/output/*",
     "compileTypescript": "tstl -p tsconfig.json",
-    "createDirectory": "mkdir maps\\output > nul",
+    "createDirectory": "make-dir maps\\output && make-dir maps\\build",
     "copyMap": "copy %npm_package_config_devMap% %npm_package_config_outputMap% > nul",
     "extractLua": "%npm_package_config_mpqEditor% extract %npm_package_config_devMap% war3map.lua maps\\build",
     "compileMap": "%npm_package_config_ceres% build build",
@@ -23,7 +23,8 @@
     "typescript": "^3.6.4",
     "typescript-to-lua": "^0.28.0",
     "lua-types": "^2.6.2",
-    "rimraf": "^3.0.0"
+    "rimraf": "^3.0.0",
+    "make-dir-cli": "^2.0.0"
   },
   "config": {
     "wardir": "\"D:\\Games\\Warcraft III\\x86_64\\Warcraft III.exe\"",
