@@ -3,7 +3,7 @@ import {UnitAction} from "./UnitAction";
 /**
  * An action that causes a unit to die and optionally be removed.
  */
-export class UnitDeathAction implements UnitAction {
+export class UnitActionDeath implements UnitAction {
     private readonly remove: boolean;
     isFinished: boolean = false;
 
@@ -12,7 +12,7 @@ export class UnitDeathAction implements UnitAction {
     }
 
     update(target: unit): void {
-        // :)
+        this.isFinished = true;
     }
 
     init(target: unit): void {

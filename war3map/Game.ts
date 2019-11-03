@@ -1,18 +1,19 @@
 import {DamageDetectionSystem} from "./TreeLib/DDS/DamageDetectionSystem";
 import {Logger} from "./TreeLib/Logger";
-import {AttackingUnitIsHeroDDSFilter} from "./TreeLib/DDS/Filters/AttackingUnitIsHeroDDSFilter";
-import {AttackedUnitIsHeroDDSFilter} from "./TreeLib/DDS/Filters/AttackedUnitIsHeroDDSFilter";
-import {AttackedPlayersDDSFilter} from "./TreeLib/DDS/Filters/AttackedPlayersDDSFilter";
-import {AttackingPlayersDDSFilter} from "./TreeLib/DDS/Filters/AttackingPlayersDDSFilter";
+import {DDSFilterAttackingUnitIsHero} from "./TreeLib/DDS/Filters/DDSFilterAttackingUnitIsHero";
+import {DDSFilterAttackedUnitIsHero} from "./TreeLib/DDS/Filters/DDSFilterAttackedUnitIsHero";
+import {DDSFilterAttackedPlayers} from "./TreeLib/DDS/Filters/DDSFilterAttackedPlayers";
+import {DDSFilterAttackingPlayers} from "./TreeLib/DDS/Filters/DDSFilterAttackingPlayers";
 import {Delay} from "./TreeLib/Utility/Delay";
 import {DummyCaster} from "./TreeLib/DummyCasting/DummyCaster";
 import {Players} from "./TreeLib/Structs/Players";
 import {Point} from "./TreeLib/Utility/Point";
 import {ActionQueue} from "./TreeLib/ActionQueue/ActionQueue";
-import {UnitWaypointAction} from "./TreeLib/ActionQueue/Actions/UnitWaypointAction";
+import {UnitActionWaypoint} from "./TreeLib/ActionQueue/Actions/UnitActionWaypoint";
 import {WaypointOrders} from "./TreeLib/ActionQueue/Actions/WaypointOrders";
-import {UnitDeathAction} from "./TreeLib/ActionQueue/Actions/UnitDeathAction";
-import {UnitKillAction} from "./TreeLib/ActionQueue/Actions/UnitKillAction";
+import {UnitActionDeath} from "./TreeLib/ActionQueue/Actions/UnitActionDeath";
+import {UnitActionKillUnit} from "./TreeLib/ActionQueue/Actions/UnitActionKillUnit";
+import {StringBuilderTest} from "./tests/StringBuilderTest";
 
 export class Game {
     private dummyCaster: DummyCaster;
@@ -23,17 +24,20 @@ export class Game {
         Logger.doLogVerbose = true;
         this.delay = Delay.getInstance();
 
+        this.doTests();
+
+
         let redHeroAttacksBlueUnit = DamageDetectionSystem.getInstance().registerBeforeDamageCalculation((hitObject) => {
             hitObject.eventDamage *= 2;
             Logger.LogDebug("Now, Thats a lot of DAMAGE!");
             Logger.LogDebug(hitObject.eventDamage);
         });
 
-        redHeroAttacksBlueUnit.addFilter(AttackingPlayersDDSFilter.RED);
-        redHeroAttacksBlueUnit.addFilter(new AttackingUnitIsHeroDDSFilter());
+        redHeroAttacksBlueUnit.addFilter(DDSFilterAttackingPlayers.RED);
+        redHeroAttacksBlueUnit.addFilter(new DDSFilterAttackingUnitIsHero());
 
-        redHeroAttacksBlueUnit.addFilter(AttackedPlayersDDSFilter.BLUE);
-        redHeroAttacksBlueUnit.addFilter(new AttackedUnitIsHeroDDSFilter(true));
+        redHeroAttacksBlueUnit.addFilter(DDSFilterAttackedPlayers.BLUE);
+        redHeroAttacksBlueUnit.addFilter(new DDSFilterAttackedUnitIsHero(true));
 
         let redAttacksAnyone = DamageDetectionSystem.getInstance().registerBeforeDamageCalculation((hitObject) => {
             hitObject.eventDamage *= 2;
@@ -41,8 +45,8 @@ export class Game {
             Logger.LogDebug(hitObject.eventDamage);
         });
 
-        redAttacksAnyone.addFilter(AttackingPlayersDDSFilter.RED);
-        redAttacksAnyone.addFilter(new AttackedPlayersDDSFilter(Players.BLUE, Players.TEAL));
+        redAttacksAnyone.addFilter(DDSFilterAttackingPlayers.RED);
+        redAttacksAnyone.addFilter(new DDSFilterAttackedPlayers(Players.BLUE, Players.TEAL));
 
         this.dummyCaster = DummyCaster.getInstance();
         let archmage = _G["gg_unit_Hamg_0003"];
@@ -59,13 +63,18 @@ export class Game {
         this.delay.addDelay(() => {
             let mortar = CreateUnit(Players.RED, FourCC("hmtm"), -1400, -3000, 0);
             this.actionQueue.createUnitQueue(mortar,
-                new UnitWaypointAction(new Point(870, -3064)),
-                new UnitWaypointAction(new Point(870, -1450), WaypointOrders.smart),
-                new UnitWaypointAction(new Point(2000, -1450), WaypointOrders.attack),
-                new UnitKillAction(archmage, 5),
-                new UnitDeathAction(true),
+                new UnitActionWaypoint(new Point(870, -3064)),
+                new UnitActionWaypoint(new Point(870, -1450), WaypointOrders.smart),
+                new UnitActionWaypoint(new Point(2000, -1450), WaypointOrders.attack),
+                new UnitActionKillUnit(archmage, 5),
+                new UnitActionDeath(true),
             )
         }, 2, 5);
 
+    }
+
+    private doTests() {
+        let sb = new StringBuilderTest();
+        sb.run();
     }
 }

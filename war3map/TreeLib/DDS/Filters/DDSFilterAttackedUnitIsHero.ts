@@ -1,7 +1,7 @@
 import {DDSFilter} from "./DDSFilter";
 import {DamageHitContainer} from "../DamageHitContainer";
 
-export class AttackedUnitIsHeroDDSFilter implements DDSFilter {
+export class DDSFilterAttackedUnitIsHero implements DDSFilter {
     constructor(private reverse = false) {
     }
 

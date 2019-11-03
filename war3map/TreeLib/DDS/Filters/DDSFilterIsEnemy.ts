@@ -1,8 +1,8 @@
 import {DDSFilter} from "./DDSFilter";
 import {DamageHitContainer} from "../DamageHitContainer";
 
-export class IsAllyDDSFilter implements DDSFilter{
+export class DDSFilterIsEnemy implements DDSFilter{
     runFilter(hitObject: DamageHitContainer): boolean {
-        return (IsPlayerAlly(hitObject.attackingPlayer, hitObject.attackedPlayer))
+        return (IsPlayerEnemy(hitObject.attackingPlayer, hitObject.attackedPlayer))
     }
 }

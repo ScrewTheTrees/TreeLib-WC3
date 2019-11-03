@@ -1,6 +1,6 @@
 /**
  * Random is used to have random generators independent of each other.
- * Great if you want ot make minecraft.
+ * Great if you want to make minecraft.
  */
 export class Random {
 

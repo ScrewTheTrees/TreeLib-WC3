@@ -41,14 +41,7 @@ export function rotateToPoint(fromDir: number, toDir: number, turnSpeed: number)
     return (fromDir + turnDir) % 360;
 }
 
-export function RGBTextString(red: number, green: number, blue: number, ...input: any[]) {
-    let ret = "|c00" + string.format('%02x', red) + string.format('%02x', green) + string.format('%02x', blue);
-    input.forEach((val) => {
-        ret += tostring(val) + " ";
-    });
-    ret += "|r";
-    return ret
-}
+
 export function ChooseOne(...input: any[]) {
     let random = GetRandomInt(0, input.length - 1);
     return input[random];

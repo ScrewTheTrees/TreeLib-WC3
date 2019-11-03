@@ -3,17 +3,19 @@ import {Point} from "../../Utility/Point";
 import {WaypointOrders} from "./WaypointOrders";
 import {Logger} from "../../Logger";
 import {ActionQueueConfig} from "../ActionQueueConfig";
+import {WeaponIndex} from "../../Wrappers/WeaponIndex";
 
 /**
  * Basic waypoint action, move, attack move, or smart your way over to a Point.
  */
-export class UnitWaypointAction implements UnitAction {
+export class UnitActionWaypoint implements UnitAction {
     isFinished: boolean = false;
     private readonly toPoint: Point;
     private readonly acceptableDistance: number;
     private readonly order: WaypointOrders;
     private readonly maxTime: number;
     private timer: number = 0;
+    private updateTimer: number = 5;
 
     constructor(toPoint: Point, order: WaypointOrders = WaypointOrders.smart, acceptableDistance: number = 32, maxTime: number = 300) {
         this.toPoint = toPoint;
@@ -21,8 +23,6 @@ export class UnitWaypointAction implements UnitAction {
         this.acceptableDistance = acceptableDistance;
         this.maxTime = maxTime;
     }
-
-    private updateTimer: number = 5;
 
     update(target: unit): void {
         this.timer += ActionQueueConfig.getInstance().timerDelay;
@@ -32,7 +32,7 @@ export class UnitWaypointAction implements UnitAction {
             Logger.LogVerbose("Finished waypoint");
         } else if (this.updateTimer >= 5) {
             IssuePointOrder(target, this.order, this.toPoint.x, this.toPoint.y); //Update order
-            this.updateTimer -= 5;
+            this.updateTimer = (BlzGetUnitWeaponRealField(target, UNIT_WEAPON_RF_ATTACK_BASE_COOLDOWN, WeaponIndex.WEAPON_1) * 2) + 1;
         }
     }
 
