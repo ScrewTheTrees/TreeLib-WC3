@@ -10,7 +10,7 @@ export class DDSFilterAttackingUnitTypes implements DDSFilter {
 
     runFilter(hitObject: DamageHitContainer): boolean {
         for (let myType of this.unitTypes) {
-            if (GetUnitTypeId(hitObject.attackingUnit) == myType) {
+            if (hitObject.attackingUnitType == myType) {
                 return true;
             }
         }

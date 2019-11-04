@@ -1,14 +1,13 @@
 import {StringBuilder} from "../TreeLib/Utility/StringBuilder";
 import {assertEqualsString} from "./Testing";
+import {Logger} from "../TreeLib/Logger";
 
 export class StringBuilderTest {
     run() {
-        if (!pcall(() => {
+        xpcall(() => {
             this.remove_everything();
             this.ensure_first_line_remains();
-        })) {
-            //uh
-        }
+        }, (...args) => Logger.LogCritical(...args));
     }
 
     remove_everything() {

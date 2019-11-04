@@ -1,7 +1,7 @@
 import {DDSFilter} from "./DDSFilter";
 import {DamageHitContainer} from "../DamageHitContainer";
 
-export class DDSFilterAttackedUnitTypes implements DDSFilter {
+export class DDSFilterTargetUnitTypes implements DDSFilter {
     private readonly unitTypes: number[];
 
     constructor(...unitTypes: number[]) {
@@ -10,7 +10,7 @@ export class DDSFilterAttackedUnitTypes implements DDSFilter {
 
     runFilter(hitObject: DamageHitContainer): boolean {
         for (let myType of this.unitTypes) {
-            if (GetUnitTypeId(hitObject.attackedUnit) == myType) {
+            if (hitObject.targetUnitType == myType) {
                 return true;
             }
         }

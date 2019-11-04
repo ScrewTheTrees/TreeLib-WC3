@@ -108,6 +108,8 @@ export class DamageDetectionSystem {
                 }, () => Logger.LogCritical);
                 this.locked = false;
             }
+        } else {
+            Logger.LogWarning("Circular DDS detected.");
         }
     }
 }

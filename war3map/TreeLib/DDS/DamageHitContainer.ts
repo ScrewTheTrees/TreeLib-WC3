@@ -2,30 +2,40 @@ import {StringBuilder} from "../Utility/StringBuilder";
 import {DummyCaster} from "../DummyCasting/DummyCaster";
 
 export class DamageHitContainer {
-    public rawAttackingUnit: unit;
+    public _rawAttackingUnit: unit;
     public attackingUnit: unit;
-    public attackedUnit: unit;
+    public attackingUnitType: number;
+    public targetUnit: unit;
+    public targetUnitType: number;
     protected _damageNumber: number;
     protected _damageType: damagetype;
     protected _attackType: attacktype;
     protected _weaponType: weapontype;
 
     constructor() {
-        this.rawAttackingUnit = GetEventDamageSource();
-        this.attackingUnit = GetEventDamageSource();
-        this.attackedUnit = BlzGetEventDamageTarget();
-        this._damageNumber = GetEventDamage();
-        this._attackType = BlzGetEventAttackType();
-        this._damageType = BlzGetEventDamageType();
-        this._weaponType = BlzGetEventWeaponType();
+        this._rawAttackingUnit = this.dummy();
+        this.attackingUnit = this.dummy();
+        this.attackingUnitType = this.dummy();
+        this.targetUnit = this.dummy();
+        this.targetUnitType = this.dummy();
+        this._damageNumber = this.dummy();
+        this._attackType = this.dummy();
+        this._damageType = this.dummy();
+        this._weaponType = this.dummy();
 
         this.updateContainer();
     }
 
+    private dummy(): any{
+        return null;
+    }
+
     public updateContainer() {
-        this.rawAttackingUnit = GetEventDamageSource();
+        this._rawAttackingUnit = GetEventDamageSource();
         this.attackingUnit = GetEventDamageSource();
-        this.attackedUnit = BlzGetEventDamageTarget();
+        this.attackingUnitType = GetUnitTypeId(this.attackingUnit);
+        this.targetUnit = BlzGetEventDamageTarget();
+        this.targetUnitType = GetUnitTypeId(this.targetUnit);
         this._damageNumber = GetEventDamage();
         this._attackType = BlzGetEventAttackType();
         this._damageType = BlzGetEventDamageType();
@@ -41,7 +51,7 @@ export class DamageHitContainer {
     }
 
     get attackedPlayer() {
-        return GetOwningPlayer(this.attackedUnit);
+        return GetOwningPlayer(this.targetUnit);
     }
 
     get eventDamage() {
@@ -88,7 +98,7 @@ export class DamageHitContainer {
             .append(", attackingUnit: ")
             .append(this.attackingUnit)
             .append(", attackedUnit: ")
-            .append(this.attackedUnit)
+            .append(this.targetUnit)
             .append("}");
         return builder.toString();
     }
