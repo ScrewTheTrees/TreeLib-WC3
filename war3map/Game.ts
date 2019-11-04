@@ -10,17 +10,21 @@ import {UnitActionDeath} from "./TreeLib/ActionQueue/Actions/UnitActionDeath";
 import {UnitActionKillUnit} from "./TreeLib/ActionQueue/Actions/UnitActionKillUnit";
 import {StringBuilderTest} from "./tests/StringBuilderTest";
 import {DDSTests} from "./tests/DDSTests";
+import {DamageDetectionSystem} from "./TreeLib/DDS/DamageDetectionSystem";
+import {DDSFilterIsAlly} from "./TreeLib/DDS/Filters/DDSFilterIsAlly";
 
 export class Game {
     private dummyCaster: DummyCaster;
     private actionQueue: ActionQueue;
     private delay: Delay;
+    private dds: DamageDetectionSystem;
 
     constructor() {
         Logger.doLogVerbose = true;
         this.delay = Delay.getInstance();
         this.dummyCaster = DummyCaster.getInstance();
         this.actionQueue = ActionQueue.getInstance();
+        this.dds = DamageDetectionSystem.getInstance();
 
         this.genericTests();
         this.dummyCasterTest();
