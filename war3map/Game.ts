@@ -11,13 +11,14 @@ import {UnitActionKillUnit} from "./TreeLib/ActionQueue/Actions/UnitActionKillUn
 import {StringBuilderTest} from "./tests/StringBuilderTest";
 import {DDSTests} from "./tests/DDSTests";
 import {DamageDetectionSystem} from "./TreeLib/DDS/DamageDetectionSystem";
-import {DDSFilterIsAlly} from "./TreeLib/DDS/Filters/DDSFilterIsAlly";
+import {Respawner} from "./TreeLib/Respawner/Respawner";
 
 export class Game {
     private dummyCaster: DummyCaster;
     private actionQueue: ActionQueue;
     private delay: Delay;
     private dds: DamageDetectionSystem;
+    private respawner: Respawner;
 
     constructor() {
         Logger.doLogVerbose = true;
@@ -25,6 +26,7 @@ export class Game {
         this.dummyCaster = DummyCaster.getInstance();
         this.actionQueue = ActionQueue.getInstance();
         this.dds = DamageDetectionSystem.getInstance();
+        this.respawner = Respawner.getInstance();
 
         this.genericTests();
         this.dummyCasterTest();
@@ -45,6 +47,22 @@ export class Game {
                 new UnitActionDeath(true),
             )
         }, 2, 5);
+
+        let knightSpawn = this.respawner.createNewUnitRespawner(killKnight, 5);
+        knightSpawn.onRespawn = (target: unit) => {
+            Logger.LogDebug("Revived ", GetUnitName(target));
+        };
+
+        let foo1 = CreateUnit(Players.NEUTRAL_HOSTILE, FourCC("hfoo"), 5000, 5000, 0);
+        let foo2 = CreateUnit(Players.NEUTRAL_HOSTILE, FourCC("hfoo"), 5000, 5000, 0);
+        let foo3 = CreateUnit(Players.NEUTRAL_HOSTILE, FourCC("hfoo"), 5000, 5000, 0);
+
+        let foo1_1 = CreateUnit(Players.NEUTRAL_HOSTILE, FourCC("hfoo"), 4000, 4000, 0);
+        let foo2_1 = CreateUnit(Players.NEUTRAL_HOSTILE, FourCC("hfoo"), 4000, 4000, 0);
+        let foo3_1 = CreateUnit(Players.NEUTRAL_HOSTILE, FourCC("hfoo"), 4000, 4000, 0);
+
+        this.respawner.createNewUnitCampRespawner([foo1, foo2, foo3], 5, true);
+        this.respawner.createNewUnitCampRespawner([foo1_1, foo2_1, foo3_1], 5, false);
     }
 
     private dummyCasterTest() {

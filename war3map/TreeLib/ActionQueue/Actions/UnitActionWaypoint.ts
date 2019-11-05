@@ -3,7 +3,6 @@ import {Point} from "../../Utility/Point";
 import {WaypointOrders} from "./WaypointOrders";
 import {Logger} from "../../Logger";
 import {ActionQueueConfig} from "../ActionQueueConfig";
-import {WeaponIndex} from "../../Wrappers/WeaponIndex";
 
 /**
  * Basic waypoint action, move, attack move, or smart your way over to a Point.
@@ -32,7 +31,7 @@ export class UnitActionWaypoint implements UnitAction {
             Logger.LogVerbose("Finished waypoint");
         } else if (this.updateTimer >= 5) {
             IssuePointOrder(target, this.order, this.toPoint.x, this.toPoint.y); //Update order
-            this.updateTimer = (BlzGetUnitWeaponRealField(target, UNIT_WEAPON_RF_ATTACK_BASE_COOLDOWN, WeaponIndex.WEAPON_1) * 2) + 1;
+            this.updateTimer = 0;
         }
     }
 
