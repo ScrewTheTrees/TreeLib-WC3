@@ -68,6 +68,12 @@ export class DummyCaster extends Entity {
         return caster;
     }
 
+    public castImmediatelyDummy(abilityId: number, orderString: string, castingUnit: unit, level: number = 0, extraSeconds: number = 2) {
+        let caster = this.getNonExpended(castingUnit);
+        caster.issueImmediateOrderDummy(abilityId, orderString, castingUnit, level, extraSeconds);
+        return caster;
+    }
+
     private getNonExpended(castingUnit: unit): Caster {
         let cast: Caster | null = null;
         for (let caster of this.allCasters) {
@@ -181,6 +187,16 @@ class Caster {
         let abil = BlzGetUnitAbility(castingUnit, abilityId);
         Delay.getInstance().addDelay(() => {
             UnitRemoveAbility(castingUnit, abilityId);
+        }, BlzGetAbilityRealLevelField(abil, ABILITY_RLF_DURATION_NORMAL, level) + extraSeconds);
+    }
+
+    public issueImmediateOrderDummy(abilityId: number, orderString: string, castingUnit: unit, level: number, extraSeconds: number) {
+        DummyCaster.getInstance().addAlias(this.unit, castingUnit);
+        this.addAbility(abilityId, level, this.unit);
+        IssueImmediateOrder(this.unit, orderString);
+        let abil = BlzGetUnitAbility(this.unit, abilityId);
+        Delay.getInstance().addDelay(() => {
+            UnitRemoveAbility(this.unit, abilityId);
         }, BlzGetAbilityRealLevelField(abil, ABILITY_RLF_DURATION_NORMAL, level) + extraSeconds);
     }
 
