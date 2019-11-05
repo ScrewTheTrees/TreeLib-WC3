@@ -13,7 +13,7 @@ export class UnitActionKillUnit implements UnitAction {
     private timer: number = 0;
     private updateTimer: number = 5;
 
-    constructor(killUnit: unit, maxTime: number = 600) {
+    constructor(killUnit: unit, maxTime: number = 1200) {
         this.killUnit = killUnit;
         this.maxTime = maxTime;
     }

@@ -10,7 +10,7 @@ export class UnitQueue implements Queue {
     isFinished: boolean = false;
     private readonly target: unit;
     protected allActions: UnitAction[] = [];
-    protected currentActionIndex = 0;
+    public currentActionIndex = 0;
 
     constructor(target: unit, ...unitActions: UnitAction[]) {
         this.target = target;
@@ -46,8 +46,13 @@ export class UnitQueue implements Queue {
         }
     }
 
-    public addAction(action: UnitAction) {
+    public addAction(action: UnitAction): UnitQueue {
         this.allActions.push(action);
+        return this;
+    }
+
+    public getActionCount(): number {
+        return this.allActions.length;
     }
 
 }

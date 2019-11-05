@@ -15,7 +15,7 @@ export class UnitActionWaypoint implements UnitAction {
     private timer: number = 0;
     private updateTimer: number = 5;
 
-    constructor(toPoint: Point, order: WaypointOrders = WaypointOrders.smart, acceptableDistance: number = 32, maxTime: number = 300) {
+    constructor(toPoint: Point, order: WaypointOrders = WaypointOrders.smart, acceptableDistance: number = 32, maxTime: number = 1200) {
         this.toPoint = toPoint;
         this.order = order;
         this.acceptableDistance = acceptableDistance;

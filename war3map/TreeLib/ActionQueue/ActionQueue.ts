@@ -20,10 +20,10 @@ export class ActionQueue extends Entity {
     }
 
     private allQueues: Queue[] = [];
+    public _timerDelay: number = 0.25;
 
     constructor() {
         super();
-        this._timerDelay = 0.25;
     }
 
     step(): void {
