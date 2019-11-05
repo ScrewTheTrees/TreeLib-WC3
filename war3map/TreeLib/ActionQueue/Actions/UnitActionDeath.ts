@@ -11,7 +11,7 @@ export class UnitActionDeath implements UnitAction {
         this.remove = alsoRemove;
     }
 
-    update(target: unit): void {
+    update(target: unit, timeStep: number): void {
         this.isFinished = true;
     }
 

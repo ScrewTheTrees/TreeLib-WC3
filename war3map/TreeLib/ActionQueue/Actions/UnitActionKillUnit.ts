@@ -1,6 +1,5 @@
 import {UnitAction} from "./UnitAction";
 import {Logger} from "../../Logger";
-import {ActionQueueConfig} from "../ActionQueueConfig";
 import {IsValidUnit} from "../../Misc";
 import {WeaponIndex} from "../../Wrappers/WeaponIndex";
 
@@ -19,9 +18,9 @@ export class UnitActionKillUnit implements UnitAction {
         this.maxTime = maxTime;
     }
 
-    update(target: unit): void {
-        this.timer += ActionQueueConfig.getInstance().timerDelay;
-        this.updateTimer += ActionQueueConfig.getInstance().timerDelay;
+    update(target: unit,timeStep: number): void {
+        this.timer += timeStep;
+        this.updateTimer += timeStep;
         if (!IsValidUnit(this.killUnit) || IsUnitDeadBJ(this.killUnit) || this.timer > this.maxTime) {
             this.isFinished = true;
             Logger.LogVerbose("Unit dead, Gone or time ran out");

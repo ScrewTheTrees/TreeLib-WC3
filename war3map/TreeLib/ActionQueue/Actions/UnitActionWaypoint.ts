@@ -2,7 +2,6 @@ import {UnitAction} from "./UnitAction";
 import {Point} from "../../Utility/Point";
 import {WaypointOrders} from "./WaypointOrders";
 import {Logger} from "../../Logger";
-import {ActionQueueConfig} from "../ActionQueueConfig";
 
 /**
  * Basic waypoint action, move, attack move, or smart your way over to a Point.
@@ -23,9 +22,9 @@ export class UnitActionWaypoint implements UnitAction {
         this.maxTime = maxTime;
     }
 
-    update(target: unit): void {
-        this.timer += ActionQueueConfig.getInstance().timerDelay;
-        this.updateTimer += ActionQueueConfig.getInstance().timerDelay;
+    update(target: unit, timeStep: number): void {
+        this.timer += timeStep;
+        this.updateTimer += timeStep;
         if (Point.fromWidget(target).distanceTo(this.toPoint) <= this.acceptableDistance || this.timer > this.maxTime) {
             this.isFinished = true;
             Logger.LogVerbose("Finished waypoint");

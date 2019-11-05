@@ -17,10 +17,10 @@ export class UnitQueue implements Queue {
         this.allActions.push(...unitActions);
     }
 
-    private performAction() {
+    private performAction(timeStep: number) {
         if (this.currentActionIndex < this.allActions.length) {
             let action = this.allActions[this.currentActionIndex];
-            action.update(this.target);
+            action.update(this.target, timeStep);
             if (action.isFinished) {
                 this.currentActionIndex += 1;
                 Logger.LogVerbose("To next action: ", this.currentActionIndex + 1, "/", this.allActions.length);
@@ -35,10 +35,10 @@ export class UnitQueue implements Queue {
         }
     }
 
-    update(): void {
+    update(timeStep: number): void {
         if (IsValidUnit(this.target)) {
             if (IsUnitAliveBJ(this.target)) {
-                this.performAction();
+                this.performAction(timeStep);
             }
         } else {
             Logger.LogVerbose("Unit has been removed, queue will be removed.");

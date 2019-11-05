@@ -4,7 +4,6 @@ import {Queue} from "./Queues/Queue";
 import {UnitQueue} from "./Queues/UnitQueue";
 import {UnitAction} from "./Actions/UnitAction";
 import {Logger} from "../Logger";
-import {ActionQueueConfig} from "./ActionQueueConfig";
 
 /**
  * ActionQueue is a system that allows you to create waypoints and a string of orders, like if a player would
@@ -24,11 +23,10 @@ export class ActionQueue extends Entity {
 
     constructor() {
         super();
-        this._timerDelay = ActionQueueConfig.getInstance().timerDelay;
+        this._timerDelay = 0.25;
     }
 
     step(): void {
-        this._timerDelay = ActionQueueConfig.getInstance().timerDelay;
         for (let i = 0; i < this.allQueues.length; i++) {
             let queue = this.allQueues[i];
             if (queue.isFinished) {
@@ -37,7 +35,7 @@ export class ActionQueue extends Entity {
                 Logger.LogVerbose("Spliced queue:", this.allQueues.length);
                 i -= 1;
             } else {
-                queue.update();
+                queue.update(this._timerDelay);
             }
 
         }

@@ -1,4 +1,4 @@
 export interface Queue {
     isFinished: boolean;
-    update(): void;
+    update(timeStep: number): void;
 }
