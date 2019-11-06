@@ -68,9 +68,10 @@ export class DummyCaster extends Entity {
         return caster;
     }
 
-    public castImmediatelyDummy(abilityId: number, orderString: string, castingUnit: unit, level: number = 0, extraSeconds: number = 2) {
+    public castImmediatelyDummy(abilityId: number, orderString: string, castingUnit: unit,
+                                origin: Point = Point.fromWidget(castingUnit), level: number = 0, extraSeconds: number = 2) {
         let caster = this.getNonExpended(castingUnit);
-        caster.issueImmediateOrderDummy(abilityId, orderString, castingUnit, level, extraSeconds);
+        caster.issueImmediateOrderDummy(abilityId, orderString, castingUnit, origin, level, extraSeconds);
         return caster;
     }
 
@@ -190,9 +191,10 @@ class Caster {
         }, BlzGetAbilityRealLevelField(abil, ABILITY_RLF_DURATION_NORMAL, level) + extraSeconds);
     }
 
-    public issueImmediateOrderDummy(abilityId: number, orderString: string, castingUnit: unit, level: number, extraSeconds: number) {
+    public issueImmediateOrderDummy(abilityId: number, orderString: string, castingUnit: unit, origin: Point, level: number, extraSeconds: number) {
         DummyCaster.getInstance().addAlias(this.unit, castingUnit);
         this.addAbility(abilityId, level, this.unit);
+        SetUnitPositionLoc(this.unit, origin.toLocationClean());
         IssueImmediateOrder(this.unit, orderString);
         let abil = BlzGetUnitAbility(this.unit, abilityId);
         Delay.getInstance().addDelay(() => {
