@@ -43,18 +43,18 @@ export class Logger {
 
     //Quickies since the above functions are a bit too overly explanatory.
     public static verbose(...args: string[]) {
-        Logger.LogVerbose(args);
+        Logger.LogVerbose(...args);
     }
 
     public static debug(...args: string[]) {
-        Logger.LogDebug(args);
+        Logger.LogDebug(...args);
     }
 
     public static warning(...args: string[]) {
-        Logger.LogWarning(args);
+        Logger.LogWarning(...args);
     }
 
     public static critical(...args: string[]) {
-        Logger.LogCritical(args);
+        Logger.LogCritical(...args);
     }
 }
