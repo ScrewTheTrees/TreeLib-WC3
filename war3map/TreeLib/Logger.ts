@@ -6,10 +6,10 @@
 import {RGB, RGBTextString} from "./Utility/RGB";
 
 export class Logger {
-    static doLogVerbose = false;
-    static doLogDebug = true;
-    static doLogWarning = true;
-    static doLogCritical = true;
+    public static doLogVerbose = false;
+    public static doLogDebug = true;
+    public static doLogWarning = true;
+    public static doLogCritical = true;
 
     public static COLOR_VERBOSE = new RGB(128, 128, 128);
     public static COLOR_DEBUG = new RGB(255, 255, 255);

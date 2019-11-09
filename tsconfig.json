@@ -1,9 +1,12 @@
 {
   "compilerOptions": {
     "strict": true,
-    "sourceMap": true,
+    "strictNullChecks": true,
+    "sourceMap": false,
     "target": "esnext",
-    "lib": ["esnext"],
+    "lib": [
+      "esnext"
+    ],
     "outDir": "./src",
     "types": [
       "lua-types/core/coroutine",
@@ -17,11 +20,10 @@
       "lua-types/special/5.3"
     ]
   },
-
   "tstl": {
     "luaTarget": "5.3",
     "luaLibImport": "inline",
-    //"sourceMapTraceback": true,
+    "sourceMapTraceback": false,
     "noHeader": true
   }
 }
