@@ -12,6 +12,10 @@ import {StringBuilderTest} from "./tests/StringBuilderTest";
 import {DDSTests} from "./tests/DDSTests";
 import {DamageDetectionSystem} from "./TreeLib/DDS/DamageDetectionSystem";
 import {Respawner} from "./TreeLib/Respawner/Respawner";
+import {UnitActionGoToAction} from "./TreeLib/ActionQueue/Actions/UnitActionGoToAction";
+import {QueueTests} from "./tests/QueueTests";
+import {RespawnTests} from "./tests/RespawnTests";
+import {QueueRespawnIntegrationTests} from "./tests/QueueRespawnIntegrationTests";
 
 export class Game {
     private dummyCaster: DummyCaster;
@@ -30,39 +34,6 @@ export class Game {
 
         this.genericTests();
         this.dummyCasterTest();
-        this.actionQueueTest();
-
-    }
-
-    private actionQueueTest() {
-        let killKnight = CreateUnit(Players.BLUE, FourCC("hkni"), 4000, 0, 0);
-
-        this.delay.addDelay(() => {
-            let mortar = CreateUnit(Players.RED, FourCC("hmtm"), -1400, -3000, 0);
-            this.actionQueue.createUnitQueue(mortar,
-                new UnitActionWaypoint(new Point(870, -3064)),
-                new UnitActionWaypoint(new Point(870, -1450), WaypointOrders.smart),
-                new UnitActionWaypoint(new Point(2000, -1450), WaypointOrders.attack),
-                new UnitActionKillUnit(killKnight),
-                new UnitActionDeath(true),
-            )
-        }, 2, 5);
-
-        let knightSpawn = this.respawner.createNewUnitRespawner(killKnight, 5);
-        knightSpawn.onRespawn = (target: unit) => {
-            Logger.LogDebug("Revived ", GetUnitName(target));
-        };
-
-        let foo1 = CreateUnit(Players.NEUTRAL_HOSTILE, FourCC("hfoo"), 5000, 5000, 0);
-        let foo2 = CreateUnit(Players.NEUTRAL_HOSTILE, FourCC("hfoo"), 5000, 5000, 0);
-        let foo3 = CreateUnit(Players.NEUTRAL_HOSTILE, FourCC("hfoo"), 5000, 5000, 0);
-
-        let foo1_1 = CreateUnit(Players.NEUTRAL_HOSTILE, FourCC("hfoo"), 4000, 4000, 0);
-        let foo2_1 = CreateUnit(Players.NEUTRAL_HOSTILE, FourCC("hfoo"), 4000, 4000, 0);
-        let foo3_1 = CreateUnit(Players.NEUTRAL_HOSTILE, FourCC("hfoo"), 4000, 4000, 0);
-
-        this.respawner.createNewUnitCampRespawner([foo1, foo2, foo3], 5, true);
-        this.respawner.createNewUnitCampRespawner([foo1_1, foo2_1, foo3_1], 5, false);
     }
 
     private dummyCasterTest() {
@@ -71,7 +42,7 @@ export class Game {
 
         this.delay.addDelay(() => {
             this.dummyCaster.castAtWidgetInstant(FourCC("ACf3"), "fingerofdeath", knight, archmage);
-            this.dummyCaster.castImmediately(FourCC("ACds"), "divineshield", archmage);
+            this.dummyCaster.castImmediatelyDummy(FourCC("Awrs"), "stomp", archmage);
             this.dummyCaster.channelAtPoint(FourCC("ACfs"), "flamestrike", Point.fromWidget(archmage), archmage, 0, 15);
         }, 5);
     }
@@ -79,5 +50,8 @@ export class Game {
     private genericTests() {
         new StringBuilderTest().run();
         new DDSTests().run();
+        new QueueTests().run();
+        new RespawnTests().run();
+        new QueueRespawnIntegrationTests().run();
     }
 }

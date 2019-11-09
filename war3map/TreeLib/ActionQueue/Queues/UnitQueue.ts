@@ -8,8 +8,8 @@ import {IsValidUnit} from "../../Misc";
  */
 export class UnitQueue implements Queue {
     isFinished: boolean = false;
-    private readonly target: unit;
-    protected allActions: UnitAction[] = [];
+    public target: unit;
+    public allActions: UnitAction[] = [];
     public currentActionIndex = 0;
 
     constructor(target: unit, ...unitActions: UnitAction[]) {
@@ -20,13 +20,13 @@ export class UnitQueue implements Queue {
     private performAction(timeStep: number) {
         if (this.currentActionIndex < this.allActions.length) {
             let action = this.allActions[this.currentActionIndex];
-            action.update(this.target, timeStep);
+            action.update(this.target, timeStep, this);
             if (action.isFinished) {
                 this.currentActionIndex += 1;
                 Logger.LogVerbose("To next action: ", this.currentActionIndex + 1, "/", this.allActions.length);
                 if (this.currentActionIndex < this.allActions.length) {
                     let newAction = this.allActions[this.currentActionIndex];
-                    newAction.init(this.target);
+                    newAction.init(this.target, this);
                 }
             }
         } else {
@@ -53,6 +53,12 @@ export class UnitQueue implements Queue {
 
     public getActionCount(): number {
         return this.allActions.length;
+    }
+
+    public resetActions() {
+        for (let action of this.allActions) {
+            action.isFinished = false;
+        }
     }
 
 }

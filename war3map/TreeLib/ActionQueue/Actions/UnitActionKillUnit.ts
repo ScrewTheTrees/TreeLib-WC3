@@ -2,6 +2,7 @@ import {UnitAction} from "./UnitAction";
 import {Logger} from "../../Logger";
 import {IsValidUnit} from "../../Misc";
 import {WeaponIndex} from "../../Wrappers/WeaponIndex";
+import {UnitQueue} from "../Queues/UnitQueue";
 
 /**
  * Try to kill a unit until it is dead, or the time runs out
@@ -16,9 +17,10 @@ export class UnitActionKillUnit implements UnitAction {
     constructor(killUnit: unit, maxTime: number = 1200) {
         this.killUnit = killUnit;
         this.maxTime = maxTime;
+        this.isFinished = false;
     }
 
-    update(target: unit,timeStep: number): void {
+    update(target: unit,timeStep: number, queue: UnitQueue): void {
         this.timer += timeStep;
         this.updateTimer += timeStep;
         if (!IsValidUnit(this.killUnit) || IsUnitDeadBJ(this.killUnit) || this.timer > this.maxTime) {
@@ -30,7 +32,7 @@ export class UnitActionKillUnit implements UnitAction {
         }
     }
 
-    init(target: unit): void {
+    init(target: unit, queue: UnitQueue): void {
         IssueTargetOrder(target, "attack", this.killUnit); //Update order
     }
 
