@@ -38,6 +38,7 @@ export class QueueRespawnIntegrationTests {
                 );
                 this.respawner.createNewUnitRespawner(foot, 5, false, undefined, (newUnit: unit) => {
                     queue.target = newUnit;
+                    this.actionQueue.enableQueue(queue);
                 })
             }, 2.5, 5);
 

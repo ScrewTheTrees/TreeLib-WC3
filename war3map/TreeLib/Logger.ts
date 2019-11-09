@@ -3,33 +3,58 @@
  * Generally you would want Debug turned on for DEV but disabled for release.
  * And verbose on in worst case erroring.
  */
+import {RGB, RGBTextString} from "./Utility/RGB";
+
 export class Logger {
     static doLogVerbose = false;
     static doLogDebug = true;
     static doLogWarning = true;
     static doLogCritical = true;
 
+    public static COLOR_VERBOSE = new RGB(128, 128, 128);
+    public static COLOR_DEBUG = new RGB(255, 255, 255);
+    public static COLOR_WARNING = new RGB(0, 255, 255);
+    public static COLOR_CRITICAL = new RGB(255, 0, 0);
+
     public static LogVerbose(...params: any[]) {
         if (this.doLogVerbose) {
-            print("Verbose: ", ...params);
+            print(RGBTextString(Logger.COLOR_VERBOSE, "Verbose: ", ...params));
         }
     }
 
     public static LogDebug(...params: any[]) {
         if (this.doLogDebug) {
-            print("Debug: ", ...params);
+            print(RGBTextString(Logger.COLOR_DEBUG, "Debug: ", ...params));
         }
     }
 
     public static LogWarning(...params: any[]) {
         if (this.doLogWarning) {
-            print("Warning: ", ...params);
+            print(RGBTextString(Logger.COLOR_WARNING, "Warning: ", ...params));
         }
     }
 
+
     public static LogCritical(...params: any[]) {
         if (this.doLogCritical) {
-            print("Critical: ", ...params);
+            print(RGBTextString(Logger.COLOR_CRITICAL, "Critical: ", ...params));
         }
+    }
+
+    //Quickies since the above functions are a bit too overly explanatory.
+    public static verbose(...args: string[]) {
+        Logger.LogVerbose(args);
+    }
+
+    public static debug(...args: string[]) {
+        Logger.LogDebug(args);
+    }
+
+    public static warning(...args: string[]) {
+        Logger.LogWarning(args);
+    }
+
+    public static critical(...args: string[]) {
+        Logger.LogCritical(args);
     }
 }
