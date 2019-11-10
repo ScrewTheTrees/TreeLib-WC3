@@ -13,7 +13,7 @@ export class Logger {
 
     public static COLOR_VERBOSE = new RGB(128, 128, 128);
     public static COLOR_DEBUG = new RGB(255, 255, 255);
-    public static COLOR_WARNING = new RGB(0, 255, 255);
+    public static COLOR_WARNING = new RGB(255, 255, 0);
     public static COLOR_CRITICAL = new RGB(255, 0, 0);
 
     public static LogVerbose(...params: any[]) {

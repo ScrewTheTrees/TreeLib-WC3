@@ -5,6 +5,7 @@ import {Unit} from "../Wrappers/Unit";
 import {WeaponIndex} from "../Wrappers/WeaponIndex";
 import {Point} from "../Utility/Point";
 import {Delay} from "../Utility/Delay";
+import {AliasDto} from "./AliasDto";
 
 /**
  * Dummy caster is a system where you can easily and quickly throw abilities without any setup or akin.
@@ -22,10 +23,10 @@ export class DummyCaster extends Entity {
     }
 
     private allCasters: Caster[] = [];
-    private aliases: any = {};
+    private aliases: AliasDto[] = [];
     public unitTypeBase = "hgyr";
 
-    public addAlias(caster: unit, credit: unit) {
+    public addAlias(caster: unit, credit: AliasDto) {
         this.aliases[GetHandleId(caster)] = credit;
     }
 
@@ -37,7 +38,10 @@ export class DummyCaster extends Entity {
         return this.aliases[GetHandleId(caster)] != null;
     }
 
-    public getActualUnit(caster: unit): unit {
+    public getUnitAlias(caster: unit): AliasDto {
+        if (!this.aliases[GetHandleId(caster)]) {
+            Logger.LogWarning("Tried to fetch a unit alias that is non existing: ", GetHandleId(caster), " please check with isUnitAlias before you try to retrieve it.")
+        }
         return this.aliases[GetHandleId(caster)];
     }
 
@@ -136,7 +140,7 @@ export class DummyCaster extends Entity {
     }
 }
 
-class Caster {
+export class Caster {
     public unit: unit;
     public expended: number = 0;
     public lastAbility: number = 0;
@@ -148,7 +152,7 @@ class Caster {
         this.unit = newUnit.wrappedUnit;
         this.expended = 0;
 
-        DummyCaster.getInstance().addAlias(this.unit, castingUnit);
+        DummyCaster.getInstance().addAlias(this.unit, new AliasDto(castingUnit, this));
     }
 
     private addAbility(abilityId: number, level: number, to: unit = this.unit) {
@@ -158,7 +162,7 @@ class Caster {
     }
 
     public issueTargetInstant(abilityId: number, orderString: string, target: widget, castingUnit: unit, origin: Point, level: number, extraSeconds: number) {
-        DummyCaster.getInstance().addAlias(this.unit, castingUnit);
+        DummyCaster.getInstance().addAlias(this.unit, new AliasDto(castingUnit, this));
         this.addAbility(abilityId, level);
         SetUnitPositionLoc(this.unit, origin.toLocationClean());
         IssueTargetOrder(this.unit, orderString, target);
@@ -173,7 +177,7 @@ class Caster {
     }
 
     public issuePointOrder(abilityId: number, orderString: string, target: Point, castingUnit: unit, origin: Point, level: number, extraSeconds: number) {
-        DummyCaster.getInstance().addAlias(this.unit, castingUnit);
+        DummyCaster.getInstance().addAlias(this.unit, new AliasDto(castingUnit, this));
         this.addAbility(abilityId, level);
         let abil = BlzGetUnitAbility(this.unit, abilityId);
         SetUnitPositionLoc(this.unit, origin.toLocationClean());
@@ -192,7 +196,7 @@ class Caster {
     }
 
     public issueImmediateOrderDummy(abilityId: number, orderString: string, castingUnit: unit, origin: Point, level: number, extraSeconds: number) {
-        DummyCaster.getInstance().addAlias(this.unit, castingUnit);
+        DummyCaster.getInstance().addAlias(this.unit, new AliasDto(castingUnit, this));
         this.addAbility(abilityId, level, this.unit);
         SetUnitPositionLoc(this.unit, origin.toLocationClean());
         IssueImmediateOrder(this.unit, orderString);

@@ -12,6 +12,10 @@ export class DDSTests {
     constructor() {
         let redHeroAttacksBlueUnit = DamageDetectionSystem.getInstance().registerBeforeDamageCalculation((hitObject) => {
             hitObject.eventDamage *= 2;
+            if (hitObject.dummyAlias != undefined && hitObject.dummyAlias.casterDummy != undefined) {
+                Logger.LogDebug("Its a : ");
+                Logger.LogDebug(hitObject.dummyAlias.casterDummy.lastAbility + " - " + GetAbilityName(hitObject.dummyAlias.casterDummy.lastAbility));
+            }
             Logger.LogDebug("Now, Thats a lot of DAMAGE!");
             Logger.LogDebug(hitObject.eventDamage);
         });

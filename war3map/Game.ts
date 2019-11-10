@@ -1,18 +1,12 @@
 import {Logger} from "./TreeLib/Logger";
 import {Delay} from "./TreeLib/Utility/Delay";
 import {DummyCaster} from "./TreeLib/DummyCasting/DummyCaster";
-import {Players} from "./TreeLib/Structs/Players";
 import {Point} from "./TreeLib/Utility/Point";
 import {ActionQueue} from "./TreeLib/ActionQueue/ActionQueue";
-import {UnitActionWaypoint} from "./TreeLib/ActionQueue/Actions/UnitActionWaypoint";
-import {WaypointOrders} from "./TreeLib/ActionQueue/Actions/WaypointOrders";
-import {UnitActionDeath} from "./TreeLib/ActionQueue/Actions/UnitActionDeath";
-import {UnitActionKillUnit} from "./TreeLib/ActionQueue/Actions/UnitActionKillUnit";
 import {StringBuilderTest} from "./tests/StringBuilderTest";
 import {DDSTests} from "./tests/DDSTests";
 import {DamageDetectionSystem} from "./TreeLib/DDS/DamageDetectionSystem";
 import {Respawner} from "./TreeLib/Respawner/Respawner";
-import {UnitActionGoToAction} from "./TreeLib/ActionQueue/Actions/UnitActionGoToAction";
 import {QueueTests} from "./tests/QueueTests";
 import {RespawnTests} from "./tests/RespawnTests";
 import {QueueRespawnIntegrationTests} from "./tests/QueueRespawnIntegrationTests";
@@ -25,7 +19,9 @@ export class Game {
     private respawner: Respawner;
 
     constructor() {
-        Logger.doLogVerbose = true;
+        Logger.doLogVerbose = false;
+        Logger.doLogDebug = true;
+
         this.delay = Delay.getInstance();
         this.dummyCaster = DummyCaster.getInstance();
         this.actionQueue = ActionQueue.getInstance();

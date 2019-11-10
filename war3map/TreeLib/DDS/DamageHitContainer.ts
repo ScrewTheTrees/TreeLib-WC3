@@ -1,5 +1,6 @@
 import {StringBuilder} from "../Utility/StringBuilder";
 import {DummyCaster} from "../DummyCasting/DummyCaster";
+import {AliasDto} from "../DummyCasting/AliasDto";
 
 export class DamageHitContainer {
     public _rawAttackingUnit: unit;
@@ -11,6 +12,7 @@ export class DamageHitContainer {
     protected _damageType: damagetype;
     protected _attackType: attacktype;
     protected _weaponType: weapontype;
+    public dummyAlias: AliasDto | undefined;
 
     constructor() {
         this._rawAttackingUnit = this.dummy();
@@ -22,6 +24,7 @@ export class DamageHitContainer {
         this._attackType = this.dummy();
         this._damageType = this.dummy();
         this._weaponType = this.dummy();
+        this.dummyAlias = this.dummy();
 
         this.updateContainer();
     }
@@ -40,9 +43,11 @@ export class DamageHitContainer {
         this._attackType = BlzGetEventAttackType();
         this._damageType = BlzGetEventDamageType();
         this._weaponType = BlzGetEventWeaponType();
+        this.dummyAlias = this.dummy();
 
         if (DummyCaster.getInstance().isUnitAlias(this.attackingUnit)) {
-            this.attackingUnit = DummyCaster.getInstance().getActualUnit(this.attackingUnit)
+            this.dummyAlias = DummyCaster.getInstance().getUnitAlias(this.attackingUnit);
+            this.attackingUnit = this.dummyAlias.credit;
         }
     }
 
@@ -99,6 +104,8 @@ export class DamageHitContainer {
             .append(this.attackingUnit)
             .append(", attackedUnit: ")
             .append(this.targetUnit)
+            .append(", hasDummyAlias: ")
+            .append(this.dummyAlias != null)
             .append("}");
         return builder.toString();
     }

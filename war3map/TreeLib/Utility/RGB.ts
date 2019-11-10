@@ -37,7 +37,7 @@ export class RGB {
 }
 
 export function RGBTextString(color: RGB, ...input: any[]) {
-    let ret = "|c00" + string.format('%02x', color.red) + string.format('%02x', color.green) + string.format('%02x', color.blue);
+    let ret = "|cFF" + string.format('%02x', color.red) + string.format('%02x', color.green) + string.format('%02x', color.blue);
     input.forEach((val) => {
         ret += tostring(val) + " ";
     });
