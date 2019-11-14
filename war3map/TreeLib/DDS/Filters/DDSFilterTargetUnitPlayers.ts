@@ -2,6 +2,10 @@ import {DDSFilter} from "./DDSFilter";
 import {DamageHitContainer} from "../DamageHitContainer";
 import {Players} from "../../Structs/Players";
 
+/**
+ * Checks if the target unit is owned by any of these players.
+ * There are a few helper functions for getting a singular player quickly.
+ */
 export class DDSFilterTargetUnitPlayers implements DDSFilter {
     private readonly attackedPlayers: player[];
 
