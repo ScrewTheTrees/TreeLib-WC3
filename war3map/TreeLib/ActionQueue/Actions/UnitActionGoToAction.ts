@@ -3,7 +3,8 @@ import {UnitQueue} from "../Queues/UnitQueue";
 import {Delay} from "../../Utility/Delay";
 
 /**
- * Try to kill a unit until it is dead, or the time runs out
+ * Sets the current action index in queue to another action, also resets all actions.
+ * Allows for adding an expression which will evaluate, returning true if it should go to the action or false if not.
  */
 export class UnitActionGoToAction implements UnitAction {
     isFinished: boolean = false;
@@ -25,6 +26,8 @@ export class UnitActionGoToAction implements UnitAction {
             Delay.getInstance().addDelay(() => {
                 queue.allActions[this.actionIndex].init(queue.target, queue);
             }, 0.02);
+        } else {
+            this.isFinished = true;
         }
     }
 

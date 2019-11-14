@@ -14,6 +14,7 @@ export class UnitRespawner implements Spawner {
     public doEyeCandy: boolean;
     public rotation: number;
     public onRespawn: Function | undefined;
+    public respawns: number;
 
 
     /**
@@ -22,8 +23,10 @@ export class UnitRespawner implements Spawner {
      *      * @param onRespawn function called when target is respawned by the system.
      * @param respawnAtCurrentLocation if true, respawns at the location where the unit was added, else respawns where it died.
      * @param doEyeCandy show revive graphics
+     * @param maxRespawns the amount of times the respawns can occur, -1 is infinite.
      */
-    constructor(target: unit, delay: number = 60, onRespawn?: (target: unit) => void, respawnAtCurrentLocation: boolean = true, doEyeCandy: boolean = true) {
+    constructor(target: unit, delay: number = 60, onRespawn?: (target: unit) => void,
+                respawnAtCurrentLocation: boolean = true, doEyeCandy: boolean = true, maxRespawns: number = -1) {
         this.target = target;
         this.owner = GetOwningPlayer(target);
         this.unitType = GetUnitTypeId(this.target);
@@ -33,6 +36,7 @@ export class UnitRespawner implements Spawner {
         this.respawnAtCurrentLocation = respawnAtCurrentLocation;
         this.doEyeCandy = doEyeCandy;
         this.rotation = GetUnitFacing(this.target);
+        this.respawns = maxRespawns;
 
         this.respawnLocation = Point.fromWidget(this.target);
     }
@@ -53,14 +57,19 @@ export class UnitRespawner implements Spawner {
     }
 
     performRevive() {
-        if (this.isHero) {
-            ReviveHero(this.target, this.respawnLocation.x, this.respawnLocation.y, false);
-            SetUnitFacing(this.target, this.rotation);
-        } else {
-            this.target = CreateUnit(this.owner, this.unitType, this.respawnLocation.x, this.respawnLocation.y, this.rotation);
+        if (this.respawns != 0) {
+            if (this.isHero) {
+                ReviveHero(this.target, this.respawnLocation.x, this.respawnLocation.y, false);
+                SetUnitFacing(this.target, this.rotation);
+            } else {
+                this.target = CreateUnit(this.owner, this.unitType, this.respawnLocation.x, this.respawnLocation.y, this.rotation);
+            }
+            if (this.onRespawn) {
+                this.onRespawn(this.target);
+            }
         }
-        if (this.onRespawn) {
-            this.onRespawn(this.target);
+        if (this.respawns > 0) {
+            this.respawns -= 1;
         }
         this.counter = 0;
     }

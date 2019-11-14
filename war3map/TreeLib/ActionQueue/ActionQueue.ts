@@ -8,6 +8,7 @@ import {Logger} from "../Logger";
 /**
  * ActionQueue is a system that allows you to create waypoints and a string of orders, like if a player would
  * hold shift and click in the game, not only that but it allows for special actions like killing and removing the unit too.
+ * Also some logic stuff like GoTo action to go to another part of the queue, setting to 0 resets the queue.
  */
 export class ActionQueue extends Entity {
     private static instance: ActionQueue;
@@ -37,7 +38,6 @@ export class ActionQueue extends Entity {
             } else {
                 queue.update(this._timerDelay);
             }
-
         }
     }
 

@@ -25,20 +25,27 @@ export class Respawner extends Entity {
 
     step(): void {
         if (!this.paused) {
-            for (let spawner of this.spawners) {
+            for (let index = 0; index < this.spawners.length; index++) {
+                let spawner = this.spawners[index];
                 spawner.update(this._timerDelay);
+                if (spawner.respawns == 0) {
+                    this.spawners.splice(index, 1);
+                    index -= 1;
+                }
             }
         }
     }
 
-    public createNewUnitRespawner(target: unit, delay: number, respawnAtOriginalLocation?: boolean, doEyeCandy?: boolean, onRespawn?: (target: unit) => void) {
-        let spawner = new UnitRespawner(target, delay, onRespawn, respawnAtOriginalLocation, doEyeCandy);
+    public createNewUnitRespawner(target: unit, delay: number, respawnAtOriginalLocation?: boolean, doEyeCandy?: boolean,
+                                  onRespawn?: (target: unit) => void, respawns?: number) {
+        let spawner = new UnitRespawner(target, delay, onRespawn, respawnAtOriginalLocation, doEyeCandy, respawns);
         this.spawners.push(spawner);
         return spawner;
     }
 
-    public createNewUnitCampRespawner(targets: unit[], delay: number, respawnAtOriginalLocation?: boolean, doEyeCandy?: boolean, onRespawn?: (target: unit) => void) {
-        let spawner = new UnitCampRespawner(targets, delay, onRespawn, respawnAtOriginalLocation, doEyeCandy);
+    public createNewUnitCampRespawner(targets: unit[], delay: number, respawnAtOriginalLocation?: boolean, doEyeCandy?: boolean,
+                                      onRespawn?: (target: unit) => void, respawns?: number) {
+        let spawner = new UnitCampRespawner(targets, delay, onRespawn, respawnAtOriginalLocation, doEyeCandy, respawns);
         this.spawners.push(spawner);
         return spawner;
     }
