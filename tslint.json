@@ -1,0 +1,6 @@
+{
+  "rules": {
+    "strict-boolean-expressions": true,
+    "no-for-in-array": true
+  }
+}

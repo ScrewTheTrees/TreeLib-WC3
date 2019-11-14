@@ -42,19 +42,19 @@ export class Logger {
     }
 
     //Quickies since the above functions are a bit too overly explanatory.
-    public static verbose(...args: string[]) {
+    public static verbose(...args: any[]) {
         Logger.LogVerbose(...args);
     }
 
-    public static debug(...args: string[]) {
+    public static debug(...args: any[]) {
         Logger.LogDebug(...args);
     }
 
-    public static warning(...args: string[]) {
+    public static warning(...args: any[]) {
         Logger.LogWarning(...args);
     }
 
-    public static critical(...args: string[]) {
+    public static critical(...args: any[]) {
         Logger.LogCritical(...args);
     }
 }

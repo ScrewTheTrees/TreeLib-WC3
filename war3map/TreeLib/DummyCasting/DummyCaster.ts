@@ -146,9 +146,7 @@ export class Caster {
     public inactiveFor: number = 0;
 
     constructor(castingUnit: unit) {
-        let newUnit = Caster.createDummyUnit(castingUnit);
-
-        this.unit = newUnit;
+        this.unit = Caster.createDummyUnit(castingUnit);
         this.expended = 0;
 
         DummyCaster.getInstance().addAlias(this.unit, new AliasDto(castingUnit, this));
@@ -161,21 +159,26 @@ export class Caster {
     }
 
     public issueTargetInstant(abilityId: number, orderString: string, target: widget, castingUnit: unit, origin: Point, level: number, extraSeconds: number) {
+        Logger.verbose("Starting to cast: ", orderString, "from: ", origin.toString());
         DummyCaster.getInstance().addAlias(this.unit, new AliasDto(castingUnit, this));
         this.addAbility(abilityId, level);
         SetUnitPositionLoc(this.unit, origin.toLocationClean());
         IssueTargetOrder(this.unit, orderString, target);
         this.expended = extraSeconds;
         this.inactiveFor = 0;
+        Logger.verbose("Finishing to cast: ", orderString, "from: ", origin.toString());
     }
 
     public issueTargetChannel(abilityId: number, orderString: string, target: widget, castingUnit: unit, origin: Point, level: number, extraSeconds: number) {
+        Logger.verbose("Starting to cast: ", orderString, "from: ", origin.toString());
         this.issueTargetInstant(abilityId, orderString, target, castingUnit, origin, level, extraSeconds);
         let abil = BlzGetUnitAbility(this.unit, abilityId);
         this.expended = BlzGetAbilityRealLevelField(abil, ABILITY_RLF_DURATION_NORMAL, GetUnitAbilityLevel(this.unit, abilityId)) + extraSeconds;
+        Logger.verbose("Finishing to cast: ", orderString, "from: ", origin.toString());
     }
 
     public issuePointOrder(abilityId: number, orderString: string, target: Point, castingUnit: unit, origin: Point, level: number, extraSeconds: number) {
+        Logger.verbose("Starting to cast: ", orderString, "from: ", origin.toString(), "to: ", target.toString());
         DummyCaster.getInstance().addAlias(this.unit, new AliasDto(castingUnit, this));
         this.addAbility(abilityId, level);
         let abil = BlzGetUnitAbility(this.unit, abilityId);
@@ -183,6 +186,7 @@ export class Caster {
         IssuePointOrder(this.unit, orderString, target.x, target.y);
         this.expended = BlzGetAbilityRealLevelField(abil, ABILITY_RLF_DURATION_NORMAL, GetUnitAbilityLevel(this.unit, abilityId)) + extraSeconds;
         this.inactiveFor = 0;
+        Logger.verbose("Finished to cast: ", orderString, "from: ", origin.toString(), "to: ", target.toString());
     }
 
     public issueImmediateOrder(abilityId: number, orderString: string, castingUnit: unit, level: number, extraSeconds: number) {
@@ -196,7 +200,7 @@ export class Caster {
 
     public issueImmediateOrderDummy(abilityId: number, orderString: string, castingUnit: unit, origin: Point, level: number, extraSeconds: number) {
         DummyCaster.getInstance().addAlias(this.unit, new AliasDto(castingUnit, this));
-        this.addAbility(abilityId, level, this.unit);
+        this.addAbility(abilityId, level);
         SetUnitPositionLoc(this.unit, origin.toLocationClean());
         IssueImmediateOrder(this.unit, orderString);
         let abil = BlzGetUnitAbility(this.unit, abilityId);
@@ -226,10 +230,13 @@ export class Caster {
         let newUnit = CreateUnit(GetOwningPlayer(castingUnit), FourCC(DummyCaster.getInstance().unitTypeBase), 0, 0, bj_UNIT_FACING);
         BlzSetUnitMaxHP(newUnit, 10000);
         BlzSetUnitMaxMana(newUnit, 10000);
+        SetUnitState(newUnit, UNIT_STATE_LIFE, 10000);
+        SetUnitState(newUnit, UNIT_STATE_MANA, 10000);
         SetUnitAcquireRange(newUnit, 0);
         SetUnitInvulnerable(newUnit, true);
         SetUnitPathing(newUnit, false);
         ShowUnit(newUnit, false);
+        SetUnitUseFood(newUnit, false);
         BlzSetUnitWeaponBooleanField(newUnit, UNIT_WEAPON_BF_ATTACKS_ENABLED, WeaponIndex.WEAPON_1, false);
         BlzSetUnitWeaponBooleanField(newUnit, UNIT_WEAPON_BF_ATTACKS_ENABLED, WeaponIndex.WEAPON_2, false);
         BlzSetUnitStringField(newUnit, UNIT_SF_SHADOW_IMAGE_UNIT, "");
@@ -239,6 +246,7 @@ export class Caster {
         BlzSetUnitRealField(newUnit, UNIT_RF_SELECTION_SCALE, 0.001);
         BlzSetUnitRealField(newUnit, UNIT_RF_SHADOW_IMAGE_HEIGHT, 0);
         BlzSetUnitRealField(newUnit, UNIT_RF_SHADOW_IMAGE_WIDTH, 0);
+        BlzSetUnitRealField(newUnit, UNIT_RF_MANA_REGENERATION, 1000);
         UnitAddAbility(newUnit, FourCC("Aloc"));
         return newUnit;
     }

@@ -19,7 +19,7 @@ export class Game {
     private respawner: Respawner;
 
     constructor() {
-        Logger.doLogVerbose = false;
+        Logger.doLogVerbose = true;
         Logger.doLogDebug = true;
 
         this.delay = Delay.getInstance();
