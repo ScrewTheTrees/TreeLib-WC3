@@ -1,7 +1,6 @@
 import {Hooks} from "../Hooks";
 import {Entity} from "../Entity";
 import {Logger} from "../Logger";
-import {Unit} from "../Wrappers/Unit";
 import {WeaponIndex} from "../Wrappers/WeaponIndex";
 import {Point} from "../Utility/Point";
 import {Delay} from "../Utility/Delay";
@@ -149,7 +148,7 @@ export class Caster {
     constructor(castingUnit: unit) {
         let newUnit = Caster.createDummyUnit(castingUnit);
 
-        this.unit = newUnit.wrappedUnit;
+        this.unit = newUnit;
         this.expended = 0;
 
         DummyCaster.getInstance().addAlias(this.unit, new AliasDto(castingUnit, this));
@@ -224,24 +223,23 @@ export class Caster {
     }
 
     public static createDummyUnit(castingUnit: unit) {
-        let newUnit = new Unit(CreateUnit(GetOwningPlayer(castingUnit), FourCC(DummyCaster.getInstance().unitTypeBase), 0, 0, bj_UNIT_FACING));
-        newUnit.maxHealth = 10000;
-        newUnit.maxMana = 10000;
-        newUnit.health = 10000;
-        newUnit.mana = 10000;
-        newUnit.acquireRange = 0;
-        newUnit.invulnerable = true;
-        newUnit.SetPathing(false);
-        newUnit.Show(false);
-        newUnit.SetWeaponBooleanField(UNIT_WEAPON_BF_ATTACKS_ENABLED, false, WeaponIndex.WEAPON_1);
-        newUnit.SetWeaponBooleanField(UNIT_WEAPON_BF_ATTACKS_ENABLED, false, WeaponIndex.WEAPON_2);
-        newUnit.SetStringField(UNIT_SF_SHADOW_IMAGE_UNIT, "");
-        newUnit.SetBooleanField(UNIT_BF_HIDE_MINIMAP_DISPLAY, true);
-        newUnit.SetRealField(UNIT_RF_CAST_BACK_SWING, 0.001);
-        newUnit.SetRealField(UNIT_RF_CAST_POINT, 0.001);
-        newUnit.SetRealField(UNIT_RF_SELECTION_SCALE, 0.001);
-        newUnit.SetRealField(UNIT_RF_SHADOW_IMAGE_HEIGHT, 0);
-        newUnit.SetRealField(UNIT_RF_SHADOW_IMAGE_WIDTH, 0);
+        let newUnit = CreateUnit(GetOwningPlayer(castingUnit), FourCC(DummyCaster.getInstance().unitTypeBase), 0, 0, bj_UNIT_FACING);
+        BlzSetUnitMaxHP(newUnit, 10000);
+        BlzSetUnitMaxMana(newUnit, 10000);
+        SetUnitAcquireRange(newUnit, 0);
+        SetUnitInvulnerable(newUnit, true);
+        SetUnitPathing(newUnit, false);
+        ShowUnit(newUnit, false);
+        BlzSetUnitWeaponBooleanField(newUnit, UNIT_WEAPON_BF_ATTACKS_ENABLED, WeaponIndex.WEAPON_1, false);
+        BlzSetUnitWeaponBooleanField(newUnit, UNIT_WEAPON_BF_ATTACKS_ENABLED, WeaponIndex.WEAPON_2, false);
+        BlzSetUnitStringField(newUnit, UNIT_SF_SHADOW_IMAGE_UNIT, "");
+        BlzSetUnitBooleanField(newUnit, UNIT_BF_HIDE_MINIMAP_DISPLAY, true);
+        BlzSetUnitRealField(newUnit, UNIT_RF_CAST_BACK_SWING, 0.001);
+        BlzSetUnitRealField(newUnit, UNIT_RF_CAST_POINT, 0.001);
+        BlzSetUnitRealField(newUnit, UNIT_RF_SELECTION_SCALE, 0.001);
+        BlzSetUnitRealField(newUnit, UNIT_RF_SHADOW_IMAGE_HEIGHT, 0);
+        BlzSetUnitRealField(newUnit, UNIT_RF_SHADOW_IMAGE_WIDTH, 0);
+        UnitAddAbility(newUnit, FourCC("Aloc"));
         return newUnit;
     }
 }
