@@ -6,3 +6,5 @@ package.lock.json
 
 maps/Output/*
 maps/Build/*
+
+package-lock.json
