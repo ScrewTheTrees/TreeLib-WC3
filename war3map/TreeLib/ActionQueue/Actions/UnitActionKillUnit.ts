@@ -1,7 +1,7 @@
 import {UnitAction} from "./UnitAction";
 import {Logger} from "../../Logger";
 import {IsValidUnit} from "../../Misc";
-import {WeaponIndex} from "../../Wrappers/WeaponIndex";
+import {WeaponIndex} from "../../Structs/WeaponIndex";
 import {UnitQueue} from "../Queues/UnitQueue";
 
 /**
