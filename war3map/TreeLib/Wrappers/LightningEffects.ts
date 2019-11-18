@@ -1,0 +1,16 @@
+export enum LightningEffects {
+    CHAIN_LIGHTNING_PRIMARY = FourCC("CLPB"),
+    CHAIN_LIGHTNING_SECONDARY = FourCC("CLSB"),
+    DRAIN = FourCC("DRAB"),
+    DRAIN_LIFE = FourCC("DRAL"),
+    DRAIN_MANA = FourCC("DRAM"),
+    FINGER_OF_DEATH = FourCC("AFOD"),
+    FORKED_LIGHTNING = FourCC("FORK"),
+    HEALING_WAVE_PRIMARY = FourCC("HWPB"),
+    HEALING_WAVE_SECONDARY = FourCC("HWSB"),
+    LIGHTNING_ATTACK = FourCC("CHIM"),
+    MAGIC_LEASH = FourCC("LEAS"),
+    MANA_BURN = FourCC("MBUR"),
+    MANA_FLARE = FourCC("MFPB"),
+    SPIRIT_LINK = FourCC("SPLK"),
+}

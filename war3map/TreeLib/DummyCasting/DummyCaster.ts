@@ -23,7 +23,7 @@ export class DummyCaster extends Entity {
 
     private allCasters: Caster[] = [];
     private aliases: AliasDto[] = [];
-    public unitTypeBase = "hgyr";
+    public unitTypeBase = FourCC("hgyr");
 
     public addAlias(caster: unit, credit: AliasDto) {
         this.aliases[GetHandleId(caster)] = credit;
@@ -227,7 +227,7 @@ export class Caster {
     }
 
     public static createDummyUnit(castingUnit: unit) {
-        let newUnit = CreateUnit(GetOwningPlayer(castingUnit), FourCC(DummyCaster.getInstance().unitTypeBase), 0, 0, bj_UNIT_FACING);
+        let newUnit = CreateUnit(GetOwningPlayer(castingUnit), DummyCaster.getInstance().unitTypeBase, 0, 0, bj_UNIT_FACING);
         BlzSetUnitMaxHP(newUnit, 10000);
         BlzSetUnitMaxMana(newUnit, 10000);
         SetUnitState(newUnit, UNIT_STATE_LIFE, 10000);

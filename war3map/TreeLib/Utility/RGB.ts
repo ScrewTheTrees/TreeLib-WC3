@@ -34,6 +34,10 @@ export class RGB {
         this._green = green;
         this._blue = blue;
     }
+
+    public static getFull() {
+        return new RGB(255, 255, 255);
+    }
 }
 
 export function RGBTextString(color: RGB, ...input: any[]) {
