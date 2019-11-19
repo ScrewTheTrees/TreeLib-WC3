@@ -59,6 +59,12 @@ export class DamageDetectionSystem {
         return hitCall;
     }
 
+    /**
+     * Warning, Recursive DDS is an unsafe option for amateurs, it will allow the DDS system to create infinite loops
+     * If used wrongly, it also forces TreeLibs DDS to create a new DamageHitContainer every time instead of reusing the same one.
+     * TreeLibs DDS system blocks infinite loops by locking the execution on hit, but it will still cause issues due to the event changes.
+     * While some parts are unsolveable, i will work on something to allow execution of code after all the DDS passes.
+     */
     public allowRecursiveDDS = false;
     private locked = false;
 

@@ -18,12 +18,7 @@ export class UnitRespawner implements Spawner {
 
 
     /**
-     * @param target the unit in question that you want to respawn.
-     * @param delay the delay after death before it respawns.
-     *      * @param onRespawn function called when target is respawned by the system.
-     * @param respawnAtCurrentLocation if true, respawns at the location where the unit was added, else respawns where it died.
-     * @param doEyeCandy show revive graphics
-     * @param maxRespawns the amount of times the respawns can occur, -1 is infinite.
+     * See Respawner.createNewUnitRespawner
      */
     constructor(target: unit, delay: number = 60, onRespawn?: (target: unit) => void,
                 respawnAtCurrentLocation: boolean = true, doEyeCandy: boolean = true, maxRespawns: number = -1) {

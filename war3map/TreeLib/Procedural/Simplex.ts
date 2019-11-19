@@ -1,5 +1,9 @@
 import {Random} from "../Utility/Random";
+import {Point} from "../Utility/Point";
 
+/**
+ * Simplex is an algorithm for programmatically generating data, this implementation is 2D generally for map generation.
+ */
 export class Simplex {
     private static STRETCH_CONSTANT_2D = -0.211324;
     private static SQUISH_CONSTANT_2D = 0.366025;
@@ -14,6 +18,18 @@ export class Simplex {
         }
     }
 
+    /**
+     * Gets data at a point, simplex 2d range is ±0.707 and not ±1
+     * @param point point of impact.
+     */
+    public getValueAtPoint(point: Point) {
+        return this.getValueAt(point.x, point.y);
+    }
+    /**
+     * Gets data at x/y, simplex 2d range is ±0.707 and not ±1
+     * @param x
+     * @param y
+     */
     public getValueAt(x: number, y: number) {
         let stretchOffset = (x + y) * Simplex.STRETCH_CONSTANT_2D;
         let xs = x + stretchOffset;

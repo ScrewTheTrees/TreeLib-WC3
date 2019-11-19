@@ -39,6 +39,12 @@ export class Delay extends Entity {
         }
     }
 
+    /**
+     * Adds a delayed function that will execute after a wanted duration.
+     * @param f the function to execute on the delay.
+     * @param delaySeconds the time before the delay executes.
+     * @param repeats How many times it will run, 1 runs it once.
+     */
     public addDelay(f: Function, delaySeconds: number, repeats: number = 1) {
         this.addDelayFrom(new DelayDto(f, delaySeconds, repeats));
     }

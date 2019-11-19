@@ -12,12 +12,7 @@ export class UnitCampRespawner implements Spawner {
     public respawns: number;
 
     /**
-     * @param targets the units in question that you want to respawn together when they are all dead
-     * @param delay the delay after death before it respawns.
-     * @param onRespawn function called when target is respawned by the system.
-     * @param respawnAtOriginalLocation if true, respawns at the location where the unit was added, else respawns where it died.
-     * @param doEyeCandy show revive graphics
-     * @param maxRespawns the amount of times the respawns can occur, -1 is infinite.
+     * See Respawner.createNewUnitCampRespawner
      */
     constructor(targets: unit[], delay: number = 60, onRespawn?: (target: unit) => void,
                 respawnAtOriginalLocation: boolean = true, doEyeCandy: boolean = true, maxRespawns: number = -1) {

@@ -46,13 +46,17 @@ export class ActionQueue extends Entity {
      * @param target The unit that should be handled.
      * @param actions Initial actions, more can be added with a function in the returned object.
      */
-    createUnitQueue(target: unit, ...actions: UnitAction[]): UnitQueue {
+    public createUnitQueue(target: unit, ...actions: UnitAction[]): UnitQueue {
         let unitQueue = new UnitQueue(target, ...actions);
         this.allQueues.push(unitQueue);
         Logger.LogDebug("Created UnitQueue, total: ", this.allQueues.length);
         return unitQueue;
     }
 
+    /**
+     * Great if you want to reAdd a queue, or add a custom queue.
+     * @param queue the queue to enable,
+     */
     public enableQueue(queue: Queue) {
         if (this.allQueues.indexOf(queue) <= 0) {
             Logger.LogVerbose("Queue is missing, adding");
