@@ -7,7 +7,7 @@ import {DDSFilterTargetUnitIsNotHero} from "../TreeLib/DDS/Filters/DDSFilterTarg
 
 export class DDSTests {
     run() {
-        let redHeroAttacksBlueUnit = DamageDetectionSystem.getInstance().registerBeforeDamageCalculation((hitObject) => {
+        let redHeroAttacksBlueUnit = DamageDetectionSystem.registerBeforeDamageCalculation((hitObject) => {
             hitObject.eventDamage *= 2;
             if (hitObject.dummyAlias != undefined && hitObject.dummyAlias.casterDummy != undefined) {
                 Logger.LogDebug("Its a : ");

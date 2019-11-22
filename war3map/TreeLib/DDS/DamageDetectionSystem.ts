@@ -123,10 +123,10 @@ export class DamageDetectionSystem {
     STATIC API
      */
     public static registerAfterDamageCalculation(callback: (hitObject: DamageHitContainer) => void) {
-        this.getInstance().registerAfterDamageCalculation(callback);
+        return this.getInstance().registerAfterDamageCalculation(callback);
     }
 
     public static registerBeforeDamageCalculation(callback: (hitObject: DamageHitContainer) => void) {
-        this.getInstance().registerBeforeDamageCalculation(callback);
+        return this.getInstance().registerBeforeDamageCalculation(callback);
     }
 }
