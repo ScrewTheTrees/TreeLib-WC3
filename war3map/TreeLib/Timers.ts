@@ -33,4 +33,11 @@ export class Timers {
     public addFastTimerCallback(func: Function) {
         this.fastTimerCallbacks.push(func);
     }
+
+    /*
+    STATIC API
+     */
+    public static addFastTimerCallback(func: Function) {
+        return Timers.getInstance().addFastTimerCallback(func);
+    }
 }

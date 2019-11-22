@@ -53,4 +53,11 @@ export class Delay extends Entity {
         this.queue.push(delayDto);
     }
 
+    /*
+    STATIC API
+     */
+    public static addDelay(f: Function, delaySeconds: number, repeats: number = 1) {
+        this.getInstance().addDelayFrom(new DelayDto(f, delaySeconds, repeats));
+    }
+
 }

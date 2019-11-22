@@ -65,4 +65,16 @@ export class ActionQueue extends Entity {
         }
         Logger.LogVerbose("Queue is present.");
     }
+
+
+    /*
+    STATIC API
+     */
+    public static createUnitQueue(target: unit, ...actions: UnitAction[]): UnitQueue {
+        return this.getInstance().createUnitQueue(target, ...actions);
+    }
+
+    public static enableQueue(queue: Queue) {
+        return this.getInstance().enableQueue(queue);
+    }
 }

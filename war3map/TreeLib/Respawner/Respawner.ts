@@ -70,4 +70,16 @@ export class Respawner extends Entity {
         this.spawners.push(spawner);
         return spawner;
     }
+
+    /*
+    STATIC API
+     */
+    public static createNewUnitRespawner(target: unit, delay: number, respawnAtOriginalLocation?: boolean, doEyeCandy?: boolean,
+                                         onRespawn?: (target: unit) => void, respawns?: number) {
+        return this.getInstance().createNewUnitRespawner(target, delay, respawnAtOriginalLocation, doEyeCandy, onRespawn, respawns);
+    }
+    public static createNewUnitCampRespawner(targets: unit[], delay: number, respawnAtOriginalLocation?: boolean, doEyeCandy?: boolean,
+                                      onRespawn?: (target: unit) => void, respawns?: number) {
+        return this.getInstance().createNewUnitCampRespawner(targets, delay, respawnAtOriginalLocation, doEyeCandy, onRespawn, respawns);
+    }
 }

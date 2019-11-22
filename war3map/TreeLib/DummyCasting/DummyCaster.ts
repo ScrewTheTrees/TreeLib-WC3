@@ -137,6 +137,50 @@ export class DummyCaster extends Entity {
             this.internalSecond = 0;
         }
     }
+
+
+    /*
+    STATIC API
+     */
+    public static addAlias(caster: unit, credit: AliasDto) {
+        return this.getInstance().addAlias(caster, credit);
+    }
+
+    public static removeAlias(caster: unit) {
+        return this.getInstance().removeAlias(caster);
+    }
+
+    public static isUnitAlias(caster: unit): boolean {
+        return this.getInstance().isUnitAlias(caster);
+    }
+
+    public static getUnitAlias(caster: unit): AliasDto {
+        return this.getInstance().getUnitAlias(caster);
+    }
+
+    public static castAtWidgetInstant(abilityId: number, orderString: string, target: widget, castingUnit: unit,
+                                      origin?: Point, level?: number, extraSeconds?: number) {
+        return this.getInstance().castAtWidgetInstant(abilityId, orderString, target, castingUnit, origin, level, extraSeconds);
+    }
+
+    public static channelAtWidget(abilityId: number, orderString: string, target: widget, castingUnit: unit,
+                                  origin?: Point, level?: number, extraSeconds?: number) {
+        return this.getInstance().channelAtWidget(abilityId, orderString, target, castingUnit, origin, level, extraSeconds);
+    }
+
+    public static channelAtPoint(abilityId: number, orderString: string, target: Point, castingUnit: unit,
+                                 level?: number, extraSeconds?: number) {
+        return this.getInstance().channelAtPoint(abilityId, orderString, target, castingUnit, level, extraSeconds);
+    }
+
+    public static castImmediately(abilityId: number, orderString: string, castingUnit: unit, level?: number, extraSeconds?: number) {
+        return this.getInstance().castImmediately(abilityId, orderString, castingUnit, level, extraSeconds);
+    }
+
+    public static castImmediatelyDummy(abilityId: number, orderString: string, castingUnit: unit,
+                                       origin?: Point, level?: number, extraSeconds?: number) {
+        return this.getInstance().castImmediatelyDummy(abilityId, orderString, castingUnit, origin, level, extraSeconds);
+    }
 }
 
 export class Caster {
