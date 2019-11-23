@@ -41,11 +41,6 @@ export class ActionQueue extends Entity {
         }
     }
 
-    /**
-     * Create a single unit Queue
-     * @param target The unit that should be handled.
-     * @param actions Initial actions, more can be added with a function in the returned object.
-     */
     public createUnitQueue(target: unit, ...actions: UnitAction[]): UnitQueue {
         let unitQueue = new UnitQueue(target, ...actions);
         this.allQueues.push(unitQueue);
@@ -53,10 +48,6 @@ export class ActionQueue extends Entity {
         return unitQueue;
     }
 
-    /**
-     * Great if you want to reAdd a queue, or add a custom queue.
-     * @param queue the queue to enable,
-     */
     public enableQueue(queue: Queue) {
         if (this.allQueues.indexOf(queue) <= 0) {
             Logger.LogVerbose("Queue is missing, adding");
@@ -70,10 +61,19 @@ export class ActionQueue extends Entity {
     /*
     STATIC API
      */
+    /**
+     * Create a single unit Queue
+     * @param target The unit that should be handled.
+     * @param actions Initial actions, more can be added with a function in the returned object.
+     */
     public static createUnitQueue(target: unit, ...actions: UnitAction[]): UnitQueue {
         return this.getInstance().createUnitQueue(target, ...actions);
     }
 
+    /**
+     * Great if you want to reAdd a queue, or add a custom queue.
+     * @param queue the queue to enable,
+     */
     public static enableQueue(queue: Queue) {
         return this.getInstance().enableQueue(queue);
     }

@@ -39,20 +39,14 @@ export class DamageDetectionSystem {
         TriggerAddAction(this.afterHit, () => this.onAfterHit());
     }
 
-    /**
-     * Register a callback that recives an object used for getting and manipulating damage data before damage calculation.
-     * Includes damage, damagetypes, target, caster, aliasedCaster (if casted by dummy)
-     */
+
     public registerBeforeDamageCalculation(callback: (hitObject: DamageHitContainer) => void) {
         let hitCall = new HitCallback(callback);
         this.beforeHitCallbacks.push(hitCall);
         return hitCall;
     }
 
-    /**
-     * Register a callback that recives an object used for getting and manipulating damage data after damage calculations.
-     * Includes damage, damagetypes, target, caster, aliasedCaster (if casted by dummy)
-     */
+
     public registerAfterDamageCalculation(callback: (hitObject: DamageHitContainer) => void) {
         let hitCall = new HitCallback(callback);
         this.afterHitCallbacks.push(hitCall);
@@ -122,10 +116,19 @@ export class DamageDetectionSystem {
     /*
     STATIC API
      */
+
+    /**
+     * Register a callback that recives an object used for getting and manipulating damage data after damage calculations.
+     * Includes damage, damagetypes, target, caster, aliasedCaster (if casted by dummy)
+     */
     public static registerAfterDamageCalculation(callback: (hitObject: DamageHitContainer) => void) {
         return this.getInstance().registerAfterDamageCalculation(callback);
     }
 
+    /**
+     * Register a callback that recives an object used for getting and manipulating damage data before damage calculation.
+     * Includes damage, damagetypes, target, caster, aliasedCaster (if casted by dummy)
+     */
     public static registerBeforeDamageCalculation(callback: (hitObject: DamageHitContainer) => void) {
         return this.getInstance().registerBeforeDamageCalculation(callback);
     }

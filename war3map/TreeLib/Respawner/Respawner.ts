@@ -39,15 +39,6 @@ export class Respawner extends Entity {
         }
     }
 
-    /**
-     * Set up respawning for a unit, if the unit is removed this will be removed as well.
-     * @param target The unit
-     * @param delay How long it takes after death to respawn
-     * @param respawnAtOriginalLocation Respawn at original location, else if false, respawn where dead.
-     * @param doEyeCandy If hero, do respawn animation.
-     * @param onRespawn callback on respawn containing the target unit respawned.
-     * @param respawns how many times it will respawn, -1 is infinite.
-     */
     public createNewUnitRespawner(target: unit, delay: number, respawnAtOriginalLocation?: boolean, doEyeCandy?: boolean,
                                   onRespawn?: (target: unit) => void, respawns?: number) {
         let spawner = new UnitRespawner(target, delay, onRespawn, respawnAtOriginalLocation, doEyeCandy, respawns);
@@ -55,15 +46,6 @@ export class Respawner extends Entity {
         return spawner;
     }
 
-    /**
-     * The big difference compared to the other one is that in this one is that all the units in the array have to die before the timer starts.
-     * @param targets The array unit
-     * @param delay How long it takes after death to respawn
-     * @param respawnAtOriginalLocation Respawn at original location, else if false, respawn where dead.
-     * @param doEyeCandy If hero, do respawn animation.
-     * @param onRespawn callback on respawn containing the target unit respawned, runs for every unit respawned
-     * @param respawns how many times it will respawn, -1 is infinite.
-     */
     public createNewUnitCampRespawner(targets: unit[], delay: number, respawnAtOriginalLocation?: boolean, doEyeCandy?: boolean,
                                       onRespawn?: (target: unit) => void, respawns?: number) {
         let spawner = new UnitCampRespawner(targets, delay, onRespawn, respawnAtOriginalLocation, doEyeCandy, respawns);
@@ -74,10 +56,28 @@ export class Respawner extends Entity {
     /*
     STATIC API
      */
+    /**
+     * Set up respawning for a unit, if the unit is removed this will be removed as well.
+     * @param target The unit
+     * @param delay How long it takes after death to respawn
+     * @param respawnAtOriginalLocation Respawn at original location, else if false, respawn where dead.
+     * @param doEyeCandy If hero, do respawn animation.
+     * @param onRespawn callback on respawn containing the target unit respawned.
+     * @param respawns how many times it will respawn, -1 is infinite.
+     */
     public static createNewUnitRespawner(target: unit, delay: number, respawnAtOriginalLocation?: boolean, doEyeCandy?: boolean,
                                          onRespawn?: (target: unit) => void, respawns?: number) {
         return this.getInstance().createNewUnitRespawner(target, delay, respawnAtOriginalLocation, doEyeCandy, onRespawn, respawns);
     }
+    /**
+     * The big difference compared to the other one is that in this one is that all the units in the array have to die before the timer starts.
+     * @param targets The array unit
+     * @param delay How long it takes after death to respawn
+     * @param respawnAtOriginalLocation Respawn at original location, else if false, respawn where dead.
+     * @param doEyeCandy If hero, do respawn animation.
+     * @param onRespawn callback on respawn containing the target unit respawned, runs for every unit respawned
+     * @param respawns how many times it will respawn, -1 is infinite.
+     */
     public static createNewUnitCampRespawner(targets: unit[], delay: number, respawnAtOriginalLocation?: boolean, doEyeCandy?: boolean,
                                       onRespawn?: (target: unit) => void, respawns?: number) {
         return this.getInstance().createNewUnitCampRespawner(targets, delay, respawnAtOriginalLocation, doEyeCandy, onRespawn, respawns);
