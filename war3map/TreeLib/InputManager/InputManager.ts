@@ -58,10 +58,8 @@ export class InputManager {
     public getKeyContainer(key: oskeytype) {
         if (this.registeredKeys[GetHandleId(key)] == null) {
             let newKey = new KeyInputContainer(key);
-
             this.registeredKeys[GetHandleId(key)] = newKey;
             this.registerNewKeyEvent(key);
-
             return newKey;
         } else {
             return this.registeredKeys[GetHandleId(key)];
@@ -71,11 +69,13 @@ export class InputManager {
     public addKeyboardPressCallback(key: oskeytype, callback: (key: KeyCallback) => void, metaKeys?: MetaKey[]) {
         let container = this.getKeyContainer(key);
         container.callbacks.push(new KeyCallback(key, callback, PressType.PRESS, metaKeys));
+        return container;
     }
 
     public addKeyboardReleaseCallback(key: oskeytype, callback: (key: KeyCallback) => void, metaKeys?: MetaKey[]) {
         let container = this.getKeyContainer(key);
         container.callbacks.push(new KeyCallback(key, callback, PressType.RELEASE, metaKeys));
+        return container;
     }
 
     public isButtonHeld(key: oskeytype) {
@@ -92,7 +92,7 @@ export class InputManager {
      * @param metaKeys Optional MetaKeys like having to hold shift or ctrl, by default its [MetaKeys.ALL] which works for any key combination.
      */
     public static addKeyboardPressCallback(key: oskeytype, callback: (key: KeyCallback) => void, metaKeys?: MetaKey[]) {
-        InputManager.getInstance().addKeyboardPressCallback(key, callback, metaKeys);
+        return InputManager.getInstance().addKeyboardPressCallback(key, callback, metaKeys);
     }
 
     /**
@@ -102,7 +102,7 @@ export class InputManager {
      * @param metaKeys Optional MetaKeys like having to hold shift or ctrl, by default its [MetaKeys.ALL] which works for any key combination.
      */
     public static addKeyboardReleaseCallback(key: oskeytype, callback: (key: KeyCallback) => void, metaKeys?: MetaKey[]) {
-        InputManager.getInstance().addKeyboardReleaseCallback(key, callback, metaKeys);
+        return InputManager.getInstance().addKeyboardReleaseCallback(key, callback, metaKeys);
     }
 
     /**
@@ -110,7 +110,14 @@ export class InputManager {
      * @param keyCallback the callback to remove
      */
     public static removeKeyCallback(keyCallback: KeyCallback) {
-        InputManager.getInstance().removeKeyCallback(keyCallback);
+        return InputManager.getInstance().removeKeyCallback(keyCallback);
+    }
+
+    /**
+     * Used internally a lot.
+     */
+    public static getKeyContainer(key: oskeytype) {
+        return InputManager.getInstance().getKeyContainer(key);
     }
 
     /**
@@ -118,6 +125,6 @@ export class InputManager {
      * @param key the button
      */
     public static isButtonHeld(key: oskeytype) {
-        InputManager.getInstance().isButtonHeld(key);
+        return InputManager.getInstance().isButtonHeld(key);
     }
 }
