@@ -18,15 +18,38 @@ export class InputManagerTest extends Entity {
                 Logger.warning("As intended!");
             });
             InputManager.addKeyboardPressCallback(OSKEY_D, () => {
-                Logger.critical("No meta or all metas!");
+                Logger.warning("No meta or all metas!");
             }, [MetaKey.SHIFT_CTRL_ALT, MetaKey.NONE]);
+
+            InputManager.addMousePressCallback(MOUSE_BUTTON_TYPE_MIDDLE, () => {
+                Logger.warning("MMB Pressed");
+            });
+            InputManager.addMouseReleaseCallback(MOUSE_BUTTON_TYPE_MIDDLE, () => {
+                Logger.warning("MMB Released");
+            });
+
+            InputManager.addMousePressCallback(MOUSE_BUTTON_TYPE_RIGHT, () => {
+                Logger.warning("RMB Pressed");
+            });
+            InputManager.addMouseReleaseCallback(MOUSE_BUTTON_TYPE_RIGHT, () => {
+                Logger.warning("RMB Released");
+            });
+
         }, (...args) => Logger.LogCritical(...args))
     }
 
     step(): void {
         this._timerDelay = 0.1;
-        if (InputManager.isButtonHeld(OSKEY_M)) {
-            Logger.critical("HOLDING M");
+        if (InputManager.isKeyButtonHeld(OSKEY_M)) {
+            Logger.warning("HOLDING M");
+        }
+        if (InputManager.isMouseButtonHeld(MOUSE_BUTTON_TYPE_LEFT)) {
+            Logger.critical(InputManager.getLastMousePosition(Player(0)). toString());
+            Logger.critical(InputManager.getLastMouseCoordinate(Player(0)).toString());
+            Logger.critical(InputManager.getLastMouseCoordinate(Player(1)).toString());
+        }
+        if (InputManager.isMouseButtonHeld(MOUSE_BUTTON_TYPE_RIGHT)) {
+            Logger.warning("HOLDING RMB");
         }
     }
 }
