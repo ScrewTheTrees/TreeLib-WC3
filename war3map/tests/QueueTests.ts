@@ -7,6 +7,9 @@ import {WaypointOrders} from "../TreeLib/ActionQueue/Actions/WaypointOrders";
 import {UnitActionKillUnit} from "../TreeLib/ActionQueue/Actions/UnitActionKillUnit";
 import {UnitActionDeath} from "../TreeLib/ActionQueue/Actions/UnitActionDeath";
 import {Delay} from "../TreeLib/Utility/Delay";
+import {UnitActionImmediate} from "../TreeLib/ActionQueue/Actions/UnitActionImmediate";
+import {ImmediateOrders} from "../TreeLib/ActionQueue/Actions/ImmediateOrders";
+import {UnitActionDelay} from "../TreeLib/ActionQueue/Actions/UnitActionDelay";
 
 export class QueueTests {
     run() {
@@ -18,6 +21,8 @@ export class QueueTests {
                 ActionQueue.createUnitQueue(mortar,
                     new UnitActionWaypoint(new Point(870, -3064)),
                     new UnitActionWaypoint(new Point(870, -1450), WaypointOrders.smart),
+                    new UnitActionImmediate(new Point(870, -1450), ImmediateOrders.holdPosition),
+                    new UnitActionDelay(3),
                     new UnitActionWaypoint(new Point(2000, -1450), WaypointOrders.attack),
                     new UnitActionKillUnit(killKnight),
                     new UnitActionDeath(true)
