@@ -8,11 +8,9 @@ import {Delay} from "../../Utility/Delay";
  */
 export class UnitActionGoToAction implements UnitAction {
     isFinished: boolean = false;
-    public readonly expression: (() => boolean);
-    public actionIndex: number;
+    public readonly expression: (target: unit, timeStep: number, queue: UnitQueue) => boolean;
 
-    constructor(actionIndex: number, expression?: () => boolean) {
-        this.actionIndex = actionIndex;
+    constructor(public actionIndex: number, expression?: (target: unit, timeStep: number, queue: UnitQueue) => boolean) {
         this.expression = expression || function () {
             return true;
         };
@@ -20,7 +18,7 @@ export class UnitActionGoToAction implements UnitAction {
     }
 
     update(target: unit, timeStep: number, queue: UnitQueue): void {
-        if (this.expression()) {
+        if (this.expression(target, timeStep, queue)) {
             queue.resetActions();
             queue.currentActionIndex = this.actionIndex;
             Delay.getInstance().addDelay(() => {

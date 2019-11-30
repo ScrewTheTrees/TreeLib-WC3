@@ -2,7 +2,6 @@
   "name": "treelib",
   "author": "Fredrik Grimmenhag (ScrewTheTrees)",
   "description": "Quality package.",
-  "version": "1.1.0",
   "scripts": {
     "fullRecompileAndRun": "npm run clean && npm run compileTypescript && npm run compileAndRunMap",
     "fullRecompile": "npm run clean && npm run compileTypescript && npm run compileMap",

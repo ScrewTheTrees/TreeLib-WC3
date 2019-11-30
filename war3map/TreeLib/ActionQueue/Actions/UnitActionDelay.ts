@@ -3,7 +3,7 @@ import {UnitQueue} from "../Queues/UnitQueue";
 import {Delay} from "../../Utility/Delay";
 
 /**
- * Basic waypoint action, move, attack move, or smart your way over to a Point.
+ * Basic delay, wait for x amount of seconds and then get on your way.
  */
 export class UnitActionDelay implements UnitAction {
     isFinished: boolean = false;
