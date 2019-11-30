@@ -4,6 +4,12 @@ import {Queue} from "./Queues/Queue";
 import {UnitQueue} from "./Queues/UnitQueue";
 import {UnitAction} from "./Actions/UnitAction";
 import {Logger} from "../Logger";
+import {Point} from "../Utility/Point";
+import {UnitActionWaypoint} from "./Actions/UnitActionWaypoint";
+import {WaypointOrders} from "./Actions/WaypointOrders";
+import {UnitActionGoToAction} from "./Actions/UnitActionGoToAction";
+import {UnitActionWaitWhileDead} from "./Actions/UnitActionWaitWhileDead";
+import {UnitActionDelay} from "./Actions/UnitActionDelay";
 
 /**
  * ActionQueue is a system that allows you to create waypoints and a string of orders, like if a player would
@@ -57,7 +63,6 @@ export class ActionQueue extends Entity {
         Logger.LogVerbose("Queue is present.");
     }
 
-
     /*
     STATIC API
      */
@@ -71,10 +76,41 @@ export class ActionQueue extends Entity {
     }
 
     /**
-     * Great if you want to reAdd a queue, or add a custom queue.
+     * Great if you want to reAdd a finished queue, like if the unit despawned but you created a new unit and add it to an old queue. you can reenable it here.
+     * Wont add a queue already present.
      * @param queue the queue to enable,
      */
     public static enableQueue(queue: Queue) {
         return this.getInstance().enableQueue(queue);
+    }
+
+    /**
+     * Creates a simple patrol between two points, the unit will run between this until their body disappears (unit is removed).
+     * @param target
+     * @param point1
+     * @param point2
+     * @param delay The delay on each edge, no delay by default
+     */
+    public static createSimplePatrol(target: unit, point1: Point, point2: Point, delay: number = 0) {
+        return this.getInstance().createUnitQueue(target,
+            new UnitActionWaypoint(point1, WaypointOrders.attack),
+            new UnitActionDelay(delay),
+            new UnitActionWaypoint(point2, WaypointOrders.attack),
+            new UnitActionDelay(delay),
+            new UnitActionWaitWhileDead(),
+            new UnitActionGoToAction(0));
+    }
+
+    /**
+     * Creates a simple guard position, a unit will infinitly guard this position until their their body disappears (unit is removed).
+     * @param target
+     * @param point
+     */
+    public static createSimpleGuardPoint(target: unit, point: Point) {
+        return this.getInstance().createUnitQueue(target,
+            new UnitActionWaypoint(point, WaypointOrders.attack),
+            new UnitActionDelay(3),
+            new UnitActionWaitWhileDead(),
+            new UnitActionGoToAction(0));
     }
 }
