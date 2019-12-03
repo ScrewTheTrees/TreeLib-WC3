@@ -1,4 +1,4 @@
-import {Game} from "./war3map/Game";
+import {Game} from "./Game";
 
 let gg_trg_Start: trigger;
 let gameInstance: Game;

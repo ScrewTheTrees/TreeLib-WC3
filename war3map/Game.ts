@@ -2,12 +2,7 @@ import {Logger} from "./TreeLib/Logger";
 import {Delay} from "./TreeLib/Utility/Delay";
 import {DummyCaster} from "./TreeLib/DummyCasting/DummyCaster";
 import {Point} from "./TreeLib/Utility/Point";
-import {StringBuilderTest} from "./tests/StringBuilderTest";
-import {DDSTests} from "./tests/DDSTests";
-import {QueueTests} from "./tests/QueueTests";
-import {RespawnTests} from "./tests/RespawnTests";
-import {QueueRespawnIntegrationTests} from "./tests/QueueRespawnIntegrationTests";
-import {InputManagerTest} from "./tests/InputManagerTest";
+import {PathfindingTests} from "./tests/PathfindingTests";
 
 export class Game {
     constructor() {
@@ -30,11 +25,14 @@ export class Game {
     }
 
     private genericTests() {
-        new StringBuilderTest().run();
-        new DDSTests().run();
-        new QueueTests().run();
-        new RespawnTests().run();
-        new QueueRespawnIntegrationTests().run();
-        new InputManagerTest().run();
+        xpcall(() => {
+            /*new StringBuilderTest().run();
+            new DDSTests().run();
+            new QueueTests().run();
+            new RespawnTests().run();
+            new QueueRespawnIntegrationTests().run();
+            new InputManagerTest().run(); */
+            PathfindingTests.getInstance();
+        }, (...args) => Logger.critical(...args));
     }
 }

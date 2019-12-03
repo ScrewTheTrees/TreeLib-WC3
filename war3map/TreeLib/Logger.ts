@@ -46,7 +46,8 @@ export class Logger {
         Logger.LogVerbose(...args);
     }
 
-    public static debug(...args: any[]) {
+    //debug seems to be a reserved codeword, so we are using generic instead
+    public static generic(...args: any[]) {
         Logger.LogDebug(...args);
     }
 

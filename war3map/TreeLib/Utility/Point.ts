@@ -69,6 +69,10 @@ export class Point {
         return new Point(GetRectCenterX(input), GetRectCenterY(input));
     }
 
+    public static copy(input: Point): Point {
+        return new Point(input.x, input.y);
+    }
+
     distanceToLine(lineStart: Point, lineEnd: Point) {
         let A = this.x - lineStart.x;
         let B = this.y - lineStart.y;
@@ -102,5 +106,9 @@ export class Point {
 
     public toString(): string {
         return "point {x:" + this.x + ", y:" + this.y + " }";
+    }
+
+    public equals(point: Point) {
+        return point.x == this.x && point.y == this.y;
     }
 }
