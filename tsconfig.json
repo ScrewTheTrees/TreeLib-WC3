@@ -1,13 +1,14 @@
 {
   "compilerOptions": {
+    "allowJs": false,
     "strict": true,
     "strictNullChecks": true,
     "sourceMap": false,
-    "target": "esnext",
+    "target": "es6",
+    "moduleResolution": "classic",
     "lib": [
-      "esnext"
+      "es6"
     ],
-    "outDir": "./src",
     "types": [
       "lua-types/core/coroutine",
       "lua-types/core/global",
@@ -22,8 +23,10 @@
   },
   "tstl": {
     "luaTarget": "5.3",
-    "luaLibImport": "inline",
+    "luaLibImport": "require",
     "sourceMapTraceback": false,
-    "noHeader": true
+    "noHeader": true,
+    "luaBundle": "target\\tstl_output.lua",
+    "luaBundleEntry": "src\\main.ts"
   }
 }

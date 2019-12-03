@@ -1,0 +1,8 @@
+{
+  "mapFolder": "TestMap.w3x",
+  "gameExecutable": "D:\\Games\\Warcraft III\\x86_64\\Warcraft III.exe",
+  "launchArgs": [
+    "-windowmode",
+    "windowed"
+  ]
+}
