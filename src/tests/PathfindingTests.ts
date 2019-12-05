@@ -23,7 +23,7 @@ export class PathfindingTests {
 
     constructor() {
         let stepSize = 128;
-        this.pathfinder = new PathfinderGrid(-4000, -4000, 4000, 4000, stepSize);
+        this.pathfinder = new PathfinderGrid(-8000, -8000, 8000, 8000, stepSize);
 
         for (let i = 0; i < this.pathfinder.nodes.length; i++) {
             let node = this.pathfinder.nodes[i];

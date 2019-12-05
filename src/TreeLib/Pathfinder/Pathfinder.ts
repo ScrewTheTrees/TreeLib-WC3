@@ -1,6 +1,7 @@
 import {Node} from "./Node";
 import {Point} from "../Utility/Point";
 import {Logger} from "../Logger";
+import {PriorityQueue} from "./PriorityQueue";
 
 export class Pathfinder {
     public nodes: Node[] = [];
@@ -12,39 +13,50 @@ export class Pathfinder {
         this.resetNodes();
 
         //Logic
-        let frontier: Node[] = [];
-        frontier.push(startNode);
+        let frontier = new PriorityQueue<Node>();
+        frontier.push(startNode, startNode.costSoFar + startNode.cost);
         startNode.cameFrom = null;
-        let finalNode = startNode;
+        startNode.costSoFar = startNode.cost;
+        let finalNode = null;
+        let highest = 0;
 
-        while (frontier.length > 0) {
-            let current = frontier[0];
-            for (let i = 0; i < current.neighbors.length; i++) {
-                let node = current.neighbors[i];
-                if (node.cameFrom == null && !node.disabled) {
-                    frontier.push(node);
-                    node.cameFrom = current;
-                    finalNode = node;
-                    if (node == endNode) {
+        while (frontier.hasEntry()) {
+            let current = frontier.get();
+            if (current != null) {
+                for (let i = 0; i < current.neighbors.length; i++) {
+                    let target = current.neighbors[i];
+                    if (!target.disabled && this.isNodeBadCompared(current, target)) {
+                        target.cameFrom = current;
+                        target.costSoFar = this.getNodeNumber(current, target);
+                        frontier.push(target, target.costSoFar);
+                    }
+                    if (target == endNode) {
+                        finalNode = target;
                         break; //Exit
                     }
                 }
             }
-            frontier.splice(0, 1);
+            if (frontier.entries.length < highest) {
+                highest = frontier.entries.length;
+            }
         }
-
-        Logger.generic("startNode", startNode.point.toString());
-        Logger.generic("finalNode", finalNode.point.toString());
-        Logger.generic("endNode", endNode.point.toString());
+        if (finalNode == null) {
+            finalNode = this.getClosestWithCameFrom(to) || startNode;
+        }
 
         // Backtrack to get path
         let compileNodes: Node[] = [];
-        let iterateNode: Node | null = endNode;
+        let iterateNode: Node | null = finalNode;
         startNode.cameFrom = null;
         while (iterateNode != null) {
             compileNodes.push(iterateNode);
             iterateNode = iterateNode.cameFrom;
         }
+
+        Logger.generic("startNode", startNode.point.toString());
+        Logger.generic("finalNode", finalNode.point.toString());
+        Logger.generic("endNode", endNode.point.toString());
+        Logger.generic("totalPrios", highest);
         Logger.critical("compileNodes ", compileNodes.length);
 
         //Reverse Path and convert to points.
@@ -53,14 +65,27 @@ export class Pathfinder {
             let node = compileNodes[i];
             points.push(Point.copy(node.point));
         }
-        Logger.critical("points ", points.length);
 
         return points;
+    }
+
+    public getNodeNumber(current: Node, target: Node) {
+        return current.costSoFar + (target.cost * current.point.distanceTo(target.point));
+    }
+
+    public isNodeBadCompared(current: Node, target: Node): boolean {
+        if (target.costSoFar == 0)
+            return true; // Touch this node, its empty.
+        if (current.costSoFar + (target.cost * current.point.distanceTo(target.point)) < target.costSoFar)
+            return true; // Target node is higher cost, add it to prio queue so it can be reevaluated.
+
+        return false;
     }
 
     public resetNodes() {
         this.nodes.forEach((node) => {
             node.cameFrom = null;
+            node.costSoFar = 0;
         });
     }
 
@@ -88,8 +113,31 @@ export class Pathfinder {
                 }
             }
         }
-        Logger.critical(tostring(closest), "  ", this.nodes.length);
         return closest;
+    }
 
+    public getClosestWithCameFrom(point: Point): Node {
+        let closest = this.findFirstWithCameFrom();
+        if (this.nodes.length > 0) {
+            let distance = point.distanceTo(closest.point);
+            for (let index = 0; index < this.nodes.length; index++) {
+                let value = this.nodes[index];
+                if (!value.disabled && value.cameFrom != null && point.distanceTo(value.point) < distance) {
+                    closest = value;
+                    distance = point.distanceTo(value.point);
+                }
+            }
+        }
+        return closest;
+    }
+
+    public findFirstWithCameFrom() {
+        for (let i = 0; i < this.nodes.length; i++) {
+            let node = this.nodes[i];
+            if (node.cameFrom != null) {
+                return node;
+            }
+        }
+        return this.nodes[0];
     }
 }
