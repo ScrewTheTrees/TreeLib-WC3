@@ -54,14 +54,6 @@ export class ActionQueue extends Entity {
         return unitQueue;
     }
 
-    /**
-     * Great if a queue has lost its purpose or needs replacing.
-     * @param queue the queue to disable,
-     */
-    public static disableQueue(queue: Queue) {
-        return this.getInstance().disableQueue(queue);
-    }
-
     public enableQueue(queue: Queue) {
         if (this.allQueues.indexOf(queue) < 0) {
             Logger.LogVerbose("Queue is missing, adding");
@@ -71,6 +63,13 @@ export class ActionQueue extends Entity {
         Logger.LogVerbose("Queue is present.");
     }
 
+    /**
+     * Great if a queue has lost its purpose or needs replacing.
+     * @param queue the queue to disable,
+     */
+    public static disableQueue(queue: Queue) {
+        return this.getInstance().disableQueue(queue);
+    }
 
     /*
     STATIC API
