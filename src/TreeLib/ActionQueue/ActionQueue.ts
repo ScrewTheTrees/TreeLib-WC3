@@ -128,7 +128,7 @@ export class ActionQueue extends Entity {
     public static createSimpleGuardPoint(target: unit, point: Point) {
         return this.getInstance().createUnitQueue(target,
             new UnitActionWaypoint(point, WaypointOrders.attack),
-            new UnitActionDelay(3),
+            new UnitActionDelay(10),
             new UnitActionWaitWhileDead(),
             new UnitActionGoToAction(0));
     }
