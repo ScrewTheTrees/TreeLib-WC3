@@ -5,8 +5,8 @@ import {PriorityQueue} from "./PriorityQueue";
 import {PathfindResult} from "./PathfindResult";
 
 export class Pathfinder {
-    public nodes: Node[] = [];
-    public frontier = new PriorityQueue<Node>();
+    private nodes: Node[] = [];
+    private frontier = new PriorityQueue<Node>();
 
     public findPath(from: Point, to: Point): PathfindResult {
         //Setup
@@ -71,7 +71,6 @@ export class Pathfinder {
             let node = compileNodes[i];
             points.push(Point.copy(node.point));
         }
-
 
         return new PathfindResult(points, finalNode == endNode);
     }
@@ -153,5 +152,9 @@ export class Pathfinder {
             }
         }
         return this.nodes[0];
+    }
+
+    public addNode(node: Node) {
+        this.nodes.push(node);
     }
 }

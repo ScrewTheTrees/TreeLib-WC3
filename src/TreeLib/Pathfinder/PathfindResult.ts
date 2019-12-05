@@ -11,7 +11,7 @@ export class PathfindResult {
     }
 
     /**
-     * Removes redundant nodes.
+     * Removes redundant nodes to make path less complex
      */
     getPathOptimised(): Point[] {
         let path = this.optimisedPath;

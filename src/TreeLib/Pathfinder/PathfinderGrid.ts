@@ -3,7 +3,7 @@ import {Point} from "../Utility/Point";
 import {Pathfinder} from "./Pathfinder";
 
 export class PathfinderGrid extends Pathfinder {
-    public grid: Node[][] = [];
+    private grid: Node[][] = [];
 
     constructor(startX: number, startY: number, endX: number, endY: number, stepSize: number) {
         super();
@@ -30,7 +30,7 @@ export class PathfinderGrid extends Pathfinder {
                 if (right != null) {
                     node.addNeighborTwoWay(right);
                 }
-                this.nodes.push(node);
+                this.addNode(node);
             }
         }
     }
