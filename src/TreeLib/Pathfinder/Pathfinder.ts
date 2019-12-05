@@ -31,7 +31,7 @@ export class Pathfinder {
                     if (!target.disabled && this.isNodeBadCompared(current, target)) {
                         target.cameFrom = current;
                         target.costSoFar = this.getNodeNumber(current, target);
-                        this.frontier.push(target, this.distanceBetweenNodes(target, endNode) * target.cost);
+                        this.frontier.push(target, current.costSoFar + this.distanceBetweenNodes(target, endNode) * target.cost);
                         opCount += 1;
                     }
                     if (target == endNode) {
@@ -94,7 +94,7 @@ export class Pathfinder {
     }
 
     public resetNodes() {
-        for (let i = 0; i < this.nodes.length; i++){
+        for (let i = 0; i < this.nodes.length; i++) {
             let node = this.nodes[i];
             node.cameFrom = null;
             node.costSoFar = 0;
