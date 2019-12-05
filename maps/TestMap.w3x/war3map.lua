@@ -112,6 +112,13 @@ function CreateAllUnits()
     CreatePlayerUnits()
 end
 
+function Trig_Untitled_Trigger_001_Conditions()
+    if (not (GetTerrainTypeBJ(GetRectCenter(GetPlayableMapRect())) == FourCC("Odtr"))) then
+        return false
+    end
+    return true
+end
+
 function Trig_Untitled_Trigger_001_Actions()
     BlzUnitInterruptAttack(gg_unit_Hamg_0003)
     BlzUnitInterruptAttack(gg_unit_hkni_0010)
@@ -120,6 +127,7 @@ end
 function InitTrig_Untitled_Trigger_001()
     gg_trg_Untitled_Trigger_001 = CreateTrigger()
     TriggerRegisterUnitEvent(gg_trg_Untitled_Trigger_001, nil, EVENT_UNIT_ISSUED_POINT_ORDER)
+    TriggerAddCondition(gg_trg_Untitled_Trigger_001, Condition(Trig_Untitled_Trigger_001_Conditions))
     TriggerAddAction(gg_trg_Untitled_Trigger_001, Trig_Untitled_Trigger_001_Actions)
 end
 

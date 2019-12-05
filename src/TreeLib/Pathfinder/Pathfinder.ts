@@ -2,11 +2,12 @@ import {Node} from "./Node";
 import {Point} from "../Utility/Point";
 import {Logger} from "../Logger";
 import {PriorityQueue} from "./PriorityQueue";
+import {PathfindResult} from "./PathfindResult";
 
 export class Pathfinder {
     public nodes: Node[] = [];
 
-    public findPath(from: Point, to: Point): Point[] {
+    public findPath(from: Point, to: Point): PathfindResult {
         //Setup
         let startNode = this.getNodeClosestTo(from);
         let endNode = this.getNodeClosestTo(to);
@@ -16,7 +17,7 @@ export class Pathfinder {
         let frontier = new PriorityQueue<Node>();
         frontier.push(startNode, startNode.costSoFar + startNode.cost);
         startNode.cameFrom = null;
-        startNode.costSoFar = startNode.cost;
+        startNode.costSoFar = this.distanceBetweenNodes(startNode, endNode) * startNode.cost;
         let finalNode = null;
         let highest = 0;
 
@@ -28,15 +29,16 @@ export class Pathfinder {
                     if (!target.disabled && this.isNodeBadCompared(current, target)) {
                         target.cameFrom = current;
                         target.costSoFar = this.getNodeNumber(current, target);
-                        frontier.push(target, target.costSoFar);
+                        frontier.push(target, this.distanceBetweenNodes(target, endNode) * target.cost);
                     }
                     if (target == endNode) {
                         finalNode = target;
-                        break; //Exit
+                        frontier.clear();
+                        i = current.neighbors.length + 1;
                     }
                 }
             }
-            if (frontier.entries.length < highest) {
+            if (frontier.entries.length > highest) {
                 highest = frontier.entries.length;
             }
         }
@@ -56,8 +58,8 @@ export class Pathfinder {
         Logger.generic("startNode", startNode.point.toString());
         Logger.generic("finalNode", finalNode.point.toString());
         Logger.generic("endNode", endNode.point.toString());
-        Logger.generic("totalPrios", highest);
-        Logger.critical("compileNodes ", compileNodes.length);
+        Logger.generic("highestPrios", highest);
+        Logger.generic("compileNodes ", compileNodes.length);
 
         //Reverse Path and convert to points.
         let points: Point[] = [];
@@ -66,20 +68,26 @@ export class Pathfinder {
             points.push(Point.copy(node.point));
         }
 
-        return points;
+
+        return new PathfindResult(points, finalNode == endNode);
     }
 
     public getNodeNumber(current: Node, target: Node) {
-        return current.costSoFar + (target.cost * current.point.distanceTo(target.point));
+        return current.costSoFar + (this.distanceBetweenNodes(current, target) * target.cost);
     }
 
     public isNodeBadCompared(current: Node, target: Node): boolean {
-        if (target.costSoFar == 0)
+        if (target.costSoFar <= 0)
             return true; // Touch this node, its empty.
-        if (current.costSoFar + (target.cost * current.point.distanceTo(target.point)) < target.costSoFar)
+        if (current.costSoFar + (this.distanceBetweenNodes(current, target) * target.cost) < target.costSoFar)
             return true; // Target node is higher cost, add it to prio queue so it can be reevaluated.
 
         return false;
+    }
+
+    public distanceBetweenNodes(current: Node, target: Node): number {
+        let dist = math.abs(current.point.distanceTo(target.point));
+        return dist >= 1 ? dist : 0;
     }
 
     public resetNodes() {
@@ -107,9 +115,10 @@ export class Pathfinder {
             let distance = point.distanceTo(closest.point);
             for (let index = 0; index < this.nodes.length; index++) {
                 let value = this.nodes[index];
-                if (!value.disabled && point.distanceTo(value.point) < distance) {
+                let tempDist = point.distanceTo(value.point);
+                if (!value.disabled && tempDist < distance) {
                     closest = value;
-                    distance = point.distanceTo(value.point);
+                    distance = tempDist;
                 }
             }
         }

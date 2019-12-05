@@ -23,16 +23,15 @@ export class PathfindingTests {
 
     constructor() {
         let stepSize = 128;
-        this.pathfinder = new PathfinderGrid(-8000, -8000, 8000, 8000, stepSize);
+        this.pathfinder = new PathfinderGrid(-8192, -8192, 8192, 8192, stepSize);
 
         for (let i = 0; i < this.pathfinder.nodes.length; i++) {
             let node = this.pathfinder.nodes[i];
-            if (IsTerrainPathable(node.point.x, node.point.y, PATHING_TYPE_WALKABILITY)
-                || IsTerrainPathable(node.point.x + (stepSize / 2), node.point.y, PATHING_TYPE_WALKABILITY)
-                || IsTerrainPathable(node.point.x, node.point.y + (stepSize / 2), PATHING_TYPE_WALKABILITY)
-                || IsTerrainPathable(node.point.x + (stepSize / 2), node.point.y + (stepSize / 2), PATHING_TYPE_WALKABILITY)
-            ) {
-                node.disabled = true;
+            if (this.isRectUnWalkable(node.point.x, node.point.y, stepSize, stepSize)) {
+                node.remove();
+            }
+            if (GetTerrainType(node.point.x, node.point.y) == FourCC("Odtr")) {
+                node.cost = 2;
             }
         }
 
@@ -40,13 +39,25 @@ export class PathfindingTests {
             let coord = InputManager.getLastMouseCoordinate(Player(0));
             let path = this.pathfinder.findPath(new Point(0, 0), coord);
             let actions = [];
-            let u = CreateUnit(Player(0), FourCC("hfoo"), path[0].x, path[1].y, 0);
-            for (let i = 0; i < path.length; i++) {
-                let value = path[i];
+            let u = CreateUnit(Player(0), FourCC("hfoo"), 0, 0, 0);
+            for (let i = 0; i < path.path.length; i++) {
+                let value = Point.copy(path.path[i]);
                 actions.push(new UnitActionWaypoint(value, WaypointOrders.attack, 64));
             }
+            actions.push(new UnitActionWaypoint(coord, WaypointOrders.attack, 128));
             actions.push(new UnitActionDeath(true));
             ActionQueue.createUnitQueue(u, ...actions);
         }, (...args) => Logger.critical(...args)));
+    }
+
+    private isRectUnWalkable(x: number, y: number, sizeX: number, sizeY: number) {
+        for (let i = 0; i < sizeX; i += 16) {
+            for (let j = 0; j < sizeY; j += 16) {
+                if (IsTerrainPathable(x + i, y + j, PATHING_TYPE_WALKABILITY)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

@@ -4,7 +4,9 @@ export class Node {
     public point: Point;
     public neighbors: Node[] = [];
     public disabled = false;
-    private _cost = 1;
+
+    /** A cost of two would be twice as hard to traverse (50%), a cost of 0 is nothing. */
+    public cost = 1;
 
     //Pathfinding
     public cameFrom: Node | null = null;
@@ -27,11 +29,10 @@ export class Node {
         }
     }
 
-    public set cost(cost: number) {
-        this._cost = cost > 0 ? cost : 1;
-    }
-
-    public get cost() {
-        return this._cost;
+    public remove() {
+        for (let i = 0; i < this.neighbors.length; i++) {
+            let node = this.neighbors[i];
+            node.neighbors.splice(node.neighbors.indexOf(this), 1);
+        }
     }
 }

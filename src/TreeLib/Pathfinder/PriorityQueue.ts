@@ -9,7 +9,7 @@ export class PriorityQueue<T> {
             let index = 0;
             for (let i = 0; i < this.entries.length; i++) {
                 let e = this.entries[i];
-                if (e.priority < priority) {
+                if (e.priority <= priority) {
                     entry = e;
                     priority = e.priority;
                     index = i;
@@ -22,12 +22,18 @@ export class PriorityQueue<T> {
     }
 
     public push(value: T, priority: number) {
+        priority = math.ceil(priority);
+        if (priority < 1) priority = 1;
         let entry = new PriorityEntry(value, priority);
         this.entries.push(entry);
     }
 
     public hasEntry(): boolean {
         return this.entries.length > 0;
+    }
+
+    public clear() {
+        this.entries = [];
     }
 }
 
