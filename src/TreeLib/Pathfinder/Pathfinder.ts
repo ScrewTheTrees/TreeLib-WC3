@@ -5,7 +5,7 @@ import {PriorityQueue} from "./PriorityQueue";
 import {PathfindResult} from "./PathfindResult";
 
 export class Pathfinder {
-    private nodes: Node[] = [];
+    public nodes: Node[] = [];
     private frontier = new PriorityQueue<Node>();
 
     public findPath(from: Point, to: Point): PathfindResult {
