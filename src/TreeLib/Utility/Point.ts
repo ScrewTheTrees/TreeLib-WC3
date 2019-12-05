@@ -51,6 +51,10 @@ export class Point {
         return loc;
     }
 
+    public isAlignedWith(point: Point): boolean {
+        return (this.x == point.x || this.y == point.y);
+    }
+
     public static fromLocation(inputLoc: location) {
         return new Point(GetLocationX(inputLoc), GetLocationY(inputLoc));
     }

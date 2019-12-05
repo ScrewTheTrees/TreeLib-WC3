@@ -5,7 +5,7 @@ export class Node {
     public neighbors: Node[] = [];
     public disabled = false;
 
-    /** A cost of two would be twice as hard to traverse (50%), a cost of 0 is nothing. */
+    /** A cost of two would be twice as hard to traverse (50%), a cost of 0 is nothing, it will always be traversed if adjacent */
     public cost = 1;
 
     //Pathfinding

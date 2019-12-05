@@ -6,40 +6,43 @@ import {PathfindResult} from "./PathfindResult";
 
 export class Pathfinder {
     public nodes: Node[] = [];
+    public frontier = new PriorityQueue<Node>();
 
     public findPath(from: Point, to: Point): PathfindResult {
         //Setup
         let startNode = this.getNodeClosestTo(from);
         let endNode = this.getNodeClosestTo(to);
+        this.frontier.clear();
         this.resetNodes();
 
         //Logic
-        let frontier = new PriorityQueue<Node>();
-        frontier.push(startNode, startNode.costSoFar + startNode.cost);
+        this.frontier.push(startNode, startNode.costSoFar + startNode.cost);
         startNode.cameFrom = null;
         startNode.costSoFar = this.distanceBetweenNodes(startNode, endNode) * startNode.cost;
         let finalNode = null;
         let highest = 0;
+        let opCount = 0;
 
-        while (frontier.hasEntry()) {
-            let current = frontier.get();
+        while (this.frontier.hasEntry()) {
+            let current = this.frontier.get();
             if (current != null) {
                 for (let i = 0; i < current.neighbors.length; i++) {
                     let target = current.neighbors[i];
                     if (!target.disabled && this.isNodeBadCompared(current, target)) {
                         target.cameFrom = current;
                         target.costSoFar = this.getNodeNumber(current, target);
-                        frontier.push(target, this.distanceBetweenNodes(target, endNode) * target.cost);
+                        this.frontier.push(target, this.distanceBetweenNodes(target, endNode) * target.cost);
+                        opCount += 1;
                     }
                     if (target == endNode) {
                         finalNode = target;
-                        frontier.clear();
+                        this.frontier.clear();
                         i = current.neighbors.length + 1;
                     }
                 }
             }
-            if (frontier.entries.length > highest) {
-                highest = frontier.entries.length;
+            if (this.frontier.entries.length > highest) {
+                highest = this.frontier.entries.length;
             }
         }
         if (finalNode == null) {
@@ -59,6 +62,7 @@ export class Pathfinder {
         Logger.generic("finalNode", finalNode.point.toString());
         Logger.generic("endNode", endNode.point.toString());
         Logger.generic("highestPrios", highest);
+        Logger.generic("opCount", opCount);
         Logger.generic("compileNodes ", compileNodes.length);
 
         //Reverse Path and convert to points.
@@ -91,10 +95,11 @@ export class Pathfinder {
     }
 
     public resetNodes() {
-        this.nodes.forEach((node) => {
+        for (let i = 0; i < this.nodes.length; i++){
+            let node = this.nodes[i];
             node.cameFrom = null;
             node.costSoFar = 0;
-        });
+        }
     }
 
     public addNodeWithNeighborsInRange(node: Node, distance: number): Node {
