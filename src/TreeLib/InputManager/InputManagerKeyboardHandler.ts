@@ -2,6 +2,7 @@ import {KeyInputContainer} from "./KeyInputContainer";
 import {maxMetaKeys, MetaKey} from "./MetaKey";
 import {PressType} from "./PressType";
 import {KeyCallback} from "./KeyCallback";
+import {Logger} from "../Logger";
 
 export class InputManagerKeyboardHandler {
     constructor() {
@@ -23,7 +24,9 @@ export class InputManagerKeyboardHandler {
                 if ((isDown && callback.pressType == PressType.PRESS)
                     || (!isDown && callback.pressType == PressType.RELEASE)) {
                     callback.triggeringPlayer = GetTriggerPlayer();
-                    callback.callback(callback);
+                    xpcall(() => {
+                        callback.callback(callback);
+                    }, (...args) => Logger.critical(...args));
                 }
             }
         }

@@ -47,11 +47,16 @@ export function ChooseOne(...input: any[]) {
     return input[random];
 }
 
-export function InverseFourCC(input: number): string
-{
+export function InverseFourCC(input: number): string {
     return string.pack(">I4", input);
 }
 
 export function IsValidUnit(target: unit) {
     return GetUnitTypeId(target) != 0;
+}
+
+
+export function QuickSplice(arr: any[], index: number) {
+    arr[index] = arr[arr.length - 1];
+    delete arr[arr.length - 1];
 }

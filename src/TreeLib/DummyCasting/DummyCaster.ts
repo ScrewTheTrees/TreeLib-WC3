@@ -82,16 +82,14 @@ export class DummyCaster extends Entity {
         let cast: Caster | null = null;
         for (let caster of this.allCasters) {
             if (caster.isAvailable(GetOwningPlayer(castingUnit))) {
-                cast = caster;
-                break;
+                SetUnitFlyHeight(caster.unit, GetUnitFlyHeight(castingUnit), 0);
+                return caster;
             }
-        }
-        if (cast != null) {
-            return cast;
         }
         cast = new Caster(castingUnit);
         this.allCasters.push(cast);
         Logger.LogVerbose("Allocated new Dummy caster for", GetOwningPlayer(castingUnit), ", total", this.allCasters.length, "casters");
+        SetUnitFlyHeight(cast.unit, GetUnitFlyHeight(castingUnit), 0);
         return cast;
     }
 

@@ -2,6 +2,7 @@ import {MouseInputContainer} from "./MouseInputContainer";
 import {Point} from "../Utility/Point";
 import {PressType} from "./PressType";
 import {MouseCallback} from "./MouseCallback";
+import {Logger} from "../Logger";
 
 export class InputManagerMouseHandler {
 
@@ -36,7 +37,9 @@ export class InputManagerMouseHandler {
                 if (callback.pressType == PressType.PRESS) {
                     callback.triggeringPlayer = GetTriggerPlayer();
                     callback.position = new Point(x, y);
-                    callback.callback(callback);
+                    xpcall(() => {
+                        callback.callback(callback);
+                    }, (...args) => Logger.critical(...args));
                 }
             }
         }

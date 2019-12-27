@@ -1,6 +1,5 @@
 import {UnitAction} from "./UnitAction";
 import {UnitQueue} from "../Queues/UnitQueue";
-import {Delay} from "../../Utility/Delay";
 
 /**
  * Basic delay, wait for x amount of seconds and then get on your way.
@@ -8,7 +7,6 @@ import {Delay} from "../../Utility/Delay";
 export class UnitActionDelay implements UnitAction {
     isFinished: boolean = false;
     private timer: number = 0;
-    private updateTimer: number = 5;
     private delay: number;
 
     constructor(delay: number) {
@@ -18,15 +16,14 @@ export class UnitActionDelay implements UnitAction {
 
     update(target: unit, timeStep: number, queue: UnitQueue): void {
         this.timer += timeStep;
-        this.updateTimer += timeStep;
 
-        Delay.addDelay(() => {
+        if (this.timer >= this.delay) {
             this.isFinished = true;
-        }, this.delay)
+        }
     }
 
     init(target: unit, queue: UnitQueue): void {
-
+        this.timer = 0;
     }
 
 }

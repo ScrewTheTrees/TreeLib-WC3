@@ -8,6 +8,7 @@ import {IsValidUnit} from "../../Misc";
  */
 export class UnitQueue implements Queue {
     isFinished: boolean = false;
+    isPaused: boolean = false;
     public target: unit;
     public allActions: UnitAction[] = [];
     public currentActionIndex = 0;

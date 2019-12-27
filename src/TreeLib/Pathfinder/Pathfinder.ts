@@ -3,15 +3,27 @@ import {Point} from "../Utility/Point";
 import {Logger} from "../Logger";
 import {PriorityQueue} from "./PriorityQueue";
 import {PathfindResult} from "./PathfindResult";
+import {NodeTable} from "./NodeTable";
 
 export class Pathfinder {
     public nodes: Node[] = [];
     private frontier = new PriorityQueue<Node>();
+    public nodeTable: NodeTable = new NodeTable();
 
     public findPath(from: Point, to: Point): PathfindResult {
-        //Setup
         let startNode = this.getNodeClosestTo(from);
         let endNode = this.getNodeClosestTo(to);
+        return this.findPathByNodes(startNode, endNode, from, to);
+    }
+
+    public findPathByNodes(startNode: Node, endNode: Node, from: Point, to: Point): PathfindResult {
+        let node1 = this.nodeTable.get(startNode, endNode);
+        if (node1 != null) {
+            Logger.verbose("Used cached path.");
+            return node1.value.copy();
+        }
+
+        //Setup
         this.frontier.clear();
         this.resetNodes();
 
@@ -58,12 +70,12 @@ export class Pathfinder {
             iterateNode = iterateNode.cameFrom;
         }
 
-        Logger.generic("startNode", startNode.point.toString());
-        Logger.generic("finalNode", finalNode.point.toString());
-        Logger.generic("endNode", endNode.point.toString());
-        Logger.generic("highestPrios", highest);
-        Logger.generic("opCount", opCount);
-        Logger.generic("compileNodes ", compileNodes.length);
+        Logger.verbose("startNode", startNode.point.toString());
+        Logger.verbose("finalNode", finalNode.point.toString());
+        Logger.verbose("endNode", endNode.point.toString());
+        Logger.verbose("highestPrios", highest);
+        Logger.verbose("opCount", opCount);
+        Logger.verbose("compileNodes ", compileNodes.length);
 
         //Reverse Path and convert to points.
         let points: Point[] = [];
@@ -72,7 +84,9 @@ export class Pathfinder {
             points.push(Point.copy(node.point));
         }
 
-        return new PathfindResult(points, finalNode == endNode);
+        let pathfindResult = new PathfindResult(points, finalNode == endNode, startNode.point, endNode.point, finalNode.point);
+        this.nodeTable.push(startNode, endNode, pathfindResult);
+        return pathfindResult.copy();
     }
 
     public getNodeNumber(current: Node, target: Node) {
