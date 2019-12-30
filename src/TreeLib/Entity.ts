@@ -1,5 +1,6 @@
 import {Timers} from "./Timers";
 import {Logger} from "./Logger";
+import {QuickSplice} from "./Misc";
 
 /**
  * Entities are great for when you need logic executed continuously.
@@ -34,7 +35,7 @@ export abstract class Entity {
     public remove() {
         let index = Entity.entities.indexOf(this);
         if (index != -1) {
-            Entity.entities.splice(index, 1);
+            QuickSplice(Entity.entities, index);
         }
     }
 }

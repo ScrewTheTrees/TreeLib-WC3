@@ -3,6 +3,7 @@ import {Entity} from "../Entity";
 import {Spawner} from "./Spawner";
 import {UnitRespawner} from "./UnitRespawner";
 import {UnitCampRespawner} from "./UnitCampRespawner";
+import {QuickSplice} from "../Misc";
 
 export class Respawner extends Entity {
     private static instance: Respawner;
@@ -32,7 +33,7 @@ export class Respawner extends Entity {
                 let spawner = this.spawners[index];
                 spawner.update(this._timerDelay);
                 if (spawner.respawns == 0) {
-                    this.spawners.splice(index, 1);
+                    QuickSplice(this.spawners, index);
                     index -= 1;
                 }
             }

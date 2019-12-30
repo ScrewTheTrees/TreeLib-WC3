@@ -36,14 +36,6 @@ export class ActionQueue extends Entity {
     }
 
     /**
-     * Great if a queue has lost its purpose or needs replacing.
-     * @param queue the queue to disable,
-     */
-    public static disableQueue(queue: Queue) {
-        return this.getInstance().disableQueue(queue);
-    }
-
-    /**
      * Creates a simple guard position, a unit will infinitly guard this position until their their body disappears (unit is removed).
      * @param target
      * @param point
@@ -55,6 +47,14 @@ export class ActionQueue extends Entity {
             new UnitActionDelay(delay),
             new UnitActionWaitWhileDead(),
             new UnitActionGoToAction(0));
+    }
+
+    /**
+     * Great if a queue has lost its purpose or needs replacing.
+     * @param queue the queue to disable,
+     */
+    public static disableQueue(queue: Queue) {
+        return this.getInstance().disableQueue(queue);
     }
 
     public enableQueue(queue: Queue) {

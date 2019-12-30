@@ -25,9 +25,7 @@ export class OnSpellCast {
         return this.instance;
     }
 
-    /*
-    STATIC API
-     */
+    //STATIC API
     public static addSpell(container: EffectContainer) {
         this.getInstance().addSpell(container);
     }

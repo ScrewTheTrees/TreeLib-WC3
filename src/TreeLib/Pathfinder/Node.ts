@@ -1,4 +1,5 @@
 import {Point} from "../Utility/Point";
+import {QuickSplice} from "../Misc";
 
 export class Node {
     public point: Point;
@@ -32,7 +33,7 @@ export class Node {
     public remove() {
         for (let i = 0; i < this.neighbors.length; i++) {
             let node = this.neighbors[i];
-            node.neighbors.splice(node.neighbors.indexOf(this), 1);
+            QuickSplice(node.neighbors, node.neighbors.indexOf(this));
         }
     }
 }

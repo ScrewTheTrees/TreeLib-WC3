@@ -3,6 +3,7 @@ import {Point} from "../Utility/Point";
 import {PressType} from "./PressType";
 import {MouseCallback} from "./MouseCallback";
 import {Logger} from "../Logger";
+import {QuickSplice} from "../Misc";
 
 export class InputManagerMouseHandler {
 
@@ -76,7 +77,7 @@ export class InputManagerMouseHandler {
     public removeMouseCallback(mouseCallback: MouseCallback) {
         let container = this.getMouseContainer(mouseCallback.button);
         if (container.callbacks.indexOf(mouseCallback) >= 0) {
-            container.callbacks.splice(container.callbacks.indexOf(mouseCallback), 1);
+            QuickSplice(container.callbacks, container.callbacks.indexOf(mouseCallback));
         }
     }
 

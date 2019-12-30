@@ -1,6 +1,7 @@
 import {Node} from "./Node";
 import {PathfindResult} from "./PathfindResult";
 import {LabelValue} from "../Utility/LabelValue";
+import {QuickSplice} from "../Misc";
 
 export class NodeTable {
     public list: LabelValue<Node, ResultContainer>[] = [];
@@ -41,7 +42,7 @@ class ResultContainer {
     public push(node: Node, pathfindResult: PathfindResult) {
         let previous = this.get(node);
         if (previous != null) {
-            this.list.splice(this.list.indexOf(previous), 1);
+            QuickSplice(this.list, this.list.indexOf(previous));
         }
 
         this.list.push(new LabelValue<Node, PathfindResult>(node, pathfindResult))
