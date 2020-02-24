@@ -9,12 +9,12 @@ import {UnitQueue} from "../Queues/UnitQueue";
  */
 export class UnitActionWaypoint implements UnitAction {
     isFinished: boolean = false;
-    private readonly toPoint: Point;
-    private readonly acceptableDistance: number;
-    private readonly order: WaypointOrders;
-    private readonly maxTime: number;
-    private timer: number = 0;
-    private updateTimer: number = 5;
+    public readonly toPoint: Point;
+    public readonly acceptableDistance: number;
+    public readonly order: WaypointOrders;
+    public readonly maxTime: number;
+    public timer: number = 0;
+    public updateTimer: number = 10;
 
     constructor(toPoint: Point, order: WaypointOrders = WaypointOrders.smart, acceptableDistance: number = 64, maxTime: number = 1200) {
         this.toPoint = toPoint;
@@ -30,7 +30,7 @@ export class UnitActionWaypoint implements UnitAction {
         if (Point.fromWidget(target).distanceTo(this.toPoint) <= this.acceptableDistance || this.timer > this.maxTime) {
             this.isFinished = true;
             Logger.LogVerbose("Finished waypoint");
-        } else if (this.updateTimer >= 3) {
+        } else if (this.updateTimer >= 10) {
             IssuePointOrder(target, this.order, this.toPoint.x, this.toPoint.y); //Update order
             this.updateTimer = 0;
         }

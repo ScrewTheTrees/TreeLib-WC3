@@ -3,7 +3,7 @@ import {Entity} from "../Entity";
 import {Spawner} from "./Spawner";
 import {UnitRespawner} from "./UnitRespawner";
 import {UnitCampRespawner} from "./UnitCampRespawner";
-import {QuickSplice} from "../Misc";
+import {Quick} from "../Quick";
 
 export class Respawner extends Entity {
     private static instance: Respawner;
@@ -11,7 +11,7 @@ export class Respawner extends Entity {
     public static getInstance() {
         if (this.instance == null) {
             this.instance = new Respawner();
-            Hooks.set("Respawner", this.instance);
+            Hooks.set(this.name, this.instance);
         }
         return this.instance;
     }
@@ -24,7 +24,7 @@ export class Respawner extends Entity {
 
     constructor() {
         super();
-        this._timerDelay = 0.1;
+        this._timerDelay = 1;
     }
 
     step(): void {
@@ -33,25 +33,11 @@ export class Respawner extends Entity {
                 let spawner = this.spawners[index];
                 spawner.update(this._timerDelay);
                 if (spawner.respawns == 0) {
-                    QuickSplice(this.spawners, index);
+                    Quick.Splice(this.spawners, index);
                     index -= 1;
                 }
             }
         }
-    }
-
-    public createNewUnitRespawner(target: unit, delay: number, respawnAtOriginalLocation?: boolean, doEyeCandy?: boolean,
-                                  onRespawn?: (target: unit) => void, respawns?: number) {
-        let spawner = new UnitRespawner(target, delay, onRespawn, respawnAtOriginalLocation, doEyeCandy, respawns);
-        this.spawners.push(spawner);
-        return spawner;
-    }
-
-    public createNewUnitCampRespawner(targets: unit[], delay: number, respawnAtOriginalLocation?: boolean, doEyeCandy?: boolean,
-                                      onRespawn?: (target: unit) => void, respawns?: number) {
-        let spawner = new UnitCampRespawner(targets, delay, onRespawn, respawnAtOriginalLocation, doEyeCandy, respawns);
-        this.spawners.push(spawner);
-        return spawner;
     }
 
     /*
@@ -63,24 +49,33 @@ export class Respawner extends Entity {
      * @param delay How long it takes after death to respawn
      * @param respawnAtOriginalLocation Respawn at original location, else if false, respawn where dead.
      * @param doEyeCandy If hero, do respawn animation.
-     * @param onRespawn callback on respawn containing the target unit respawned.
      * @param respawns how many times it will respawn, -1 is infinite.
      */
-    public static createNewUnitRespawner(target: unit, delay: number, respawnAtOriginalLocation?: boolean, doEyeCandy?: boolean,
-                                         onRespawn?: (target: unit) => void, respawns?: number) {
-        return this.getInstance().createNewUnitRespawner(target, delay, respawnAtOriginalLocation, doEyeCandy, onRespawn, respawns);
+    public static createNewUnitRespawner(target: unit, delay: number, respawnAtOriginalLocation?: boolean, doEyeCandy?: boolean, respawns?: number) {
+        return this.getInstance().createNewUnitRespawner(target, delay, respawnAtOriginalLocation, doEyeCandy, respawns);
     }
+
     /**
      * The big difference compared to the other one is that in this one is that all the units in the array have to die before the timer starts.
      * @param targets The array unit
      * @param delay How long it takes after death to respawn
      * @param respawnAtOriginalLocation Respawn at original location, else if false, respawn where dead.
      * @param doEyeCandy If hero, do respawn animation.
-     * @param onRespawn callback on respawn containing the target unit respawned, runs for every unit respawned
      * @param respawns how many times it will respawn, -1 is infinite.
      */
-    public static createNewUnitCampRespawner(targets: unit[], delay: number, respawnAtOriginalLocation?: boolean, doEyeCandy?: boolean,
-                                      onRespawn?: (target: unit) => void, respawns?: number) {
-        return this.getInstance().createNewUnitCampRespawner(targets, delay, respawnAtOriginalLocation, doEyeCandy, onRespawn, respawns);
+    public static createNewUnitCampRespawner(targets: unit[], delay: number, respawnAtOriginalLocation?: boolean, doEyeCandy?: boolean, respawns?: number) {
+        return this.getInstance().createNewUnitCampRespawner(targets, delay, respawnAtOriginalLocation, doEyeCandy, respawns);
+    }
+
+    public createNewUnitRespawner(target: unit, delay: number, respawnAtOriginalLocation?: boolean, doEyeCandy?: boolean, respawns?: number) {
+        let spawner = new UnitRespawner(target, delay, respawnAtOriginalLocation, doEyeCandy, respawns);
+        Quick.Push(this.spawners, spawner);
+        return spawner;
+    }
+
+    public createNewUnitCampRespawner(targets: unit[], delay: number, respawnAtOriginalLocation?: boolean, doEyeCandy?: boolean, respawns?: number) {
+        let spawner = new UnitCampRespawner(targets, delay, respawnAtOriginalLocation, doEyeCandy, respawns);
+        Quick.Push(this.spawners, spawner);
+        return spawner;
     }
 }

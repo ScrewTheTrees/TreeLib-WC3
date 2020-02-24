@@ -1,12 +1,12 @@
 import {SpellData} from "./SpellData";
 
-export class EffectContainer {
-    public abilityType: number;
+export class OnCastContainer {
+    public abilityTypes: number[];
     public onTrigger: (data: SpellData) => void;
     public filter?: (data: SpellData) => boolean;
 
-    constructor(abilityType: number, onTrigger: (data: SpellData) => void, filter?: (data: SpellData) => boolean) {
-        this.abilityType = abilityType;
+    constructor(abilityTypes: number[], onTrigger: (data: SpellData) => void, filter?: (data: SpellData) => boolean) {
+        this.abilityTypes = abilityTypes;
         this.onTrigger = onTrigger;
         this.filter = filter;
     }

@@ -1,4 +1,4 @@
-export enum MetaKey {
+export const enum MetaKey {
     ALL = -1, //This is not real, its for TreeLib exclusivity
     NONE = 0,
     SHIFT = 1,

@@ -1,4 +1,4 @@
-export enum ImmediateOrders {
+export const enum ImmediateOrders {
     stop = "stop",
     holdPosition = "holdposition",
 }

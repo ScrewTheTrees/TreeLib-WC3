@@ -1,4 +1,5 @@
 import {Point} from "../Utility/Point";
+import {Quick} from "../Quick";
 
 export class PathfindResult {
     public path: Point[];
@@ -29,7 +30,7 @@ export class PathfindResult {
                 let next = this.path[i + 1];
 
                 if (next.directionTo(node) != node.directionTo(previous)) {
-                    path.push(node);
+                    Quick.Push(path, node);
                 }
             }
             path.push(this.path[this.path.length - 1]);

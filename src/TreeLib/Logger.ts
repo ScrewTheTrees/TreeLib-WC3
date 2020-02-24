@@ -5,6 +5,7 @@
  */
 import {RGB, RGBTextString} from "./Utility/RGB";
 
+/** @noSelf **/
 export class Logger {
     public static doLogVerbose = false;
     public static doLogDebug = true;
@@ -17,26 +18,25 @@ export class Logger {
     public static COLOR_CRITICAL = new RGB(255, 0, 0);
 
     public static LogVerbose(...params: any[]) {
-        if (this.doLogVerbose) {
+        if (Logger.doLogVerbose) {
             print(RGBTextString(Logger.COLOR_VERBOSE, "Verbose: ", ...params));
         }
     }
 
     public static LogDebug(...params: any[]) {
-        if (this.doLogDebug) {
+        if (Logger.doLogDebug) {
             print(RGBTextString(Logger.COLOR_DEBUG, "Debug: ", ...params));
         }
     }
 
     public static LogWarning(...params: any[]) {
-        if (this.doLogWarning) {
+        if (Logger.doLogWarning) {
             print(RGBTextString(Logger.COLOR_WARNING, "Warning: ", ...params));
         }
     }
 
-
     public static LogCritical(...params: any[]) {
-        if (this.doLogCritical) {
+        if (Logger.doLogCritical) {
             print(RGBTextString(Logger.COLOR_CRITICAL, "Critical: ", ...params));
         }
     }

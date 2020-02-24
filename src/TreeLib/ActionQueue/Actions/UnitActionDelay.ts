@@ -7,7 +7,7 @@ import {UnitQueue} from "../Queues/UnitQueue";
 export class UnitActionDelay implements UnitAction {
     isFinished: boolean = false;
     private timer: number = 0;
-    private delay: number;
+    public delay: number;
 
     constructor(delay: number) {
         this.delay = delay;

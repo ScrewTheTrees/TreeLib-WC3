@@ -55,6 +55,9 @@ export class Point {
         return Location(this.x, this.y);
     }
 
+    /**
+     * A very temporary self cleaning location.
+     */
     public toLocationClean() {
         let loc = Location(this.x, this.y);
         Delay.getInstance().addDelay(() => {

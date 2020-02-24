@@ -8,3 +8,11 @@ export class TreeMath {
         return value;
     }
 }
+
+export function RandAngle() {
+    return GetRandomReal(0, 360);
+}
+
+export function RandPercent() {
+    return GetRandomReal(0, 1);
+}

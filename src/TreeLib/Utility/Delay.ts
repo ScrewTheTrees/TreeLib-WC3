@@ -1,7 +1,7 @@
 import {Entity} from "../Entity";
 import {Hooks} from "../Hooks";
 import {DelayDto} from "./DelayDto";
-import {QuickSplice} from "../Misc";
+import {Quick} from "../Quick";
 
 /**
  * The Delay Executes the sent function after a defined delay. Can also be repeated X amount of times.
@@ -12,7 +12,7 @@ export class Delay extends Entity {
     public static getInstance() {
         if (this.instance == null) {
             this.instance = new Delay();
-            Hooks.set("Delay", this.instance);
+            Hooks.set(this.name, this.instance);
         }
         return this.instance;
     }
@@ -23,27 +23,12 @@ export class Delay extends Entity {
 
     private queue: DelayDto[] = [];
 
-    /*
-    STATIC API
-     */
-    /**
-     * Adds a delayed function that will execute after a wanted duration.
-     * @param f the function to execute on the delay.
-     * @param delaySeconds the time before the delay executes.
-     * @param repeats How many times it will run, 1 runs it once. 0 and under wont run at all
-     */
-    public static addDelay(f: Function, delaySeconds: number, repeats: number = 1) {
-        if (repeats > 0) {
-            this.getInstance().addDelayFrom(new DelayDto(f, delaySeconds, repeats));
-        }
-    }
-
     public addDelay(f: Function, delaySeconds: number, repeats: number = 1) {
         this.addDelayFrom(new DelayDto(f, delaySeconds, repeats));
     }
 
     public addDelayFrom(delayDto: DelayDto) {
-        this.queue.push(delayDto);
+        Quick.Push(this.queue, delayDto);
     }
 
     step(): void {
@@ -54,12 +39,27 @@ export class Delay extends Entity {
                 queueDto.function();
                 queueDto.repeatCounter += 1;
                 if (queueDto.repeatCounter >= queueDto.repeats) {
-                    QuickSplice(this.queue, index);
+                    Quick.Splice(this.queue, index);
                     index -= 1;
                 } else {
                     queueDto.age = 0;
                 }
             }
+        }
+    }
+
+    /*
+    STATIC API
+    */
+    /**
+     * Adds a delayed function that will execute after a wanted duration.
+     * @param f the function to execute on the delay.
+     * @param delaySeconds the time before the delay executes.
+     * @param repeats How many times it will run, 1 runs it once. 0 and under wont run at all
+     */
+    public static addDelay(f: Function, delaySeconds: number = 1, repeats: number = 1) {
+        if (repeats > 0) {
+            this.getInstance().addDelayFrom(new DelayDto(f, delaySeconds, repeats));
         }
     }
 

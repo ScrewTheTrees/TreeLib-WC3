@@ -1,4 +1,4 @@
-export enum PressType {
+export const enum PressType {
     PRESS,
     RELEASE,
 }

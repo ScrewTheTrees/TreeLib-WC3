@@ -6,14 +6,21 @@ _G.__hooks = {};
  * In order to prevent things falling out of scope, you can hook them to global,
  * That way the garbage collector wont ever remove it.
  */
-export class Hooks {
-    public static get(name: string): object | undefined {
+export namespace Hooks {
+    export function get(name: string): object | undefined {
         return _G.__hooks[name];
     }
 
-    public static set(name: string, value: any) {
+    export function set(name: string, value: any) {
         _G.__hooks[name] = value;
         Logger.LogDebug("Hooked: " + name)
+    }
+
+    export function bind(oldFunc: Function, newFunc: Function) {
+        return () => {
+            oldFunc();
+            newFunc();
+        };
     }
 }
 

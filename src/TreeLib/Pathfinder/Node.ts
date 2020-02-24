@@ -1,5 +1,5 @@
 import {Point} from "../Utility/Point";
-import {QuickSplice} from "../Misc";
+import {Quick} from "../Quick";
 
 export class Node {
     public point: Point;
@@ -19,21 +19,21 @@ export class Node {
 
     public addNeighbor(node: Node) {
         if (this.neighbors.indexOf(node) < 0) {
-            this.neighbors.push(node);
+            Quick.Push(this.neighbors, node);
         }
     }
 
     public addNeighborTwoWay(node: Node) {
         this.addNeighbor(node);
         if (node.neighbors.indexOf(this) < 0) {
-            node.neighbors.push(this);
+            Quick.Push(node.neighbors, this);
         }
     }
 
     public remove() {
         for (let i = 0; i < this.neighbors.length; i++) {
             let node = this.neighbors[i];
-            QuickSplice(node.neighbors, node.neighbors.indexOf(this));
+            Quick.Splice(node.neighbors, node.neighbors.indexOf(this));
         }
     }
 }

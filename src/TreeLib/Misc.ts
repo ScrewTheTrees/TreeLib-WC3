@@ -54,9 +54,3 @@ export function InverseFourCC(input: number): string {
 export function IsValidUnit(target: unit) {
     return GetUnitTypeId(target) != 0;
 }
-
-
-export function QuickSplice(arr: any[], index: number) {
-    arr[index] = arr[arr.length - 1];
-    delete arr[arr.length - 1];
-}

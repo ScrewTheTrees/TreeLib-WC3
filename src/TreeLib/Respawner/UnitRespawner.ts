@@ -13,20 +13,19 @@ export class UnitRespawner implements Spawner {
     public respawnLocation: Point;
     public doEyeCandy: boolean;
     public rotation: number;
-    public onRespawn: Function | undefined;
+    public onRespawn: ((self: UnitRespawner) => void) | undefined;
     public respawns: number;
+    public filter: ((self: UnitRespawner) => boolean) | undefined;
 
 
     /**
      * See Respawner.createNewUnitRespawner
      */
-    constructor(target: unit, delay: number = 60, onRespawn?: (target: unit) => void,
-                respawnAtCurrentLocation: boolean = true, doEyeCandy: boolean = true, maxRespawns: number = -1) {
+    constructor(target: unit, delay: number = 60, respawnAtCurrentLocation: boolean = true, doEyeCandy: boolean = true, maxRespawns: number = -1) {
         this.target = target;
         this.owner = GetOwningPlayer(target);
         this.unitType = GetUnitTypeId(this.target);
         this.delay = delay;
-        this.onRespawn = onRespawn;
         this.isHero = IsUnitType(this.target, UNIT_TYPE_HERO);
         this.respawnAtCurrentLocation = respawnAtCurrentLocation;
         this.doEyeCandy = doEyeCandy;
@@ -46,7 +45,7 @@ export class UnitRespawner implements Spawner {
                 this.rotation = GetUnitFacing(this.target);
             }
         }
-        if (this.counter >= this.delay) {
+        if (this.counter >= this.delay && (this.filter == undefined || this.filter(this))) {
             this.performRevive();
         }
     }
@@ -60,7 +59,7 @@ export class UnitRespawner implements Spawner {
                 this.target = CreateUnit(this.owner, this.unitType, this.respawnLocation.x, this.respawnLocation.y, this.rotation);
             }
             if (this.onRespawn) {
-                this.onRespawn(this.target);
+                this.onRespawn(this);
             }
         }
         if (this.respawns > 0) {

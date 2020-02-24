@@ -4,19 +4,21 @@
  * gg_rct_route1waypoint1.
  * And make it into gg_rct_route   1    waypoint    1.
  * This way i could easily parse it into other systems...
- * You can use it if you'd like, or something more refined.
+ * You can use it if you'd like, or use something more refined.
  */
+import {Quick} from "./Quick";
+
 export class ShitEx {
-    public static separateNumbers(input: string) : string[] {
+    public static separateNumbers(input: string): string[] {
         let lastChar = "";
-        const result : string[] = [];
+        const result: string[] = [];
         let build = "";
 
         for (let i = 0; i < input.length; i++) {
             const char = input.charAt(i);
             if (this.isNumber(char) != this.isNumber(lastChar)) {
                 if (build.length > 0) {
-                    result.push(build);
+                    Quick.Push(result, build);
                     build = "";
                 }
             }
@@ -24,7 +26,7 @@ export class ShitEx {
             lastChar = char;
         }
         if (build.length > 0) {
-            result.push(build);
+            Quick.Push(result, build);
         }
 
         return result;

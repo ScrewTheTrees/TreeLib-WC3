@@ -11,7 +11,7 @@ export class InputManager {
     public static getInstance() {
         if (this.instance == null) {
             this.instance = new InputManager();
-            Hooks.set("InputManager", this.instance);
+            Hooks.set(this.name, this.instance);
         }
         return this.instance;
     }

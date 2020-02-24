@@ -2,6 +2,7 @@ import {Hooks} from "../Hooks";
 import {DamageHitContainer} from "./DamageHitContainer";
 import {HitCallback} from "./HitCallback";
 import {Logger} from "../Logger";
+import {Quick} from "../Quick";
 
 /**
  * Simple streamlined DDS system where you can register callbacks and optionally add filters for quickly handling when units take damage.
@@ -14,7 +15,7 @@ export class DamageDetectionSystem {
     public static getInstance() {
         if (this.instance == null) {
             this.instance = new DamageDetectionSystem();
-            Hooks.set("DamageDetectionSystem", this.instance);
+            Hooks.set(this.name, this.instance);
         }
         return this.instance;
     }
@@ -42,14 +43,14 @@ export class DamageDetectionSystem {
 
     public registerBeforeDamageCalculation(callback: (hitObject: DamageHitContainer) => void) {
         let hitCall = new HitCallback(callback);
-        this.beforeHitCallbacks.push(hitCall);
+        Quick.Push(this.beforeHitCallbacks, hitCall);
         return hitCall;
     }
 
 
     public registerAfterDamageCalculation(callback: (hitObject: DamageHitContainer) => void) {
         let hitCall = new HitCallback(callback);
-        this.afterHitCallbacks.push(hitCall);
+        Quick.Push(this.afterHitCallbacks, hitCall);
         return hitCall;
     }
 
@@ -105,7 +106,7 @@ export class DamageDetectionSystem {
                     if (this.isPassingFilters(hitCall, hitContainer)) {
                         hitCall.callback(hitContainer);
                     }
-                }, () => Logger.LogCritical);
+                }, Logger.LogCritical);
                 this.locked = false;
             }
         } else {

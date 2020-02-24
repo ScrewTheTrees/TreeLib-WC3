@@ -1,14 +1,16 @@
 import {Node} from "./Node";
 import {Point} from "../Utility/Point";
 import {Logger} from "../Logger";
-import {PriorityQueue} from "./PriorityQueue";
+import {PriorityQueue} from "../Utility/Data/PriorityQueue";
 import {PathfindResult} from "./PathfindResult";
 import {NodeTable} from "./NodeTable";
+import {Quick} from "../Quick";
 
 export class Pathfinder {
     public nodes: Node[] = [];
     private frontier = new PriorityQueue<Node>();
     public nodeTable: NodeTable = new NodeTable();
+    public useCache: boolean = true;
 
     public findPath(from: Point, to: Point): PathfindResult {
         let startNode = this.getNodeClosestTo(from);
@@ -17,10 +19,12 @@ export class Pathfinder {
     }
 
     public findPathByNodes(startNode: Node, endNode: Node, from: Point, to: Point): PathfindResult {
-        let node1 = this.nodeTable.get(startNode, endNode);
-        if (node1 != null) {
-            Logger.verbose("Used cached path.");
-            return node1.value.copy();
+        if (this.useCache) {
+            let node1 = this.nodeTable.get(startNode, endNode);
+            if (node1 != null) {
+                Logger.verbose("Used cached path.");
+                return node1.value.copy();
+            }
         }
 
         //Setup
@@ -31,7 +35,7 @@ export class Pathfinder {
         this.frontier.push(startNode, startNode.costSoFar + startNode.cost);
         startNode.cameFrom = null;
         startNode.costSoFar = this.distanceBetweenNodes(startNode, endNode) * startNode.cost;
-        let finalNode = null;
+        let finalNode: Node | null = null;
         let highest = 0;
         let opCount = 0;
 
@@ -66,7 +70,7 @@ export class Pathfinder {
         let iterateNode: Node | null = finalNode;
         startNode.cameFrom = null;
         while (iterateNode != null) {
-            compileNodes.push(iterateNode);
+            Quick.Push(compileNodes, iterateNode);
             iterateNode = iterateNode.cameFrom;
         }
 
@@ -85,8 +89,11 @@ export class Pathfinder {
         }
 
         let pathfindResult = new PathfindResult(points, finalNode == endNode, startNode.point, endNode.point, finalNode.point);
-        this.nodeTable.push(startNode, endNode, pathfindResult);
-        return pathfindResult.copy();
+        if (this.useCache) {
+            this.nodeTable.push(startNode, endNode, pathfindResult);
+            return pathfindResult.copy();
+        }
+        return pathfindResult; //No need to copy.
     }
 
     public getNodeNumber(current: Node, target: Node) {
@@ -115,6 +122,10 @@ export class Pathfinder {
         }
     }
 
+    public clearCache() {
+        this.nodeTable.clearAll();
+    }
+
     public addNodeWithNeighborsInRange(node: Node, distance: number): Node {
         distance += 0.5;
         for (let index = 0; index < this.nodes.length; index++) {
@@ -123,7 +134,8 @@ export class Pathfinder {
                 node.addNeighborTwoWay(otherNode);
             }
         }
-        this.nodes.push(node);
+        Quick.Push(this.nodes, node);
+        this.clearCache();
         return node;
     }
 
@@ -169,6 +181,7 @@ export class Pathfinder {
     }
 
     public addNode(node: Node) {
-        this.nodes.push(node);
+        Quick.Push(this.nodes, node);
+        this.clearCache();
     }
 }

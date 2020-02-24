@@ -1,3 +1,5 @@
+import {Quick} from "../../Quick";
+
 export class PriorityQueue<T> {
     public entries: PriorityEntry<T>[] = [];
 
@@ -25,7 +27,7 @@ export class PriorityQueue<T> {
         priority = math.ceil(priority);
         if (priority < 1) priority = 1;
         let entry = new PriorityEntry(value, priority);
-        this.entries.push(entry);
+        Quick.Push(this.entries, entry);
     }
 
     public hasEntry(): boolean {

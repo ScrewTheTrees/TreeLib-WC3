@@ -1,4 +1,6 @@
 import {Hooks} from "./Hooks";
+import {Quick} from "./Quick";
+import {TreeLib} from "./TreeLib";
 
 /**
  * Provides timers for other classes,
@@ -12,7 +14,7 @@ export class Timers {
     public static getInstance() {
         if (this.instance == null) {
             this.instance = new Timers();
-            Hooks.set("Timers", this.instance);
+            Hooks.set(this.name, this.instance);
         }
         return this.instance;
     }
@@ -28,10 +30,12 @@ export class Timers {
                 callback();
             });
         });
+
+        print(TreeLib.getIntroductionString());
     }
 
     public addFastTimerCallback(func: Function) {
-        this.fastTimerCallbacks.push(func);
+        Quick.Push(this.fastTimerCallbacks, func);
     }
 
     /*

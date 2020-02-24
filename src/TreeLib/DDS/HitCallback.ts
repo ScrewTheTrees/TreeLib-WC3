@@ -1,5 +1,6 @@
 import {DDSFilter} from "./Filters/DDSFilter";
 import {DamageHitContainer} from "./DamageHitContainer";
+import {Quick} from "../Quick";
 
 export class HitCallback {
     public readonly filters: DDSFilter[] = [];
@@ -10,7 +11,7 @@ export class HitCallback {
     }
 
     public addFilter(filter: DDSFilter) {
-        this.filters.push(filter);
+        Quick.Push(this.filters, filter);
     }
 
     public addFilters(filters: DDSFilter[]) {

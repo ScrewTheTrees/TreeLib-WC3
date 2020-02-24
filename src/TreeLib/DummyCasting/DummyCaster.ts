@@ -5,6 +5,7 @@ import {WeaponIndex} from "../Structs/WeaponIndex";
 import {Point} from "../Utility/Point";
 import {Delay} from "../Utility/Delay";
 import {AliasDto} from "./AliasDto";
+import {Quick} from "../Quick";
 
 /**
  * Dummy caster is a system where you can easily and quickly throw abilities without any setup or akin.
@@ -16,7 +17,7 @@ export class DummyCaster extends Entity {
     public static getInstance() {
         if (this.instance == null) {
             this.instance = new DummyCaster();
-            Hooks.set("DummyCaster", this.instance);
+            Hooks.set(this.name, this.instance);
         }
         return this.instance;
     }
@@ -66,7 +67,7 @@ export class DummyCaster extends Entity {
     }
 
     public castImmediately(abilityId: number, orderString: string, castingUnit: unit, level: number = 0, extraSeconds: number = 2) {
-        let caster = this.getNonExpended(castingUnit);
+        let caster = this.getAny(castingUnit);
         caster.issueImmediateOrder(abilityId, orderString, castingUnit, level, extraSeconds);
         return caster;
     }
@@ -78,16 +79,23 @@ export class DummyCaster extends Entity {
         return caster;
     }
 
+    private getAny(castingUnit: unit): Caster {
+        if (this.allCasters[0] != null) {
+            return this.allCasters[0];
+        }
+        return this.getNonExpended(castingUnit); //At this point everything is irrelevant.
+    }
+
     private getNonExpended(castingUnit: unit): Caster {
-        let cast: Caster | null = null;
-        for (let caster of this.allCasters) {
+        for (let i = 0; i < this.allCasters.length; i++) {
+            let caster = this.allCasters[i];
             if (caster.isAvailable(GetOwningPlayer(castingUnit))) {
                 SetUnitFlyHeight(caster.unit, GetUnitFlyHeight(castingUnit), 0);
                 return caster;
             }
         }
-        cast = new Caster(castingUnit);
-        this.allCasters.push(cast);
+        const cast = new Caster(castingUnit);
+        Quick.Push(this.allCasters, cast);
         Logger.LogVerbose("Allocated new Dummy caster for", GetOwningPlayer(castingUnit), ", total", this.allCasters.length, "casters");
         SetUnitFlyHeight(cast.unit, GetUnitFlyHeight(castingUnit), 0);
         return cast;

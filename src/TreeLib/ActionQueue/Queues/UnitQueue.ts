@@ -2,6 +2,7 @@ import {Queue} from "./Queue";
 import {UnitAction} from "../Actions/UnitAction";
 import {Logger} from "../../Logger";
 import {IsValidUnit} from "../../Misc";
+import {Quick} from "../../Quick";
 
 /**
  * A unit queue is a queue for a singular unit operating on its own.
@@ -48,7 +49,7 @@ export class UnitQueue implements Queue {
     }
 
     public addAction(action: UnitAction): UnitQueue {
-        this.allActions.push(action);
+        Quick.Push(this.allActions, action);
         return this;
     }
 
