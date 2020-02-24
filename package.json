@@ -3,6 +3,7 @@
   "author": "Fredrik Grimmenhag (ScrewTheTrees)",
   "license": "MIT",
   "description": "Quality package.",
+  "version": "1.2",
   "scripts": {
     "fullRecompileAndRun": "npm run clean && npm run compileTypescript && npm run compileAndRunMap",
     "fullRecompile": "npm run clean && npm run compileTypescript && npm run compileMap",
