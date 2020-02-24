@@ -10,7 +10,7 @@ export namespace Quick {
     }
 
     export function GroupToUnitArray(g: group): unit[] {
-        let units = [];
+        let units: unit[] = [];
         let val = FirstOfGroup(g);
         while (val != null) {
             Push(units, val);
