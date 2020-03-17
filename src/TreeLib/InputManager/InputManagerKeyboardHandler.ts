@@ -45,7 +45,7 @@ export class InputManagerKeyboardHandler {
     public removeKeyCallback(keyCallback: KeyCallback) {
         let container = this.getKeyContainer(keyCallback.key);
         if (container.callbacks.indexOf(keyCallback) >= 0) {
-            Quick.Splice(container.callbacks, container.callbacks.indexOf(keyCallback));
+            Quick.Slice(container.callbacks, container.callbacks.indexOf(keyCallback));
         }
     }
 

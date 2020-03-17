@@ -10,11 +10,29 @@ import {Delay} from "../TreeLib/Utility/Delay";
 import {UnitActionImmediate} from "../TreeLib/ActionQueue/Actions/UnitActionImmediate";
 import {ImmediateOrders} from "../TreeLib/ActionQueue/Actions/ImmediateOrders";
 import {UnitActionDelay} from "../TreeLib/ActionQueue/Actions/UnitActionDelay";
+import {UnitGroupQueue} from "../TreeLib/ActionQueue/Queues/UnitGroupQueue";
+import {Quick} from "../TreeLib/Quick";
+import {UnitGroupActionWaypoint} from "../TreeLib/ActionQueue/Actions/UnitGroupActionWaypoint";
+import {UnitGroupActionGoToAction} from "../TreeLib/ActionQueue/Actions/UnitGroupActionGoToAction";
 
 export class QueueTests {
     run() {
         xpcall(() => {
             let killKnight = CreateUnit(Players.BLUE, FourCC("hkni"), 4000, 0, 0);
+
+            let units: unit[] = [];
+            for (let i = 0; i < 12; i++) {
+                Quick.Push(units, CreateUnit(Players.BLUE, FourCC("hfoo"), -6000, 0, 0));
+            }
+            let walkAround = new UnitGroupQueue(units,
+                new UnitGroupActionWaypoint(new Point(-6000, -6000), WaypointOrders.attack),
+                new UnitGroupActionWaypoint(new Point(-6000, 6000), WaypointOrders.attack),
+                new UnitGroupActionWaypoint(new Point(6000, 6000), WaypointOrders.attack),
+                new UnitGroupActionWaypoint(new Point(6000, -6000), WaypointOrders.attack),
+                new UnitGroupActionGoToAction(0),
+            );
+
+            ActionQueue.enableQueue(walkAround);
 
             Delay.addDelay(() => {
                 let mortar = CreateUnit(Players.RED, FourCC("hmtm"), -1400, -3000, 0);

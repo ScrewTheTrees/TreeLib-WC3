@@ -497,7 +497,7 @@ declare function TriggerRegisterPlayerChatEvent(whichTrigger: trigger, whichPlay
 declare function GetEventPlayerChatString(): string
 declare function GetEventPlayerChatStringMatched(): string
 declare function TriggerRegisterDeathEvent(whichTrigger: trigger, whichWidget: widget): event
-declare function GetTriggerUnit(): unit | null
+declare function GetTriggerUnit(): unit
 declare function TriggerRegisterUnitStateEvent(whichTrigger: trigger, whichUnit: unit, whichState: unitstate, opcode: limitop, limitval: number): event
 declare function GetEventUnitState(): unitstate
 declare function TriggerRegisterUnitEvent(whichTrigger: trigger, whichUnit: unit, whichEvent: unitevent): event

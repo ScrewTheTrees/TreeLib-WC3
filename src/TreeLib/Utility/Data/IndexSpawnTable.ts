@@ -18,7 +18,7 @@ export class IndexSpawnTable {
     public remove(id: string) {
         for (let i = 0; i < this.values.length; i++) {
             if (this.values[i] == id) {
-                Quick.Splice(this.values, i);
+                Quick.Slice(this.values, i);
                 i -= 1;
             }
         }

@@ -13,7 +13,7 @@ export abstract class Entity {
     private _internalTimer: number = 0;
     protected _timerDelay: number = 0.01;
 
-    protected constructor() {
+    public constructor() {
         if (Entity.entityLoop == null) {
             Entity.entityLoop = () => {
                 Entity.entities.forEach((entity) => {
@@ -37,7 +37,7 @@ export abstract class Entity {
     public remove() {
         let index = Entity.entities.indexOf(this);
         if (index != -1) {
-            Quick.Splice(Entity.entities, index);
+            Quick.Slice(Entity.entities, index);
         }
     }
 }

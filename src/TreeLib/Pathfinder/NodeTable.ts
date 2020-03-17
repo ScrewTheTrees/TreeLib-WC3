@@ -53,7 +53,7 @@ class ResultContainer {
     public push(node: Node, pathfindResult: PathfindResult) {
         let previous = this.get(node);
         if (previous != null) {
-            Quick.Splice(this.list, this.list.indexOf(previous));
+            Quick.Slice(this.list, this.list.indexOf(previous));
         }
 
         Quick.Push(this.list, new LabelValue<Node, PathfindResult>(node, pathfindResult));

@@ -33,7 +33,7 @@ export class Respawner extends Entity {
                 let spawner = this.spawners[index];
                 spawner.update(this._timerDelay);
                 if (spawner.respawns == 0) {
-                    Quick.Splice(this.spawners, index);
+                    Quick.Slice(this.spawners, index);
                     index -= 1;
                 }
             }

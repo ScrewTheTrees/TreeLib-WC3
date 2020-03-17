@@ -33,7 +33,7 @@ export class TemporaryEffects extends Entity {
             value.step();
             if (value.currentTime >= value.timer) {
                 value.destroy();
-                Quick.Splice(this.runes, i);
+                Quick.Slice(this.runes, i);
                 i -= 1;
             }
         }

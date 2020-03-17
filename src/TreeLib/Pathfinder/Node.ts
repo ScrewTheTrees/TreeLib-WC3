@@ -33,7 +33,7 @@ export class Node {
     public remove() {
         for (let i = 0; i < this.neighbors.length; i++) {
             let node = this.neighbors[i];
-            Quick.Splice(node.neighbors, node.neighbors.indexOf(this));
+            Quick.Slice(node.neighbors, node.neighbors.indexOf(this));
         }
     }
 }

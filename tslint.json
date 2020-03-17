@@ -1,6 +1,9 @@
 {
   "rules": {
     "strict-boolean-expressions": true,
-    "no-for-in-array": true
+    "no-for-in-array": true,
+    "no-circular-imports": {
+      "severity": "error"
+    }
   }
 }

@@ -19,6 +19,7 @@ export class Delay extends Entity {
 
     private constructor() {
         super();
+        this._timerDelay = 0.01;
     }
 
     private queue: DelayDto[] = [];
@@ -39,7 +40,7 @@ export class Delay extends Entity {
                 queueDto.function();
                 queueDto.repeatCounter += 1;
                 if (queueDto.repeatCounter >= queueDto.repeats) {
-                    Quick.Splice(this.queue, index);
+                    Quick.Slice(this.queue, index);
                     index -= 1;
                 } else {
                     queueDto.age = 0;

@@ -77,7 +77,7 @@ export class InputManagerMouseHandler {
     public removeMouseCallback(mouseCallback: MouseCallback) {
         let container = this.getMouseContainer(mouseCallback.button);
         if (container.callbacks.indexOf(mouseCallback) >= 0) {
-            Quick.Splice(container.callbacks, container.callbacks.indexOf(mouseCallback));
+            Quick.Slice(container.callbacks, container.callbacks.indexOf(mouseCallback));
         }
     }
 

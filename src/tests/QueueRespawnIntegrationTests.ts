@@ -29,10 +29,11 @@ export class QueueRespawnIntegrationTests {
                     new UnitActionWaitWhileDead(),
                     new UnitActionGoToAction(0)
                 );
-                Respawner.createNewUnitRespawner(foot, 5, false, undefined, (newUnit: unit) => {
-                    queue.target = newUnit;
+                let resp = Respawner.createNewUnitRespawner(foot, 5, false, undefined)
+                resp.onRespawn = (newUnit) => {
+                    queue.target = newUnit.target;
                     ActionQueue.enableQueue(queue);
-                })
+                };
             }, 2.5, 5);
 
 
