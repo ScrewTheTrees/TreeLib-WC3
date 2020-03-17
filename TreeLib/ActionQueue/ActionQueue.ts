@@ -46,6 +46,7 @@ export class ActionQueue extends Entity {
         if (this.allQueues.indexOf(queue) < 0) {
             Logger.LogVerbose("Queue is missing, adding");
             Quick.Push(this.allQueues, queue);
+            queue.init();
             return;
         }
         Logger.LogVerbose("Queue is present.");

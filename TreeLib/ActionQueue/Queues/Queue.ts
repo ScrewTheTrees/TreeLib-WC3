@@ -3,4 +3,5 @@ export interface Queue {
     isPaused: boolean;
 
     update(timeStep: number): void;
+    init(): void;
 }
