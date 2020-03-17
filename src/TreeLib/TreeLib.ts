@@ -1,5 +1,5 @@
 export class TreeLib {
-    public static version = "1.2";
+    public static version = "1.3";
     public static creator = "ScrewTheTrees";
     public static libName = "TreeLib";
 
