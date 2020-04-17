@@ -11,6 +11,11 @@ import {UnitActionGoToAction} from "./Actions/UnitActionGoToAction";
 import {UnitActionWaitWhileDead} from "./Actions/UnitActionWaitWhileDead";
 import {UnitActionDelay} from "./Actions/UnitActionDelay";
 import {Quick} from "../Quick";
+import {UnitGroupQueue} from "./Queues/UnitGroupQueue";
+import {UnitGroupAction} from "./Actions/UnitGroupAction";
+import {UnitGroupActionWaypoint} from "./Actions/UnitGroupActionWaypoint";
+import {UnitGroupActionDelay} from "./Actions/UnitGroupActionDelay";
+import {UnitGroupActionGoToAction} from "./Actions/UnitGroupActionGoToAction";
 
 /**
  * ActionQueue is a system that allows you to create waypoints and a string of orders, like if a player would
@@ -37,7 +42,14 @@ export class ActionQueue extends Entity {
 
     public createUnitQueue(target: unit, ...actions: UnitAction[]): UnitQueue {
         let unitQueue = new UnitQueue(target, ...actions);
-        Quick.Push(this.allQueues, unitQueue);
+        this.enableQueue(unitQueue);
+        Logger.verbose("Created UnitQueue, total: ", this.allQueues.length);
+        return unitQueue;
+    }
+
+    public createUnitGroupQueue(targets: unit[], ...actions: UnitGroupAction[]): UnitGroupQueue {
+        let unitQueue = new UnitGroupQueue(targets, ...actions);
+        this.enableQueue(unitQueue);
         Logger.verbose("Created UnitQueue, total: ", this.allQueues.length);
         return unitQueue;
     }
@@ -123,6 +135,19 @@ export class ActionQueue extends Entity {
             new UnitActionDelay(delay),
             new UnitActionWaitWhileDead(),
             new UnitActionGoToAction(0));
+    }
+
+    /**
+     * Creates a simple guard position, a unit will infinitly guard this position until their their body disappears (unit is removed).
+     * @param targets
+     * @param point
+     * @param delay the delay when the unit is ordered back... dont put it too low.
+     */
+    public static createGroupGuardPoint(targets: unit[], point: Point, delay: number = 15) {
+        return this.getInstance().createUnitGroupQueue(targets,
+            new UnitGroupActionWaypoint(point, WaypointOrders.attack),
+            new UnitGroupActionDelay(delay),
+            new UnitGroupActionGoToAction(0));
     }
 
     public disableQueue(queue: Queue) {

@@ -17,8 +17,8 @@ export class UnitGroupActionWaypoint implements UnitGroupAction {
     public timer: number = 0;
     public updateTimer: number = 0;
 
-    //300 for acceptable distance is mainly for groups of 12 which has a a sweetspot around ~222, so we use a
-    constructor(toPoint: Point, order: WaypointOrders = WaypointOrders.smart, acceptableDistance: number = 300, maxTime: number = 1200) {
+    //300 for acceptable distance is mainly for groups of 12 which has a a sweetspot around ~222, so we use a more decent size
+    constructor(toPoint: Point, order: WaypointOrders = WaypointOrders.smart, acceptableDistance: number = 400, maxTime: number = 1200) {
         this.toPoint = toPoint;
         this.order = order;
         this.acceptableDistance = acceptableDistance;

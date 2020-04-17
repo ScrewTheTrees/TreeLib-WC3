@@ -70,6 +70,18 @@ export class Point {
         return (this.x == point.x || this.y == point.y);
     }
 
+    public static getCenterOfPoints(arr: Point[]) {
+        let sumX = 0;
+        let sumY = 0;
+        for (let i = 0; i < arr.length; i++) {
+             sumX += arr[i].x;
+             sumY += arr[i].y;
+        }
+        sumX = sumX / arr.length;
+        sumY = sumY / arr.length;
+        return new Point(sumX, sumY);
+    }
+
     public static fromLocation(inputLoc: location) {
         return new Point(GetLocationX(inputLoc), GetLocationY(inputLoc));
     }
