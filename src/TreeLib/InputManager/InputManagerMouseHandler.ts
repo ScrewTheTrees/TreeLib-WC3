@@ -109,10 +109,10 @@ export class InputManagerMouseHandler {
     }
 
     public getLastMousePosition(triggerPlayer: player) {
-        return this.lastPosition[GetPlayerId(triggerPlayer)];
+        return this.lastPosition[GetPlayerId(triggerPlayer)] || new Point(0, 0);
     }
 
     public getLastMouseCoordinate(triggerPlayer: player) {
-        return this.lastCoordinate[GetPlayerId(triggerPlayer)];
+        return this.lastCoordinate[GetPlayerId(triggerPlayer)] || new Point(0, 0);
     }
 }

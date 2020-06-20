@@ -10,6 +10,13 @@ export namespace Quick {
         arr[arr.length] = value;
     }
 
+    export function Clear<T>(arr: T[]) {
+        const count = arr.length;
+        for (let i = 0; i < count; i++) {
+            delete arr[i];
+        }
+    }
+
     export function GroupToUnitArray(g: group): unit[] {
         let units = [];
         let val = FirstOfGroup(g);

@@ -20,6 +20,7 @@ export const enum BaseUpgrades {
     HUMAN_FLAK_CANNON = "Rhfc",
     HUMAN_FRAG_SHARDS = "Rhfs",
     HUMAN_CLOUD_RESEARCH = "Rhcd",
+    HUMAN_SUNDERING_BLADES = "Rhsb",
     ORC_MELEE_ATTACK = "Rome",
     ORC_RANGED_ATTACK = "Rora",
     ORC_ARMOR = "Roar",

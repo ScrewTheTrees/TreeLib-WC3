@@ -16,4 +16,7 @@ export const enum Orders {
     setrally = 851980, // set a rally point for a structure that trains units
     getitem = 851981, // specific order for picking up item so we can issue it from scripts
     suicide = 851982, // attack anything on map until I'm dead
+    attack = 851983,
+    harvest = 852018,
+    resumeharvest = 852017,
 }
