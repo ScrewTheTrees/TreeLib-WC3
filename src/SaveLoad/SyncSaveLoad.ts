@@ -16,12 +16,14 @@ export class SyncSaveLoad {
     }
 
     public syncPrefix = "S_TIO";
+    public syncPrefixFinish = "S_TIOF";
     public syncEvent: trigger = CreateTrigger();
     private allPromises: (FilePromise | undefined)[] = [];
 
     constructor() {
         for (let i = 0; i < GetBJMaxPlayers(); i++) {
             BlzTriggerRegisterPlayerSyncEvent(this.syncEvent, Player(i), this.syncPrefix, false);
+            BlzTriggerRegisterPlayerSyncEvent(this.syncEvent, Player(i), this.syncPrefixFinish, false);
         }
         TriggerAddAction(this.syncEvent, () => this.onSync());
     }
@@ -37,8 +39,8 @@ export class SyncSaveLoad {
         let assemble = "";
         let noOfChunks = math.ceil(toCompile.length / chunkSize);
 
-        Logger.generic("rawData.length: ", rawData.length);
-        Logger.generic("toCompile.length: ", toCompile.length);
+        Logger.verbose("rawData.length: ", rawData.length);
+        Logger.verbose("toCompile.length: ", toCompile.length);
 
         xpcall(() => {
             for (let i = 0; i < toCompile.length; i++) {
@@ -66,28 +68,38 @@ export class SyncSaveLoad {
         if (this.allPromises[GetPlayerId(reader)] == null) {
             this.allPromises[GetPlayerId(reader)] = new FilePromise(reader, onFinish);
             if (GetLocalPlayer() == reader) {
+                PreloadStart();
                 Preloader(filename);
+                PreloadEnd(1);
+
+                BlzSendSyncData(this.syncPrefixFinish, "");
             }
+        } else {
+            Logger.warning("Trying to read file when file read is already busy.");
         }
         return <FilePromise>this.allPromises[GetPlayerId(reader)];
     }
 
+    public
+
     private onSync() {
         xpcall(() => {
+
             const readData = BlzGetTriggerSyncData();
             let totalChunkSize = EncodingHex.ToNumber(readData.substr(0, 8));
             let currentChunk = EncodingHex.ToNumber(readData.substr(8, 8));
             let theRest = readData.substr(16);
 
-            print(currentChunk, totalChunkSize);
+            Logger.verbose("Loading ", currentChunk, " out of ", totalChunkSize);
 
             let promise = this.allPromises[GetPlayerId(GetTriggerPlayer())];
             if (promise) {
-                promise.buffer[currentChunk - 1] = theRest;
-
-                if (promise.allChunksPresent(totalChunkSize)) {
+                if (BlzGetTriggerSyncPrefix() == this.syncPrefix) {
+                    promise.buffer[currentChunk - 1] = theRest;
+                } else if (BlzGetTriggerSyncPrefix() == this.syncPrefixFinish) {
                     promise.finish();
                     this.allPromises[GetPlayerId(promise.syncOwner)] = undefined;
+                    Logger.generic("Promise killed: ", this.allPromises[GetPlayerId(promise.syncOwner)]);
                 }
             } else {
                 Logger.warning(`Syncronised data in ${SyncSaveLoad.name} when there is no promise present for player: ${GetPlayerName(GetTriggerPlayer())}`);
@@ -110,18 +122,11 @@ export class FilePromise {
         let loadString = new StringBuilder(...this.buffer).toString();
         this.finalString = EncodingBase64.Decode(loadString);
 
-        Logger.generic("loadString.length", loadString.length);
-        Logger.generic("this.onFinish", this.onFinish);
-        Logger.generic("Finished: ");
-        Logger.generic("finalString.length: ", this.finalString.length);
+        Logger.verbose("loadString.length", loadString.length);
+        Logger.verbose("this.onFinish", this.onFinish);
+        Logger.verbose("Finished: ");
+        Logger.verbose("finalString.length: ", this.finalString.length);
 
         if (this.onFinish != null) this.onFinish(this);
-    }
-
-    public allChunksPresent(length: number): boolean {
-        for (let i = 0; i < length; i++) {
-            if (this.buffer[i] == null) return false;
-        }
-        return true;
     }
 }
