@@ -1,0 +1,8 @@
+Goal:
+    - Every player can deal with one file per player.
+    - File data is is synced.
+    -
+
+
+Preload:
+    - Max write length: 255
