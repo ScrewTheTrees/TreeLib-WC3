@@ -18,7 +18,6 @@
       "lua-types/core/modules",
       "lua-types/core/string",
       "lua-types/core/table",
-      "lua-types/core/debug",
       "lua-types/special/5.3"
     ]
   },
