@@ -4,11 +4,17 @@
 import {RGB, RGBTextString} from "./RGB";
 
 export class StringBuilder {
-    private contentArray: string[] = [];
-    private newLine = "\n";
+    public contentArray: string[] = [];
+    public newLine = "\n";
 
-    public append(input: any): this {
-        this.contentArray.push(tostring(input));
+    constructor(...initialD: any[]) {
+        this.append(...initialD);
+    }
+
+    public append(...input: any[]): this {
+        for (let i = 0; i < input.length; i++) {
+            this.contentArray.push(tostring(input[i]));
+        }
         return this;
     }
 
@@ -17,9 +23,11 @@ export class StringBuilder {
         return this;
     }
 
-    public appendLine(input: any): this {
-        this.contentArray.push(tostring(input));
-        this.contentArray.push(this.newLine);
+    public appendLine(...input: any[]): this {
+        for (let i = 0; i < input.length; i++) {
+            this.contentArray.push(tostring(input[i]));
+            this.contentArray.push(this.newLine);
+        }
         return this;
     }
 
