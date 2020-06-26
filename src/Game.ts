@@ -1,5 +1,4 @@
 import {Logger} from "./TreeLib/Logger";
-import {SyncSaveLoadTest} from "./SaveLoad/SyncSaveLoadTest";
 
 export class Game {
 
@@ -8,7 +7,7 @@ export class Game {
         Logger.doLogDebug = true;
 
         xpcall(() => {
-            new SyncSaveLoadTest();
+
         }, Logger.critical);
     }
 }

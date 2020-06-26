@@ -1,4 +1,4 @@
-export class CSV {
+export class EncodingCSV {
     public static Parse(parse: string, delimiter: string = ";"): string[] {
         let values: string[] = [];
         let current: string = "";
