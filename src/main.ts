@@ -1,5 +1,6 @@
 /** @noSelfInFile **/
 import {Game} from "./Game";
+import {Hooks} from "./TreeLib/Hooks";
 
 let gg_trg_Start: trigger;
 let gameInstance: Game;
@@ -19,8 +20,5 @@ function NewMain() {
     TriggerAddAction(gg_trg_Start, () => MapStart())
 }
 
-_G.__oldMain = _G.main;
-_G.main = () => {
-    _G.__oldMain();
-    NewMain();
-};
+// @ts-ignore
+main = Hooks.hookArguments(main, NewMain);

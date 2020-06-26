@@ -17,7 +17,7 @@ export namespace Hooks {
         Logger.LogDebug("Hooked: " + name)
     }
 
-    export function hookArguments(oldFunc: Function, newFunc: Function) {
+    export function hookArguments(oldFunc: (...args: any) => any, newFunc: (...args: any) => any) {
         return (...args) => {
             let val = oldFunc(...args);
             newFunc(...args);
@@ -26,7 +26,7 @@ export namespace Hooks {
     }
 
     export function hookResult<T>(hookFunc: (...args: any) => T, passFunc: (value: T) => void) {
-        return hookFunc = (...args) => {
+        return (...args) => {
             let value = hookFunc(...args);
             passFunc(value);
             return value;
