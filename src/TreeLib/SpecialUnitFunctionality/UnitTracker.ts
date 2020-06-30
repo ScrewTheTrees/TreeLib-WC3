@@ -1,7 +1,7 @@
 /**@NoSelfInFile **/
 /*
 DO NOT CURRENTLY USE THIS, HIGHLY UNFINISHED!
- */
+*/
 
 /*
 import {Hooks} from "../Hooks";
