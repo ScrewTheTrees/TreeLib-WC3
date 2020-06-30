@@ -1,4 +1,9 @@
 /**@NoSelfInFile **/
+/*
+DO NOT CURRENTLY USE THIS, HIGHLY UNFINISHED!
+ */
+
+/*
 import {Hooks} from "../Hooks";
 import {Quick} from "../Quick";
 import {Logger} from "../Logger";
@@ -59,12 +64,12 @@ export class UnitTracker {
     }
 
     public static onUnitCreate(u: unit) {
-        Logger.warning("Added to tracking: ", u);
+        Logger.verbose("Added to tracking: ", u);
         Quick.Push(UnitTracker.livingUnits, u);
     }
 
     public static onDeadCreate(u: unit) {
-        Logger.warning("Added Dead to tracking: ", u);
+        Logger.verbose("Added Dead to tracking: ", u);
         if (IsValidUnit(u))
             Quick.Push(UnitTracker.deadUnits, u);
     }
@@ -99,4 +104,4 @@ KillUnit = Hooks.hookArguments(KillUnit, (u: unit) => UnitTracker.killUnit(u));
 
 // @ts-ignore
 RemoveUnit = Hooks.hookArguments(RemoveUnit, (u: unit) => UnitTracker.removeFromAll(u));
-
+*/
