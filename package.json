@@ -9,13 +9,13 @@
     "fullRecompile": "npm run clean && npm run compileTypescript && npm run compileMap",
     "clean": "rimraf target/*",
     "compileTypescript": "tstl -p tsconfig.json",
-    "compileAndRunMap": "npm run compileMap && ts-node bin/operations run",
-    "compileMap": "ts-node bin/operations build"
+    "compileAndRunMap": "node bin/operations build && node bin/operations run",
+    "compileMap": "node bin/operations build"
   },
   "directories": {
     "lib": "lib"
   },
-  "main": "src/main.ts",
+  "main": "src/index.ts",
   "devDependencies": {
     "fs-extra": "^8.1.0",
     "lua-types": "^2.6.2",
