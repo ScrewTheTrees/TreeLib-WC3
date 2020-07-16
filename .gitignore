@@ -7,3 +7,4 @@ maps/Output/*
 maps/Build/*
 
 package-lock.json
+.npmrc
