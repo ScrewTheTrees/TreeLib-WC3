@@ -1,4 +1,4 @@
-export class TreeLib {
+export class TreeLibMeta {
     public static version = "1.3.2";
     public static creator = "ScrewTheTrees";
     public static libName = "TreeLib";

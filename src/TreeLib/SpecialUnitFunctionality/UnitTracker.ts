@@ -3,7 +3,6 @@
 DO NOT CURRENTLY USE THIS, HIGHLY UNFINISHED!
 */
 
-/*
 import {Hooks} from "../Hooks";
 import {Quick} from "../Quick";
 import {Logger} from "../Logger";
@@ -104,4 +103,3 @@ KillUnit = Hooks.hookArguments(KillUnit, (u: unit) => UnitTracker.killUnit(u));
 
 // @ts-ignore
 RemoveUnit = Hooks.hookArguments(RemoveUnit, (u: unit) => UnitTracker.removeFromAll(u));
-*/

@@ -1,6 +1,6 @@
 import {Hooks} from "./Hooks";
 import {Quick} from "./Quick";
-import {TreeLib} from "./TreeLib";
+import {TreeLibMeta} from "./TreeLibMeta";
 
 /**
  * Provides timers for other classes,
@@ -31,7 +31,7 @@ export class Timers {
             });
         });
 
-        print(TreeLib.getIntroductionString());
+        print(TreeLibMeta.getIntroductionString());
     }
 
     public addFastTimerCallback(func: Function) {
