@@ -1,5 +1,5 @@
 {
-  "name": "treelib",
+  "name": "@screwthetrees/war3-treelib",
   "author": "Fredrik Grimmenhag (ScrewTheTrees)",
   "license": "MIT",
   "version": "1.4.0",
@@ -25,6 +25,9 @@
     "typescript-to-lua": "^0.29.1",
     "war3-transformer": "^1.1.0",
     "winston": "^3.3.3"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
   },
   "repository": {
     "type": "git",
