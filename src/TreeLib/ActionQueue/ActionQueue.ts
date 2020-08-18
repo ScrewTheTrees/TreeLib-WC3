@@ -34,7 +34,7 @@ export class ActionQueue extends Entity {
     }
 
     private allQueues: Queue[] = [];
-    public _timerDelay: number = 0.25; //0.25 is explicitly picked due to action delay.
+    public _timerDelay: number = 0.5;
 
     constructor() {
         super();
