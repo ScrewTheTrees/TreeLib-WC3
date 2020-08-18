@@ -18,6 +18,9 @@ export class InputManagerKeyboardHandler {
         let metaKey = BlzGetTriggerPlayerMetaKey();
         let isDown = BlzGetTriggerPlayerIsKeyDown();
         let inputContainer = this.getKeyContainer(key);
+
+        if (inputContainer.isDown && isDown) return;
+
         inputContainer.isDown = isDown;
         for (let index = 0; index < inputContainer.callbacks.length; index += 1) {
             let callback = inputContainer.callbacks[index];
