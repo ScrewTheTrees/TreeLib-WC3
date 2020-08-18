@@ -4,6 +4,7 @@
     "strictPropertyInitialization": true,
     "strictNullChecks": true,
     "strictFunctionTypes": true,
+    "strictBindCallApply": true,
     "sourceMap": false,
     "target": "es6",
 
@@ -23,11 +24,6 @@
         "../node_modules/*"
       ]
     },
-    "plugins": [
-      {
-        "transform": "war3-transformer"
-      }
-    ],
     "types": [
       "lua-types/core/coroutine",
       "lua-types/core/global",

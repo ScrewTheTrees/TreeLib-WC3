@@ -2,6 +2,8 @@ import {Queue} from "./Queue";
 import {Logger} from "../../Logger";
 import {Quick} from "../../Quick";
 import {UnitGroupAction} from "../Actions/UnitGroupAction";
+import {IsValidUnit} from "../../Misc";
+import {Hooks} from "../../Hooks";
 
 /**
  * A unit queue is a queue for a several unit operating together. (Most actions are capped at 12 units)
@@ -34,16 +36,23 @@ export class UnitGroupQueue implements Queue {
             this.isFinished = true;
             Logger.LogVerbose("Finished queue.");
         }
+
     }
 
     update(timeStep: number): void {
+        for (let i = this.targets.length; i >= 0; i--) {
+            let u = this.targets[i];
+            if (!IsValidUnit(u) || IsUnitDeadBJ(u)) {
+                Quick.Slice(this.targets, i);
+            }
+        }
         //if (IsValidUnit(this.target)) {
-            //if (IsUnitAliveBJ(this.target)) {
-                this.performAction(timeStep);
-            //}
+        //if (IsUnitAliveBJ(this.target)) {
+        this.performAction(timeStep);
+        //}
         //} else {
-            //Logger.LogVerbose("Unit has been removed, queue will be removed.");
-            //this.isFinished = true;
+        //Logger.LogVerbose("Unit has been removed, queue will be removed.");
+        //this.isFinished = true;
         //}
     }
 

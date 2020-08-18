@@ -173,13 +173,13 @@ export class UnitTracker {
         tracker.executeEvent(UnitEventTypes.CREATED_ANY, u);
     }
 
-    _G.CreateUnit = Hooks.hookResult<unit>(_G.CreateUnit, unitCreatedEvent);
-    _G.CreateUnitByName = Hooks.hookResult<unit>(_G.CreateUnitByName, unitCreatedEvent);
-    _G.CreateUnitAtLoc = Hooks.hookResult<unit>(_G.CreateUnitAtLoc, unitCreatedEvent);
-    _G.CreateUnitAtLocByName = Hooks.hookResult<unit>(_G.CreateUnitAtLocByName, unitCreatedEvent);
-    _G.BlzCreateUnitWithSkin = Hooks.hookResult<unit>(_G.BlzCreateUnitWithSkin, unitCreatedEvent);
+    _G.CreateUnit = Hooks.hookResult(_G.CreateUnit, unitCreatedEvent);
+    _G.CreateUnitByName = Hooks.hookResult(_G.CreateUnitByName, unitCreatedEvent);
+    _G.CreateUnitAtLoc = Hooks.hookResult(_G.CreateUnitAtLoc, unitCreatedEvent);
+    _G.CreateUnitAtLocByName = Hooks.hookResult(_G.CreateUnitAtLocByName, unitCreatedEvent);
+    _G.BlzCreateUnitWithSkin = Hooks.hookResult(_G.BlzCreateUnitWithSkin, unitCreatedEvent);
 
-    _G.CreateCorpse = Hooks.hookResult<unit>(_G.CreateCorpse, (u: unit) => UnitTracker.getInstance().executeEvent(UnitEventTypes.CREATED_DEAD, u));
+    _G.CreateCorpse = Hooks.hookResult(_G.CreateCorpse, (u: unit) => UnitTracker.getInstance().executeEvent(UnitEventTypes.CREATED_DEAD, u));
 
 //_G.KillUnit = Hooks.hookArguments(_G.KillUnit, (u: unit) => UnitTracker.killUnit(u));
 

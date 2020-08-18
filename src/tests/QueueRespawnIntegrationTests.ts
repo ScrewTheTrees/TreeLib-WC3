@@ -19,11 +19,8 @@ export class QueueRespawnIntegrationTests {
                 let foot = CreateUnit(Players.RED, FourCC("hfoo"), -6000, -6000, 0);
                 let queue = ActionQueue.createUnitQueue(foot,
                     new UnitActionWaypoint(new Point(-6000, -6000), WaypointOrders.attack),
-                    new UnitActionDelay(0.5),
                     new UnitActionWaypoint(new Point(-5500, -6000), WaypointOrders.attack),
-                    new UnitActionDelay(0.5),
                     new UnitActionWaypoint(new Point(-5500, -5500), WaypointOrders.attack),
-                    new UnitActionDelay(0.5),
                     new UnitActionWaypoint(new Point(-6000, -5500), WaypointOrders.attack),
                     new UnitActionDeath(false),
                     new UnitActionWaitWhileDead(),

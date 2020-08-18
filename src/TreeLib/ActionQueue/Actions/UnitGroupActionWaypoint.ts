@@ -33,7 +33,7 @@ export class UnitGroupActionWaypoint implements UnitGroupAction {
         if (this.getDistanceToPoint(targets, this.toPoint) <= this.acceptableDistance || this.timer > this.maxTime) {
             this.isFinished = true;
             Logger.LogVerbose("Finished waypoint");
-        } else if (this.updateTimer >= 10) {
+        } else if (this.updateTimer >= 7) {
             let g = Quick.UnitArrayToGroup(targets);
             GroupPointOrder(g, this.order, this.toPoint.x, this.toPoint.y); //Update order
             DestroyGroup(g);

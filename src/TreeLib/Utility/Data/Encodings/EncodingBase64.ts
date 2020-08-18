@@ -3,7 +3,7 @@ const ALPHA = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
 
 export class EncodingBase64 {
     private static getbyte64(s: string, i: number) {
-        var idx = ALPHA.indexOf(s.charAt(i));
+        let idx = ALPHA.indexOf(s.charAt(i));
         if (idx === -1) {
             throw "Cannot decode base64";
         }
@@ -31,7 +31,7 @@ export class EncodingBase64 {
             imax -= 4;
         }
 
-        var x: string[] = [];
+        let x: string[] = [];
         for (i = 0; i < imax; i += 4) {
             b10 = (this.getbyte64(s, i) << 18) | (this.getbyte64(s, i + 1) << 12) |
                 (this.getbyte64(s, i + 2) << 6) | this.getbyte64(s, i + 3);
@@ -52,7 +52,7 @@ export class EncodingBase64 {
     }
 
     private static getbyte(s: string, i: number) {
-        var x = s.charCodeAt(i);
+        let x = s.charCodeAt(i);
         if (x > 255) {
             throw "INVALID_CHARACTER_ERR: DOM Exception 5";
         }
@@ -64,7 +64,7 @@ export class EncodingBase64 {
         let i: number;
         let x: string[] = [];
 
-        var imax = s.length - s.length % 3;
+        let imax = s.length - s.length % 3;
 
         if (s.length === 0) {
             return s;

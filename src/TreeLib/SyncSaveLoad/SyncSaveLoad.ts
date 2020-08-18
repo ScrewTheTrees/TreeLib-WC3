@@ -80,8 +80,6 @@ export class SyncSaveLoad {
         return <FilePromise>this.allPromises[GetPlayerId(reader)];
     }
 
-    public
-
     private onSync() {
         xpcall(() => {
 
