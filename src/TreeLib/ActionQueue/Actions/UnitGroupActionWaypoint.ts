@@ -51,9 +51,9 @@ export class UnitGroupActionWaypoint implements UnitGroupAction {
         if (targets.length == 0) return 9999999;
         let num = 0;
         for (let i = 0; i < targets.length; i++) {
-            num += Point.fromWidget(targets[i]).distanceTo(point);
+            num += Point.fromWidget(targets[i]).distanceToSquared(point);
         }
-        return num / targets.length;
+        return math.sqrt(num / targets.length);
     }
 
 }

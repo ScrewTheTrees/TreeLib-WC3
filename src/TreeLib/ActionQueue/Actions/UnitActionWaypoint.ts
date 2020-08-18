@@ -30,8 +30,8 @@ export class UnitActionWaypoint implements UnitAction {
         this.updateTimer += timeStep;
 
         if (GetUnitCurrentOrder(target) == 0) this.idleFor += timeStep;
-
-        if (Point.fromWidget(target).distanceTo(this.toPoint) <= this.acceptableDistance || this.timer > this.maxTime) {
+        let acceptSquare = this.acceptableDistance * this.acceptableDistance;
+        if (Point.fromWidget(target).distanceToSquared(this.toPoint) <= acceptSquare || this.timer > this.maxTime) {
             this.isFinished = true;
             Logger.LogVerbose("Finished waypoint");
         } else if (this.updateTimer >= 7 || this.idleFor >= 1) {
