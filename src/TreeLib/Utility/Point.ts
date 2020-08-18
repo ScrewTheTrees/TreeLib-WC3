@@ -53,6 +53,11 @@ export class Point {
         RemoveLocation(inputLoc);
     }
 
+    public updateToWidget(inputU: widget) {
+        this.x = GetWidgetX(inputU);
+        this.y = GetWidgetY(inputU);
+    }
+
     public polarProject(distance: number, angle: number): Point {
         let x = this.x + distance * math.cos(angle * bj_DEGTORAD);
         let y = this.y + distance * math.sin(angle * bj_DEGTORAD);
