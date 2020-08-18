@@ -17,6 +17,7 @@ export namespace Hooks {
         Logger.LogDebug("Hooked: " + name)
     }
 
+    /**  Hook a function with your own logic that will execute after the original function. */
     export function hookArguments(oldFunc: (...args: any) => any, newFunc: (...args: any) => any) {
         return (...args) => {
             let val = oldFunc(...args);
@@ -25,6 +26,15 @@ export namespace Hooks {
         };
     }
 
+    /**  Hook a function with your own logic that will execute before the original function. */
+    export function hookArgumentsBefore(oldFunc: (...args: any) => any, newFunc: (...args: any) => any) {
+        return (...args) => {
+            newFunc(...args);
+            return oldFunc(...args);
+        };
+    }
+
+    /**  Hook a function that will execute your own function and passes the result of the original to the new function. */
     export function hookResult<T>(hookFunc: (...args: any) => T, passFunc: (value: T) => void) {
         return (...args) => {
             let value = hookFunc(...args);

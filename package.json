@@ -10,7 +10,8 @@
     "clean": "rimraf target/*",
     "compileTypescript": "tstl -p tsconfig.json",
     "compileAndRunMap": "npm run compileMap && ts-node bin/operations run",
-    "compileMap": "ts-node bin/operations build"
+    "compileMap": "ts-node bin/operations build",
+    "regenerateIndex": "ts-node bin/operations regenerateIndex"
   },
   "directories": {
     "lib": "lib"

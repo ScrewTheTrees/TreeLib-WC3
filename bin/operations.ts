@@ -16,7 +16,7 @@ switch (operation) {
     case "run":
         const filename = `${cwd}\\target\\${config.mapFolder}`;
 
-        logger.debug(filename);
+        logger.info(filename);
 
         execFile(config.gameExecutable, ["-loadfile", filename, ...config.launchArgs]);
 

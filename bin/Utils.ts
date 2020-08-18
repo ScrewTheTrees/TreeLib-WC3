@@ -23,25 +23,25 @@ if (fs.existsSync("build.json")) {
 export function incrementBuild() {
     buildVersion.build += 1;
     fs.writeFileSync("build.json", JSON.stringify(buildVersion));
-    logger.debug("Increment Build");
+    logger.info("Increment Build");
 }
 export function incrementMinor() {
     buildVersion.build = 0;
     buildVersion.minor += 1;
     fs.writeFileSync("build.json", JSON.stringify(buildVersion));
-    logger.debug("Increment Minor version");
+    logger.info("Increment Minor version");
 }
 export function incrementMajor() {
     buildVersion.build = 0;
     buildVersion.minor = 0;
     buildVersion.major += 1;
     fs.writeFileSync("build.json", JSON.stringify(buildVersion));
-    logger.debug("Increment Major version");
+    logger.info("Increment Major version");
 }
 
 export function getFilesInsideDir(startPath, filter): string[] {
     if (!fs.existsSync(startPath)) {
-        logger.log("Cannot find directory: ", startPath);
+        logger.info("Cannot find directory: ", startPath);
         return [];
     }
     let retvar: string[] = [];

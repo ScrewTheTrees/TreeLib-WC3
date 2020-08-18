@@ -16,7 +16,7 @@ export function buildEntireMap() {
     let mapFolder = `${cwd}\\maps\\${config.mapFolder}`;
     let targetFolder = `${cwd}\\target\\${config.mapFolder}`;
 
-    logger.debug(`Building "${mapFolder}"...`);
+    logger.info(`Building "${mapFolder}"...`);
     fs.copy(mapFolder, targetFolder, (err) => {
         if (err) {
             logger.error(err);
@@ -39,7 +39,7 @@ export function buildEntireMap() {
             } catch (err) {
                 return logger.error(err);
             }
-            logger.debug(`Completed!`);
+            logger.info(`Completed!`);
         }
     });
 }

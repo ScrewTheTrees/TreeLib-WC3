@@ -8,3 +8,4 @@ maps/Build/*
 
 package-lock.json
 .npmrc
+project.log
