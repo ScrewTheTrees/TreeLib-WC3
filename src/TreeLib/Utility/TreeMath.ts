@@ -1,5 +1,5 @@
 export namespace TreeMath {
-    function Clamp(value: number, min: number, max: number) {
+    export function Clamp(value: number, min: number, max: number) {
         if (value > max) {
             value = max;
         } else if (value < min) {
@@ -8,11 +8,11 @@ export namespace TreeMath {
         return value;
     }
     
-    function RandAngle() {
+    export function RandAngle() {
         return GetRandomReal(0, 360);
     }
 
-    function RandPercent() {
+    export function RandPercent() {
         return GetRandomReal(0, 1);
     }
 }
