@@ -7,12 +7,13 @@ export class TreeMath {
         }
         return value;
     }
+    
+    public static RandAngle() {
+        return GetRandomReal(0, 360);
+    }
+
+    public static RandPercent() {
+        return GetRandomReal(0, 1);
+    }
 }
 
-export function RandAngle() {
-    return GetRandomReal(0, 360);
-}
-
-export function RandPercent() {
-    return GetRandomReal(0, 1);
-}
