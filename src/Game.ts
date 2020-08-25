@@ -6,8 +6,8 @@ import {PathfindingTests} from "./tests/PathfindingTests";
 import {RespawnTests} from "./tests/RespawnTests";
 import {QueueRespawnIntegrationTests} from "./tests/QueueRespawnIntegrationTests";
 import {InputManagerTest} from "./tests/InputManagerTest";
-import {UnitTracker} from "./TreeLib/SpecialUnitFunctionality/UnitTracker";
-import {UnitEventTypes} from "./TreeLib/SpecialUnitFunctionality/UnitEventTypes";
+import {UnitEventTracker} from "./TreeLib/UnitEventTracker/UnitEventTracker";
+import {UnitEventTypes} from "./TreeLib/UnitEventTracker/UnitEventTypes";
 
 export class Game {
 
@@ -23,7 +23,7 @@ export class Game {
             new QueueRespawnIntegrationTests().run();
             new InputManagerTest().run();
             PathfindingTests.getInstance();
-            UnitTracker.getInstance().registerAction(UnitEventTypes.CREATED_ANY, (u) => {
+            UnitEventTracker.getInstance().registerAction(UnitEventTypes.CREATED_ANY, (u) => {
             });
         }, Logger.critical);
     }

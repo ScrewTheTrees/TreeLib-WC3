@@ -4,12 +4,12 @@ import {Logger} from "../Logger";
 import {EventContainerList} from "./EventContainerList";
 import {UnitEventContainer} from "./UnitEventContainer";
 
-export class UnitTracker {
-    private static instance: UnitTracker;
+export class UnitEventTracker {
+    private static instance: UnitEventTracker;
 
     public static getInstance() {
         if (this.instance == null) {
-            this.instance = new UnitTracker();
+            this.instance = new UnitEventTracker();
             Hooks.set(this.name, this.instance);
         }
         return this.instance;
@@ -53,13 +53,13 @@ export class UnitTracker {
         const triggerUnitDeath = CreateTrigger();
         TriggerRegisterAnyUnitEventBJ(triggerUnitDeath, EVENT_PLAYER_UNIT_DEATH);
         TriggerAddAction(triggerUnitDeath, () => {
-            UnitTracker.getInstance().executeEvent(UnitEventTypes.KILLED, GetDyingUnit())
+            UnitEventTracker.getInstance().executeEvent(UnitEventTypes.KILLED, GetDyingUnit())
         });
 
         const triggerUnitSummoned = CreateTrigger();
         TriggerRegisterAnyUnitEventBJ(triggerUnitSummoned, EVENT_PLAYER_UNIT_SUMMON);
         TriggerAddAction(triggerUnitSummoned, () => {
-            const tracker = UnitTracker.getInstance();
+            const tracker = UnitEventTracker.getInstance();
             tracker.executeEvent(UnitEventTypes.SUMMONED, GetSummonedUnit());
             tracker.executeEvent(UnitEventTypes.CREATED_ANY, GetSummonedUnit());
         });
@@ -67,7 +67,7 @@ export class UnitTracker {
         const triggerUnitHired = CreateTrigger();
         TriggerRegisterAnyUnitEventBJ(triggerUnitHired, EVENT_PLAYER_UNIT_SELL);
         TriggerAddAction(triggerUnitHired, () => {
-            const tracker = UnitTracker.getInstance();
+            const tracker = UnitEventTracker.getInstance();
             tracker.executeEvent(UnitEventTypes.SOLD_UNIT, GetSoldUnit());
             tracker.executeEvent(UnitEventTypes.CREATED_ANY, GetSoldUnit());
         });
@@ -81,29 +81,29 @@ export class UnitTracker {
         const triggerUnitTrained = CreateTrigger();
         TriggerRegisterAnyUnitEventBJ(triggerUnitTrained, EVENT_PLAYER_UNIT_TRAIN_START);
         TriggerAddAction(triggerUnitTrained, () => {
-            const tracker = UnitTracker.getInstance();
+            const tracker = UnitEventTracker.getInstance();
             tracker.executeEvent(UnitEventTypes.START_TRAINING, GetTriggerUnit());
         });
         const triggerUnitResearched = CreateTrigger();
         TriggerRegisterAnyUnitEventBJ(triggerUnitResearched, EVENT_PLAYER_UNIT_RESEARCH_START);
         TriggerAddAction(triggerUnitResearched, () => {
-            UnitTracker.getInstance().executeEvent(UnitEventTypes.START_RESEARCH, GetResearchingUnit());
+            UnitEventTracker.getInstance().executeEvent(UnitEventTypes.START_RESEARCH, GetResearchingUnit());
         });
         const triggerUnitUpgrading = CreateTrigger();
         TriggerRegisterAnyUnitEventBJ(triggerUnitUpgrading, EVENT_PLAYER_UNIT_UPGRADE_START);
         TriggerAddAction(triggerUnitUpgrading, () => {
-            UnitTracker.getInstance().executeEvent(UnitEventTypes.START_UPGRADE, GetTriggerUnit());
+            UnitEventTracker.getInstance().executeEvent(UnitEventTypes.START_UPGRADE, GetTriggerUnit());
         });
         const triggerUnitReviving = CreateTrigger();
         TriggerRegisterAnyUnitEventBJ(triggerUnitReviving, EVENT_PLAYER_HERO_REVIVE_START);
         TriggerAddAction(triggerUnitReviving, () => {
-            UnitTracker.getInstance().executeEvent(UnitEventTypes.START_REVIVE, GetRevivingUnit());
+            UnitEventTracker.getInstance().executeEvent(UnitEventTypes.START_REVIVE, GetRevivingUnit());
         });
 
         const triggerUnitConstruction = CreateTrigger();
         TriggerRegisterAnyUnitEventBJ(triggerUnitConstruction, EVENT_PLAYER_UNIT_CONSTRUCT_START);
         TriggerAddAction(triggerUnitConstruction, () => {
-            UnitTracker.getInstance().executeEvent(UnitEventTypes.START_CONSTRUCTION, GetConstructingStructure());
+            UnitEventTracker.getInstance().executeEvent(UnitEventTypes.START_CONSTRUCTION, GetConstructingStructure());
         });
     }
 
@@ -112,28 +112,28 @@ export class UnitTracker {
         const triggerUnitTrained = CreateTrigger();
         TriggerRegisterAnyUnitEventBJ(triggerUnitTrained, EVENT_PLAYER_UNIT_TRAIN_CANCEL);
         TriggerAddAction(triggerUnitTrained, () => {
-            const tracker = UnitTracker.getInstance();
+            const tracker = UnitEventTracker.getInstance();
             tracker.executeEvent(UnitEventTypes.CANCEL_TRAINING, GetTriggerUnit());
         });
         const triggerUnitResearched = CreateTrigger();
         TriggerRegisterAnyUnitEventBJ(triggerUnitResearched, EVENT_PLAYER_UNIT_RESEARCH_CANCEL);
         TriggerAddAction(triggerUnitResearched, () => {
-            UnitTracker.getInstance().executeEvent(UnitEventTypes.CANCEL_RESEARCHING, GetTriggerUnit());
+            UnitEventTracker.getInstance().executeEvent(UnitEventTypes.CANCEL_RESEARCHING, GetTriggerUnit());
         });
         const triggerUnitUpgrading = CreateTrigger();
         TriggerRegisterAnyUnitEventBJ(triggerUnitUpgrading, EVENT_PLAYER_UNIT_UPGRADE_CANCEL);
         TriggerAddAction(triggerUnitUpgrading, () => {
-            UnitTracker.getInstance().executeEvent(UnitEventTypes.CANCEL_UPGRADING, GetTriggerUnit());
+            UnitEventTracker.getInstance().executeEvent(UnitEventTypes.CANCEL_UPGRADING, GetTriggerUnit());
         });
         const triggerUnitReviving = CreateTrigger();
         TriggerRegisterAnyUnitEventBJ(triggerUnitReviving, EVENT_PLAYER_HERO_REVIVE_CANCEL);
         TriggerAddAction(triggerUnitReviving, () => {
-            UnitTracker.getInstance().executeEvent(UnitEventTypes.CANCEL_REVIVE, GetRevivingUnit());
+            UnitEventTracker.getInstance().executeEvent(UnitEventTypes.CANCEL_REVIVE, GetRevivingUnit());
         });
         const triggerUnitConstruction = CreateTrigger();
         TriggerRegisterAnyUnitEventBJ(triggerUnitConstruction, EVENT_PLAYER_UNIT_CONSTRUCT_CANCEL);
         TriggerAddAction(triggerUnitConstruction, () => {
-            UnitTracker.getInstance().executeEvent(UnitEventTypes.CANCEL_CONSTRUCTION, GetConstructingStructure());
+            UnitEventTracker.getInstance().executeEvent(UnitEventTypes.CANCEL_CONSTRUCTION, GetConstructingStructure());
         });
     }
 
@@ -141,34 +141,34 @@ export class UnitTracker {
         const triggerUnitTrained = CreateTrigger();
         TriggerRegisterAnyUnitEventBJ(triggerUnitTrained, EVENT_PLAYER_UNIT_TRAIN_FINISH);
         TriggerAddAction(triggerUnitTrained, () => {
-            const tracker = UnitTracker.getInstance();
+            const tracker = UnitEventTracker.getInstance();
             tracker.executeEvent(UnitEventTypes.FINISH_TRAINING, GetTrainedUnit());
             tracker.executeEvent(UnitEventTypes.CREATED_ANY, GetTrainedUnit());
         });
         const triggerUnitResearched = CreateTrigger();
         TriggerRegisterAnyUnitEventBJ(triggerUnitResearched, EVENT_PLAYER_UNIT_RESEARCH_FINISH);
         TriggerAddAction(triggerUnitResearched, () => {
-            UnitTracker.getInstance().executeEvent(UnitEventTypes.FINISH_RESEARCHING, GetResearchingUnit());
+            UnitEventTracker.getInstance().executeEvent(UnitEventTypes.FINISH_RESEARCHING, GetResearchingUnit());
         });
         const triggerUnitUpgrading = CreateTrigger();
         TriggerRegisterAnyUnitEventBJ(triggerUnitUpgrading, EVENT_PLAYER_UNIT_UPGRADE_FINISH);
         TriggerAddAction(triggerUnitUpgrading, () => {
-            UnitTracker.getInstance().executeEvent(UnitEventTypes.FINISH_UPGRADING, GetTriggerUnit());
+            UnitEventTracker.getInstance().executeEvent(UnitEventTypes.FINISH_UPGRADING, GetTriggerUnit());
         });
         const triggerUnitReviving = CreateTrigger();
         TriggerRegisterAnyUnitEventBJ(triggerUnitReviving, EVENT_PLAYER_HERO_REVIVE_FINISH);
         TriggerAddAction(triggerUnitReviving, () => {
-            UnitTracker.getInstance().executeEvent(UnitEventTypes.FINISH_REVIVE, GetRevivingUnit());
+            UnitEventTracker.getInstance().executeEvent(UnitEventTypes.FINISH_REVIVE, GetRevivingUnit());
         });
         const triggerUnitConstruction = CreateTrigger();
         TriggerRegisterAnyUnitEventBJ(triggerUnitConstruction, EVENT_PLAYER_UNIT_CONSTRUCT_FINISH);
         TriggerAddAction(triggerUnitConstruction, () => {
-            UnitTracker.getInstance().executeEvent(UnitEventTypes.FINISH_CONSTRUCTION, GetConstructedStructure());
+            UnitEventTracker.getInstance().executeEvent(UnitEventTypes.FINISH_CONSTRUCTION, GetConstructedStructure());
         });
     }
 
     function unitCreatedEvent(this: void, u: unit) {
-        const tracker = UnitTracker.getInstance();
+        const tracker = UnitEventTracker.getInstance();
         tracker.executeEvent(UnitEventTypes.CREATED_TRIGGER, u);
         tracker.executeEvent(UnitEventTypes.CREATED_ANY, u);
     }
@@ -179,9 +179,9 @@ export class UnitTracker {
     _G.CreateUnitAtLocByName = Hooks.hookResult(_G.CreateUnitAtLocByName, unitCreatedEvent);
     _G.BlzCreateUnitWithSkin = Hooks.hookResult(_G.BlzCreateUnitWithSkin, unitCreatedEvent);
 
-    _G.CreateCorpse = Hooks.hookResult(_G.CreateCorpse, (u: unit) => UnitTracker.getInstance().executeEvent(UnitEventTypes.CREATED_DEAD, u));
+    _G.CreateCorpse = Hooks.hookResult(_G.CreateCorpse, (u: unit) => UnitEventTracker.getInstance().executeEvent(UnitEventTypes.CREATED_DEAD, u));
 
 //_G.KillUnit = Hooks.hookArguments(_G.KillUnit, (u: unit) => UnitTracker.killUnit(u));
 
-    _G.RemoveUnit = Hooks.hookArguments(_G.RemoveUnit, (u: unit) => UnitTracker.getInstance().executeEvent(UnitEventTypes.REMOVED, u));
+    _G.RemoveUnit = Hooks.hookArguments(_G.RemoveUnit, (u: unit) => UnitEventTracker.getInstance().executeEvent(UnitEventTypes.REMOVED, u));
 }
