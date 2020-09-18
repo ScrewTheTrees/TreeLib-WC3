@@ -183,5 +183,5 @@ export class UnitEventTracker {
 
 //_G.KillUnit = Hooks.hookArguments(_G.KillUnit, (u: unit) => UnitTracker.killUnit(u));
 
-    _G.RemoveUnit = Hooks.hookArguments(_G.RemoveUnit, (u: unit) => UnitEventTracker.getInstance().executeEvent(UnitEventTypes.REMOVED, u));
+    _G.RemoveUnit = Hooks.hookArgumentsBefore(_G.RemoveUnit, (u: unit) => UnitEventTracker.getInstance().executeEvent(UnitEventTypes.REMOVED, u));
 }

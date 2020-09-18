@@ -7,7 +7,11 @@ export namespace TreeMath {
         }
         return value;
     }
-    
+
+    export function Round(value: number) {
+        return math.floor(value + 0.5);
+    }
+
     export function RandAngle() {
         return GetRandomReal(0, 360);
     }
