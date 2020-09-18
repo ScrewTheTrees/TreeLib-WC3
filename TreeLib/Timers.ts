@@ -1,6 +1,5 @@
 import {Hooks} from "./Hooks";
 import {Quick} from "./Quick";
-import {TreeLibMeta} from "./TreeLibMeta";
 
 /**
  * Provides timers for other classes,

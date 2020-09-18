@@ -3,7 +3,6 @@ import {Logger} from "../../Logger";
 import {Quick} from "../../Quick";
 import {UnitGroupAction} from "../Actions/UnitGroupAction";
 import {IsValidUnit} from "../../Misc";
-import {Hooks} from "../../Hooks";
 
 /**
  * A unit queue is a queue for a several unit operating together. (Most actions are capped at 12 units)
