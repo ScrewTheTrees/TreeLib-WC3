@@ -15,6 +15,7 @@ export class UnitActionWaypoint implements UnitAction {
     public readonly maxTime: number;
     public timer: number = 0;
     public updateTimer: number = 0;
+    public idleFor: number = 0;
 
     constructor(toPoint: Point, order: WaypointOrders = WaypointOrders.smart, acceptableDistance: number = 64, maxTime: number = 1200) {
         this.toPoint = toPoint;
@@ -24,20 +25,40 @@ export class UnitActionWaypoint implements UnitAction {
         this.isFinished = false;
     }
 
-    update(target: unit, timeStep: number, queue: UnitQueue): void {
+    public update(target: unit, timeStep: number, queue: UnitQueue): void {
         this.timer += timeStep;
         this.updateTimer += timeStep;
-        if (Point.fromWidget(target).distanceTo(this.toPoint) <= this.acceptableDistance || this.timer > this.maxTime) {
+
+        if (GetUnitCurrentOrder(target) == 0) this.idleFor += timeStep;
+
+
+        if (this.inObjectiveRange(target) || this.timer > this.maxTime) {
             this.isFinished = true;
             Logger.LogVerbose("Finished waypoint");
-        } else if (this.updateTimer >= 10) {
+        } else if (this.updateTimer >= 7 || this.idleFor >= 1) {
             IssuePointOrder(target, this.order, this.toPoint.x, this.toPoint.y); //Update order
             this.updateTimer = 0;
+            this.idleFor = 0;
         }
     }
 
-    init(target: unit, queue: UnitQueue): void {
+    public init(target: unit, queue: UnitQueue): void {
         IssuePointOrder(target, this.order, this.toPoint.x, this.toPoint.y); //Update order
+    }
+
+    public inObjectiveRange(target: unit) {
+        let targetPoint = Point.fromWidget(target);
+        let offset = targetPoint.getOffsetTo(this.toPoint);
+
+        if (offset.x > this.acceptableDistance
+            || offset.x < -this.acceptableDistance
+            || offset.y > this.acceptableDistance
+            || offset.y < -this.acceptableDistance) {
+            return false;
+        }
+
+        let acceptSquare = this.acceptableDistance * this.acceptableDistance;
+        return targetPoint.distanceToSquared(this.toPoint) <= acceptSquare;
     }
 
 }

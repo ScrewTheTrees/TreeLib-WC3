@@ -45,7 +45,7 @@ export function rotateToPoint(fromDir: number, toDir: number, turnSpeed: number)
 }
 
 
-export function ChooseOne(...input: any[]) {
+export function ChooseOne<T>(...input: T[]): T {
     let random = GetRandomInt(0, input.length - 1);
     return input[random];
 }
@@ -56,6 +56,10 @@ export function InverseFourCC(input: number): string {
 
 export function IsValidUnit(target: unit) {
     return GetUnitTypeId(target) != 0;
+}
+
+export function IsUnitAlive(u: unit): boolean {
+    return IsValidUnit(u) && !IsUnitType(u, UNIT_TYPE_DEAD);
 }
 
 export function IsOfAnyType(buildingType: number, ...targetUnitTypes: number[]): boolean {

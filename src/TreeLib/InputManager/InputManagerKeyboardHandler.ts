@@ -1,5 +1,5 @@
 import {KeyInputContainer} from "./KeyInputContainer";
-import {maxMetaKeys, MetaKey} from "./MetaKey";
+import {MetaKey, MetaKeysMax} from "./MetaKey";
 import {PressType} from "./PressType";
 import {KeyCallback} from "./KeyCallback";
 import {Logger} from "../Logger";
@@ -18,6 +18,9 @@ export class InputManagerKeyboardHandler {
         let metaKey = BlzGetTriggerPlayerMetaKey();
         let isDown = BlzGetTriggerPlayerIsKeyDown();
         let inputContainer = this.getKeyContainer(key);
+
+        if (inputContainer.isDown && isDown) return;
+
         inputContainer.isDown = isDown;
         for (let index = 0; index < inputContainer.callbacks.length; index += 1) {
             let callback = inputContainer.callbacks[index];
@@ -35,7 +38,7 @@ export class InputManagerKeyboardHandler {
 
     public registerNewKeyEvent(key: oskeytype) {
         for (let i = 0; i < PLAYER_NEUTRAL_AGGRESSIVE; i++) {
-            for (let meta = 0; meta <= maxMetaKeys(); meta++) {
+            for (let meta = 0; meta <= MetaKeysMax; meta++) {
                 BlzTriggerRegisterPlayerKeyEvent(this.keyInputTrigger, Player(i), key, meta, true);
                 BlzTriggerRegisterPlayerKeyEvent(this.keyInputTrigger, Player(i), key, meta, false);
             }
@@ -61,13 +64,13 @@ export class InputManagerKeyboardHandler {
         }
     }
 
-    public addKeyboardPressCallback(key: oskeytype, callback: (key: KeyCallback) => void, metaKeys?: MetaKey[]) {
+    public addKeyboardPressCallback(key: oskeytype, callback: (this: any, key: KeyCallback) => void, metaKeys?: MetaKey[]) {
         let container = this.getKeyContainer(key);
         container.callbacks.push(new KeyCallback(key, callback, PressType.PRESS, metaKeys));
         return container;
     }
 
-    public addKeyboardReleaseCallback(key: oskeytype, callback: (key: KeyCallback) => void, metaKeys?: MetaKey[]) {
+    public addKeyboardReleaseCallback(key: oskeytype, callback: (this: any, key: KeyCallback) => void, metaKeys?: MetaKey[]) {
         let container = this.getKeyContainer(key);
         container.callbacks.push(new KeyCallback(key, callback, PressType.RELEASE, metaKeys));
         return container;

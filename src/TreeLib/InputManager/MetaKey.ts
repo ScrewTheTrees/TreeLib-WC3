@@ -8,7 +8,7 @@ export const enum MetaKey {
     SHIFT_ALT = 5,
     CTRL_ALT = 6,
     SHIFT_CTRL_ALT = 7,
+    WINDOWS = 8,
 }
-export function maxMetaKeys() {
-    return 7;
-}
+
+export const MetaKeysMax = 8;

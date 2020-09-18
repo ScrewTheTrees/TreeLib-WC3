@@ -10,7 +10,7 @@ export class UnitActionGoToAction implements UnitAction {
     isFinished: boolean = false;
     public readonly expression: (target: unit, timeStep: number, queue: UnitQueue) => boolean;
 
-    constructor(public actionIndex: number, expression?: (target: unit, timeStep: number, queue: UnitQueue) => boolean) {
+    constructor(public actionIndex: number, expression?: (this: any, target: unit, timeStep: number, queue: UnitQueue) => boolean) {
         this.expression = expression || function () {
             return true;
         };

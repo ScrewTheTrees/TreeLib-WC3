@@ -9,7 +9,7 @@ export class KeyCallback {
     public pressType: PressType;
     public triggeringPlayer!: player;
 
-    constructor(key: oskeytype, callback: (key: KeyCallback) => void, pressType: PressType, metaKeys: MetaKey[] = [MetaKey.ALL]) {
+    constructor(key: oskeytype, callback: (this: any, key: KeyCallback) => void, pressType: PressType, metaKeys: MetaKey[] = [MetaKey.ALL]) {
         this.key = key;
         this.callback = callback;
         this.pressType = pressType;

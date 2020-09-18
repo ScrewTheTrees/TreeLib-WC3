@@ -6,8 +6,8 @@ export abstract class StepEffect {
         this.timer = timer;
     }
 
-    public abstract step();
+    public abstract step(): void;
 
-    public abstract destroy();
+    public abstract destroy(): void;
 
 }
