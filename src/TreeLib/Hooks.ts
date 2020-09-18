@@ -1,19 +1,20 @@
 /** @noSelfInFile **/
 import {Logger} from "./Logger";
 
-_G.__hooks = {};
-
+const __hooks: any = {};
+// @ts-ignore
+_G.__hooks = __hooks; //Make persistent.
 /**
  * In order to prevent things falling out of scope, you can hook them to global,
  * That way the garbage collector wont ever remove it.
  */
 export namespace Hooks {
     export function get(name: string): object | undefined {
-        return _G.__hooks[name];
+        return __hooks[name];
     }
 
     export function set(name: string, value: any) {
-        _G.__hooks[name] = value;
+        __hooks[name] = value;
         Logger.LogDebug("Hooked: " + name)
     }
 

@@ -17,7 +17,7 @@ export function buildEntireMap() {
     let targetFolder = `${cwd}\\target\\${config.mapFolder}`;
 
     logger.info(`Building "${mapFolder}"...`);
-    fs.copy(mapFolder, targetFolder, (err) => {
+    fs.copy(mapFolder, targetFolder, (err: string) => {
         if (err) {
             logger.error(err);
         } else {

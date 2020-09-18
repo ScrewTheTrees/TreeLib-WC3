@@ -5,7 +5,7 @@ export class OnCastContainer {
     public onTrigger: (data: SpellData) => void;
     public filter?: (data: SpellData) => boolean;
 
-    constructor(abilityTypes: number[], onTrigger: (data: SpellData) => void, filter?: (data: SpellData) => boolean) {
+    constructor(abilityTypes: number[], onTrigger: (this: any, data: SpellData) => void, filter?: (this: any, data: SpellData) => boolean) {
         this.abilityTypes = abilityTypes;
         this.onTrigger = onTrigger;
         this.filter = filter;

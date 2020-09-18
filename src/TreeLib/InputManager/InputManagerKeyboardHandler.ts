@@ -64,13 +64,13 @@ export class InputManagerKeyboardHandler {
         }
     }
 
-    public addKeyboardPressCallback(key: oskeytype, callback: (key: KeyCallback) => void, metaKeys?: MetaKey[]) {
+    public addKeyboardPressCallback(key: oskeytype, callback: (this: any, key: KeyCallback) => void, metaKeys?: MetaKey[]) {
         let container = this.getKeyContainer(key);
         container.callbacks.push(new KeyCallback(key, callback, PressType.PRESS, metaKeys));
         return container;
     }
 
-    public addKeyboardReleaseCallback(key: oskeytype, callback: (key: KeyCallback) => void, metaKeys?: MetaKey[]) {
+    public addKeyboardReleaseCallback(key: oskeytype, callback: (this: any, key: KeyCallback) => void, metaKeys?: MetaKey[]) {
         let container = this.getKeyContainer(key);
         container.callbacks.push(new KeyCallback(key, callback, PressType.RELEASE, metaKeys));
         return container;

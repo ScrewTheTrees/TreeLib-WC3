@@ -1,6 +1,7 @@
 import * as fs from "fs-extra";
 import * as path from "path";
-import { createLogger, format, transports } from "winston";
+import {createLogger, format, transports} from "winston";
+
 const { combine, timestamp, printf} = format;
 
 export function loadJsonFile(fname: string) {
@@ -39,7 +40,7 @@ export function incrementMajor() {
     logger.info("Increment Major version");
 }
 
-export function getFilesInsideDir(startPath, filter): string[] {
+export function getFilesInsideDir(startPath: string, filter: string): string[] {
     if (!fs.existsSync(startPath)) {
         logger.info("Cannot find directory: ", startPath);
         return [];

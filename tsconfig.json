@@ -1,14 +1,11 @@
 {
   "compilerOptions": {
     "allowJs": true,
-    "strictPropertyInitialization": true,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
-    "strictBindCallApply": true,
+    "strict": true,
     "sourceMap": false,
     "target": "es6",
 
-    "outDir": "./target",
+    "outDir": "./",
     "baseUrl": "./src",
     "lib": [
       "es6"
@@ -46,7 +43,8 @@
     "luaLibImport": "require",
     "sourceMapTraceback": false,
     "noHeader": true,
-    "luaBundle": "tstl_output.lua",
+    "noImplicitSelf": true,
+    "luaBundle": "target\\tstl_output.lua",
     "luaBundleEntry": "src\\main.ts"
   }
 }

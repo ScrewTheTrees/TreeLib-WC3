@@ -1,5 +1,3 @@
-import {Hooks} from "../Hooks";
-
 export enum UnitEventTypes {
     CREATED_ANY,        //Unit is created in ANY way, (hired, trained, summoned, trigger, construct). Sends created unit
     CREATED_TRIGGER,    //Unit is spawned using triggers. Sends created unit
@@ -30,5 +28,6 @@ export enum UnitEventTypes {
 }
 
 export function UnitEventTypeGetName(type: UnitEventTypes) {
+    // @ts-ignore Shitty JS stuff :/
     return Object.keys(UnitEventTypes).find(key => UnitEventTypes[key] == type) || "Invalid";
 }
