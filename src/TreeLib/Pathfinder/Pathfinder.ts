@@ -47,7 +47,7 @@ export class Pathfinder {
                     if (!target.disabled && this.isNodeBadCompared(current, target)) {
                         target.cameFrom = current;
                         target.costSoFar = this.getNodeNumber(current, target);
-                        this.frontier.push(target, current.costSoFar + this.distanceBetweenNodes(target, endNode) * target.cost);
+                        this.frontier.push(target, current.costSoFar + (this.distanceBetweenNodes(target, endNode) * target.cost));
                         opCount += 1;
                     }
                     if (target == endNode) {
@@ -57,8 +57,8 @@ export class Pathfinder {
                     }
                 }
             }
-            if (this.frontier.entries.length > highest) {
-                highest = this.frontier.entries.length;
+            if (this.frontier.entries.noOfEntries > highest) {
+                highest = this.frontier.entries.noOfEntries;
             }
         }
         if (finalNode == null) {
@@ -88,7 +88,7 @@ export class Pathfinder {
             points.push(Point.copy(node.point));
         }
 
-        let pathfindResult = new PathfindResult(points, finalNode == endNode, startNode.point, endNode.point, finalNode.point);
+        let pathfindResult = new PathfindResult(points, finalNode == endNode, startNode, endNode, finalNode);
         if (this.useCache) {
             this.nodeTable.push(startNode, endNode, pathfindResult);
             return pathfindResult.copy();
@@ -145,10 +145,12 @@ export class Pathfinder {
             let distance = point.distanceTo(closest.point);
             for (let index = 0; index < this.nodes.length; index++) {
                 let value = this.nodes[index];
-                let tempDist = point.distanceTo(value.point);
-                if (!value.disabled && tempDist < distance) {
-                    closest = value;
-                    distance = tempDist;
+                if (!value.disabled) {
+                    let tempDist = point.distanceTo(value.point);
+                    if (tempDist < distance) {
+                        closest = value;
+                        distance = tempDist;
+                    }
                 }
             }
         }
@@ -161,9 +163,11 @@ export class Pathfinder {
             let distance = point.distanceTo(closest.point);
             for (let index = 0; index < this.nodes.length; index++) {
                 let value = this.nodes[index];
-                if (!value.disabled && value.cameFrom != null && point.distanceTo(value.point) < distance) {
-                    closest = value;
-                    distance = point.distanceTo(value.point);
+                if (!value.disabled && value.cameFrom != null) {
+                    if (point.distanceTo(value.point) < distance) {
+                        closest = value;
+                        distance = point.distanceTo(value.point);
+                    }
                 }
             }
         }

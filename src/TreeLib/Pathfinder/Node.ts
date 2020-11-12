@@ -6,7 +6,7 @@ export class Node {
     public neighbors: Node[] = [];
     public disabled = false;
 
-    /** A cost of two would be twice as hard to traverse (50%), a cost of 0 is nothing, it will always be traversed if adjacent */
+    /** A cost of 2 would be twice as hard to traverse (50%), a cost of 0 is nothing, it will always be traversed if adjacent */
     public cost = 1;
 
     //Pathfinding
@@ -35,5 +35,24 @@ export class Node {
             let node = this.neighbors[i];
             Quick.Slice(node.neighbors, node.neighbors.indexOf(this));
         }
+    }
+
+    public _activityTraversal = false;
+    public getClosestActiveNeighbor() {
+        let candidate = this.neighbors[0];
+        let distance = candidate.point.distanceToSquared(this.point);
+
+        for (let i = 0; i < this.neighbors.length; i++) {
+            const element = this.neighbors[i];
+            if (element.disabled) continue;
+
+            const newDist = element.point.distanceToSquared(this.point);
+            if (newDist < distance) {
+                candidate = element;
+                distance = newDist;
+            }
+        }
+
+        return candidate;
     }
 }

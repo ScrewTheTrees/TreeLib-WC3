@@ -1,15 +1,16 @@
 import {Point} from "../Utility/Point";
 import {Quick} from "../Quick";
+import {Node} from "./Node";
 
 export class PathfindResult {
     public path: Point[];
     public reachedTheEnd: boolean;
     private optimisedPath: Point[] | undefined;
-    public startNode: Point;
-    public endNode: Point;
-    public finalNode: Point;
+    public startNode: Node;
+    public endNode: Node;
+    public finalNode: Node;
 
-    constructor(points: Point[], reachedTheEnd: boolean, startNode: Point, endNode: Point, finalNode: Point) {
+    constructor(points: Point[], reachedTheEnd: boolean, startNode: Node, endNode: Node, finalNode: Node) {
         this.path = points;
         this.reachedTheEnd = reachedTheEnd;
         this.startNode = startNode;
@@ -29,7 +30,7 @@ export class PathfindResult {
                 let previous = this.path[i - 1];
                 let next = this.path[i + 1];
 
-                if (next.directionTo(node) != node.directionTo(previous)) {
+                if (Math.round(next.directionTo(node) * 100) != Math.round(node.directionTo(previous) * 100)) {//0.01 is good enough for comparison in this context.
                     Quick.Push(path, node);
                 }
             }

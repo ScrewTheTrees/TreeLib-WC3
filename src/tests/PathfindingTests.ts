@@ -24,7 +24,7 @@ export class PathfindingTests {
 
     constructor() {
         let stepSize = 128;
-        this.pathfinder = new PathfinderGrid(-8192, -8192, 8192, 8192, stepSize);
+        this.pathfinder = new PathfinderGrid(-8192, -8192, 8192, 8192, stepSize, true);
 
         for (let i = 0; i < this.pathfinder.nodes.length; i++) {
             let node = this.pathfinder.nodes[i];
@@ -45,7 +45,7 @@ export class PathfindingTests {
             let u = CreateUnit(Player(0), FourCC("hfoo"), 0, 0, 0);
             for (let i = 0; i < newPath.length; i++) {
                 let value = Point.copy(newPath[i]);
-                actions.push(new UnitActionWaypoint(value, WaypointOrders.attack, 64));
+                actions.push(new UnitActionWaypoint(value, WaypointOrders.attack, 96));
             }
             actions.push(new UnitActionDeath(true));
             ActionQueue.createUnitQueue(u, ...actions);

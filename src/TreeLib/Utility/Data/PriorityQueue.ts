@@ -1,41 +1,38 @@
-import {Quick} from "../../Quick";
+import {LinkedList} from "./LinkedList";
 
 export class PriorityQueue<T> {
-    public entries: PriorityEntry<T>[] = [];
+    public entries: LinkedList<PriorityEntry<T>> = new LinkedList<PriorityEntry<T>>();
 
 
     public get(): T | null {
-        let entry = this.entries[0];
-        if (this.entries.length > 0) {
-            let priority = entry.priority;
-            let index = 0;
-            for (let i = 0; i < this.entries.length; i++) {
-                let e = this.entries[i];
-                if (e.priority <= priority) {
-                    entry = e;
-                    priority = e.priority;
-                    index = i;
-                }
-            }
-            this.entries.splice(index, 1);
+        const entry = this.entries.popAtStart();
+        if (entry) {
+            return entry.value;
+        } else {
+            return null;
         }
-
-        return entry != null ? entry.value : null;
     }
 
     public push(value: T, priority: number) {
-        priority = math.ceil(priority);
+        priority = Math.ceil(priority);
         if (priority < 1) priority = 1;
         let entry = new PriorityEntry(value, priority);
-        Quick.Push(this.entries, entry);
+        const referenceField = this.entries.search((t) => {
+            return entry.priority <= t.priority; //If Ts priority is above entry, insert entry before T
+        });
+        if (referenceField) {
+            referenceField.insertBefore(entry);
+        } else {
+            this.entries.insertAtEnd(entry);
+        }
     }
 
     public hasEntry(): boolean {
-        return this.entries.length > 0;
+        return this.entries.noOfEntries > 0;
     }
 
     public clear() {
-        this.entries = [];
+        this.entries.clear();
     }
 }
 
