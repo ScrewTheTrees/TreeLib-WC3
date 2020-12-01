@@ -1,5 +1,10 @@
 export namespace UnitArrays {
-    const _enumGroupToUse = CreateGroup();
+    let _enumGroupToUse: group;
+
+    function enumGroupToUse() {
+        if (!_enumGroupToUse) _enumGroupToUse = CreateGroup();
+        return _enumGroupToUse;
+    }
 
     export function ArrayUnitsInRange(x: number, y: number, radius: number, filter?: (filterUnit: unit) => boolean) {
         let array: unit[] = [];
@@ -8,7 +13,7 @@ export namespace UnitArrays {
                 array.push(GetFilterUnit());
             return false;
         });
-        GroupEnumUnitsInRange(_enumGroupToUse, x, y, radius, filterEnum);
+        GroupEnumUnitsInRange(enumGroupToUse(), x, y, radius, filterEnum);
         DestroyFilter(filterEnum);
         return array;
     }
@@ -20,7 +25,7 @@ export namespace UnitArrays {
                 array.push(GetFilterUnit());
             return false;
         });
-        GroupEnumUnitsOfPlayer(_enumGroupToUse, p, filterEnum);
+        GroupEnumUnitsOfPlayer(enumGroupToUse(), p, filterEnum);
         DestroyFilter(filterEnum);
         return array;
     }
