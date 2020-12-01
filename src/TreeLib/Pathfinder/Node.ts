@@ -36,23 +36,4 @@ export class Node {
             Quick.Slice(node.neighbors, node.neighbors.indexOf(this));
         }
     }
-
-    public _activityTraversal = false;
-    public getClosestActiveNeighbor() {
-        let candidate = this.neighbors[0];
-        let distance = candidate.point.distanceToSquared(this.point);
-
-        for (let i = 0; i < this.neighbors.length; i++) {
-            const element = this.neighbors[i];
-            if (element.disabled) continue;
-
-            const newDist = element.point.distanceToSquared(this.point);
-            if (newDist < distance) {
-                candidate = element;
-                distance = newDist;
-            }
-        }
-
-        return candidate;
-    }
 }
