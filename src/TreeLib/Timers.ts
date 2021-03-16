@@ -1,6 +1,5 @@
 import {Hooks} from "./Hooks";
 import {Quick} from "./Quick";
-import {TreeLibMeta} from "./TreeLibMeta";
 
 /**
  * Provides timers for other classes,
@@ -26,9 +25,11 @@ export class Timers {
         this.fastTimer = CreateTrigger();
         TriggerRegisterTimerEvent(this.fastTimer, 0.01, true);
         TriggerAddAction(this.fastTimer, () => {
-            this.fastTimerCallbacks.forEach((callback) => {
-                callback();
-            });
+            for (let callback of this.fastTimerCallbacks) {
+                {
+                    callback();
+                }
+            }
         });
     }
 

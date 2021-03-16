@@ -1,9 +1,6 @@
 /**
  * This is just very Miscellaneous functions used for mostly movement and rotation.
  */
-import {Point} from "./Utility/Point";
-import {Quick} from "./Quick";
-import GroupToUnitArray = Quick.GroupToUnitArray;
 
 export function linearInterpolate(start: number, end: number, maxStep: number = 1) {
     let diff = start - end;
@@ -70,6 +67,7 @@ export function IsOfAnyType(buildingType: number, ...targetUnitTypes: number[]):
     }
     return false;
 }
+/* DEPRECATION, VERY BAD FOR PERFORMANCE! DONT USE FILTERS/CONDITIONS
 
 export function GetUnitsOfTypesAroundPointInRange(point: Point, range: number, ...unitIds: string[]): unit[] {
     const f = Filter(() => {
@@ -106,3 +104,4 @@ export function GetAliveUnitsOfTypeByPlayer(unitType: number, player: player) {
     DestroyGroup(g);
     return arr;
 }
+*/

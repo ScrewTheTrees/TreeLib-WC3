@@ -19,27 +19,33 @@ export namespace Hooks {
     }
 
     /**  Hook a function with your own logic that will execute after the original function. */
-    export function hookArguments<Args  extends any[], T>(oldFunc: (...args: Args) => T, newFunc: (...args: Args) => void) {
+    export function hookArguments<Args extends any[], T>(oldFunc: (...args: Args) => T, newFunc: (...args: Args) => void) {
         return (...args: Args) => {
             let val = oldFunc(...args);
-            newFunc(...args);
+            xpcall(() => {
+                newFunc(...args);
+            }, Logger.critical)
             return val;
         };
     }
 
     /**  Hook a function with your own logic that will execute before the original function. */
-    export function hookArgumentsBefore<Args  extends any[], T>(oldFunc: (...args: Args) => T, newFunc: (...args: Args) => void) {
+    export function hookArgumentsBefore<Args extends any[], T>(oldFunc: (...args: Args) => T, newFunc: (...args: Args) => void) {
         return (...args: Args) => {
-            newFunc(...args);
+            xpcall(() => {
+                newFunc(...args);
+            }, Logger.critical)
             return oldFunc(...args);
         };
     }
 
     /**  Hook a function that will execute your own function and passes the result of the original to the new function. */
-    export function hookResult<Args  extends any[], T>(hookFunc: (...args: Args) => T, passFunc: (value: T) => void) {
+    export function hookResult<Args extends any[], T>(hookFunc: (...args: Args) => T, passFunc: (value: T) => void) {
         return (...args: Args) => {
             let value = hookFunc(...args);
-            passFunc(value);
+            xpcall(() => {
+                passFunc(value);
+            }, Logger.critical)
             return value;
         }
     }
