@@ -17,6 +17,21 @@ export const enum Orders {
     getitem = 851981, // specific order for picking up item so we can issue it from scripts
     suicide = 851982, // attack anything on map until I'm dead
     attack = 851983,
-    harvest = 852018,
+
+    itemMoveSlot1 = 852002,
+    itemMoveSlot2 = 852003,
+    itemMoveSlot3 = 852004,
+    itemMoveSlot4 = 852005,
+    itemMoveSlot5 = 852006,
+    itemMoveSlot6 = 852007,
+    itemUseSlot1 = 852008,
+    itemUseSlot2 = 852009,
+    itemUseSlot3 = 852010,
+    itemUseSlot4 = 852011,
+    itemUseSlot5 = 852012,
+    itemUseSlot6 = 852013,
+
     resumeharvest = 852017,
+    harvest = 852018,
+
 }
