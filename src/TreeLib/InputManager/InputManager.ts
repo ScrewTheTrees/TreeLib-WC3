@@ -60,9 +60,10 @@ export class InputManager {
     /**
      *  Checks if a button is held down, entirely disregards metakeys.
      * @param key the button to press
+     * @param triggeringPlayer the player whom holds
      */
-    public static isKeyButtonHeld(key: oskeytype) {
-        return InputManager.getInstance().keyboardHandler.isKeyButtonHeld(key);
+    public static isKeyButtonHeld(key: oskeytype, triggeringPlayer: player) {
+        return InputManager.getInstance().keyboardHandler.isKeyButtonHeld(key, triggeringPlayer);
     }
 
     // MOUSE

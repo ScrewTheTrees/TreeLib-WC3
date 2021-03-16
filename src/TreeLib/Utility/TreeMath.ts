@@ -8,6 +8,11 @@ export namespace TreeMath {
         return value;
     }
 
+    export function Lerp(a: number, b: number, t: number)
+    {
+        return a + (b - a) * TreeMath.Clamp(t, 0, 1);
+    }
+
     export function Round(value: number) {
         return math.floor(value + 0.5);
     }

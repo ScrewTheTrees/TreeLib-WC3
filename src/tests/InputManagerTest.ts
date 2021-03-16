@@ -2,7 +2,6 @@ import {Logger} from "../TreeLib/Logger";
 import {InputManager} from "../TreeLib/InputManager/InputManager";
 import {MetaKey} from "../TreeLib/InputManager/MetaKey";
 import {Entity} from "../TreeLib/Entity";
-import {Delay} from "../TreeLib/Utility/Delay";
 
 export class InputManagerTest extends Entity {
 
@@ -35,7 +34,7 @@ export class InputManagerTest extends Entity {
 
     step(): void {
         this._timerDelay = 0.1;
-        if (InputManager.isKeyButtonHeld(OSKEY_M)) {
+        if (InputManager.isKeyButtonHeld(OSKEY_M, Player(0))) {
             Logger.warning("HOLDING M");
         }
         if (InputManager.isMouseButtonHeld(MOUSE_BUTTON_TYPE_MIDDLE)) {

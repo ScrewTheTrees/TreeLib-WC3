@@ -87,8 +87,8 @@ export class Point {
         let sumX = 0;
         let sumY = 0;
         for (let i = 0; i < arr.length; i++) {
-            sumX += arr[i].x;
-            sumY += arr[i].y;
+             sumX += arr[i].x;
+             sumY += arr[i].y;
         }
         sumX = sumX / arr.length;
         sumY = sumY / arr.length;
@@ -111,12 +111,6 @@ export class Point {
 
     public static fromRectCenter(input: rect) {
         return new Point(GetRectCenterX(input), GetRectCenterY(input));
-    }
-
-    public static randomPointInRect(input: rect) {
-        return new Point(math.random(GetRectMinX(input) + 32, GetRectMaxX(input) - 32),
-            math.random(GetRectMinY(input) + 32, GetRectMaxY(input) - 32)
-        );
     }
 
     public static copy(input: Point): Point {
@@ -154,7 +148,7 @@ export class Point {
 
         let dx = this.x - xx;
         let dy = this.y - yy;
-        return math.sqrt(dx * dx + dy * dy);
+        return Math.sqrt(dx * dx + dy * dy);
     }
 
 

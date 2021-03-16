@@ -19,9 +19,9 @@ export class InputManagerKeyboardHandler {
         let isDown = BlzGetTriggerPlayerIsKeyDown();
         let inputContainer = this.getKeyContainer(key);
 
-        if (inputContainer.isDown && isDown) return;
+        if (inputContainer.isDown(GetPlayerId(GetTriggerPlayer())) && isDown) return;
 
-        inputContainer.isDown = isDown;
+        inputContainer.setIsDown(isDown, GetPlayerId(GetTriggerPlayer()));
         for (let index = 0; index < inputContainer.callbacks.length; index += 1) {
             let callback = inputContainer.callbacks[index];
             if (callback.enabled && (callback.metaKeys.indexOf(metaKey) >= 0 || callback.metaKeys.indexOf(MetaKey.ALL) >= 0)) {
@@ -76,7 +76,7 @@ export class InputManagerKeyboardHandler {
         return container;
     }
 
-    public isKeyButtonHeld(key: oskeytype) {
-        return this.getKeyContainer(key).isDown;
+    public isKeyButtonHeld(key: oskeytype, triggeringPlayer: player) {
+        return this.getKeyContainer(key).isDown(GetPlayerId(triggeringPlayer));
     }
 }
