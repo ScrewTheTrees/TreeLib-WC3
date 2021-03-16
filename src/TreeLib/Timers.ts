@@ -25,9 +25,11 @@ export class Timers {
         this.fastTimer = CreateTrigger();
         TriggerRegisterTimerEvent(this.fastTimer, 0.01, true);
         TriggerAddAction(this.fastTimer, () => {
-            this.fastTimerCallbacks.forEach((callback) => {
-                callback();
-            });
+            for (let callback of this.fastTimerCallbacks) {
+                {
+                    callback();
+                }
+            }
         });
     }
 

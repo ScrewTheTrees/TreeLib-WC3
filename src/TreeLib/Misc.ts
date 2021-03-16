@@ -1,11 +1,27 @@
 /**
  * This is just very Miscellaneous functions used for mostly movement and rotation.
  */
-import {Point} from "./Utility/Point";
-import {Quick} from "./Quick";
-import GroupToUnitArray = Quick.GroupToUnitArray;
 
-export function RotateToPoint(fromDir: number, toDir: number, turnSpeed: number) {
+export function linearInterpolate(start: number, end: number, maxStep: number = 1) {
+    let diff = start - end;
+    if (diff < 0) {
+        return start + (math.max(maxStep, diff));
+    } else {
+        return start + (math.min(-maxStep, diff));
+    }
+}
+
+export function divisionInterpolate(start: number, end: number, divider: number, minimumStep: number = 1) {
+    let diff = start - end;
+    if (diff <= minimumStep && diff >= -minimumStep) {
+        return diff;
+    }
+
+    return start + (-diff / divider);
+}
+
+
+export function rotateToPoint(fromDir: number, toDir: number, turnSpeed: number) {
     let result = toDir - fromDir;
     while (result > 180) {
         result -= 360
@@ -16,26 +32,10 @@ export function RotateToPoint(fromDir: number, toDir: number, turnSpeed: number)
     let turnDir = result;
 
     if (turnDir < -turnSpeed) {
-        turnDir = -turnSpeed;
+        turnDir = -turnSpeed
     }
     if (turnDir > turnSpeed) {
-        turnDir = turnSpeed;
-    }
-
-    return (fromDir + turnDir) % 360;
-}
-export function RotateToSmooth(fromDir: number, toDir: number, turnSpeed: number, minimum: number = 1) {
-    let result = toDir - fromDir;
-    while (result > 180) {
-        result -= 360
-    }
-    while (result < -180) {
-        result += 360
-    }
-    let turnDir = result / turnSpeed;
-
-    if (math.abs(turnDir) < minimum) {
-        turnDir = result; //Insta turn
+        turnDir = turnSpeed
     }
 
     return (fromDir + turnDir) % 360;
@@ -67,6 +67,7 @@ export function IsOfAnyType(buildingType: number, ...targetUnitTypes: number[]):
     }
     return false;
 }
+/* DEPRECATION, VERY BAD FOR PERFORMANCE! DONT USE FILTERS/CONDITIONS
 
 export function GetUnitsOfTypesAroundPointInRange(point: Point, range: number, ...unitIds: string[]): unit[] {
     const f = Filter(() => {
@@ -103,3 +104,4 @@ export function GetAliveUnitsOfTypeByPlayer(unitType: number, player: player) {
     DestroyGroup(g);
     return arr;
 }
+*/

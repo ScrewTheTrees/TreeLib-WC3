@@ -9,27 +9,32 @@ import {Quick} from "./Quick";
 export abstract class Entity {
     private static entities: Entity[] = [];
     private static entityLoop: Function;
+    public static pauseExecution = false;
 
     private _internalTimer: number = 0;
     protected _timerDelay: number = 0.01;
 
     public constructor() {
-        if (Entity.entityLoop == null) {
-            Entity.entityLoop = () => {
-                Entity.entities.forEach((entity) => {
-
-                    entity._internalTimer += 0.01;
-                    if (entity._internalTimer >= entity._timerDelay) {
-                        entity._internalTimer = 0;
+        {
+            if (Entity.entityLoop == null) {
+                Entity.entityLoop = () => {
+                    { //DO
+                        if (Entity.pauseExecution) return;
                         xpcall(() => {
-                            entity.step();
+                            for (let entity of Entity.entities) {
+                                entity._internalTimer += 0.01;
+                                if (entity._internalTimer >= entity._timerDelay) {
+                                    entity._internalTimer = 0;
+                                    entity.step();
+                                }
+                            }
                         }, Logger.LogCritical);
-                    }
-                });
-            };
-            Timers.getInstance().addFastTimerCallback(Entity.entityLoop);
+                    } //END
+                };
+                Timers.getInstance().addFastTimerCallback(Entity.entityLoop);
+            }
+            Quick.Push(Entity.entities, this);
         }
-        Quick.Push(Entity.entities, this);
     }
 
     abstract step(): void;

@@ -68,7 +68,8 @@ export function RGBTextString(color: RGB, ...input: any[]) {
     let ret = "|cFF" + string.format('%02x', color.red) + string.format('%02x', color.green) + string.format('%02x', color.blue);
     for (let i = 0; i < input.length; i++) {
         ret += tostring(input[i]);
-        ret += " ";
+        if (i != input.length - 1)
+            ret += " ";
     }
     ret += "|r";
     return ret
