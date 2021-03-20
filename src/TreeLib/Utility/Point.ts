@@ -17,6 +17,10 @@ export class Point {
         return math.sqrt(((this.x - target.x) * (this.x - target.x)) + ((this.y - target.y) * (this.y - target.y)));
     }
 
+    public distanceToXY(targetX: number, targetY: number): number {
+        return math.sqrt(((this.x - targetX) * (this.x - targetX)) + ((this.y - targetY) * (this.y - targetY)));
+    }
+
     public distanceToSquared(target: Point): number {
         return ((this.x - target.x) * (this.x - target.x)) + ((this.y - target.y) * (this.y - target.y));
     }
@@ -45,18 +49,28 @@ export class Point {
     public updateToLocation(inputLoc: location) {
         this.x = GetLocationX(inputLoc);
         this.y = GetLocationY(inputLoc);
+        return this;
     }
 
     public updateToLocationClean(inputLoc: location) {
         this.x = GetLocationX(inputLoc);
         this.y = GetLocationY(inputLoc);
         RemoveLocation(inputLoc);
+        return this;
     }
 
     public updateToWidget(inputU: widget) {
         this.x = GetWidgetX(inputU);
         this.y = GetWidgetY(inputU);
+        return this;
     }
+
+    public updateTo(p: Point) {
+        this.x = p.x;
+        this.y = p.y;
+        return this;
+    }
+
 
     public polarProject(distance: number, angle: number): Point {
         let x = this.x + distance * math.cos(angle * bj_DEGTORAD);
