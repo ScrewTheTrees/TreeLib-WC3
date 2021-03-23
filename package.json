@@ -2,7 +2,7 @@
   "name": "treelib",
   "author": "Fredrik Grimmenhag (ScrewTheTrees)",
   "license": "MIT",
-  "version": "1.4.0",
+  "version": "2.0.0",
   "description": "Quality package.",
   "scripts": {
     "fullRecompileAndRun": "npm run clean && npm run compileTypescript && npm run compileAndRunMap",
@@ -16,7 +16,7 @@
   "directories": {
     "lib": "lib"
   },
-  "main": "src/main.ts",
+  "main": "index.ts",
   "devDependencies": {
     "fs-extra": "^9.0.1",
     "lua-types": "^2.6.1",
@@ -30,6 +30,12 @@
     "type": "git",
     "url": "git+https://github.com/ScrewTheTrees/TreeLib-WC3.git"
   },
+  "files": [
+    "src/TreeLib",
+    "LICENSE",
+    "README.md",
+    "index.ts"
+  ],
   "bugs": {
     "url": "https://github.com/ScrewTheTrees/TreeLib-WC3/issues"
   },
