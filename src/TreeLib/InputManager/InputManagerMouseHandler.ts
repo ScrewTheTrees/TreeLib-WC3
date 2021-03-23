@@ -1,5 +1,5 @@
 import {MouseInputContainer} from "./MouseInputContainer";
-import {Point} from "../Utility/Point";
+import {Vector2} from "../Utility/Data/Vector2";
 import {PressType} from "./PressType";
 import {MouseCallback} from "./MouseCallback";
 import {Logger} from "../Logger";
@@ -22,8 +22,8 @@ export class InputManagerMouseHandler {
     private mouseInputReleaseTrigger: trigger = CreateTrigger();
     private mouseMoveTrigger: trigger = CreateTrigger();
     public registeredMouseEvents: MouseInputContainer[] = [];
-    public lastPosition: Point[] = [];
-    public lastCoordinate: Point[] = [];
+    public lastPosition: Vector2[] = [];
+    public lastCoordinate: Vector2[] = [];
 
     private onMousePressAction() {
         let mouseButton = BlzGetTriggerPlayerMouseButton();
@@ -37,7 +37,7 @@ export class InputManagerMouseHandler {
             if (callback.enabled) {
                 if (callback.pressType == PressType.PRESS) {
                     callback.triggeringPlayer = GetTriggerPlayer();
-                    callback.position = new Point(x, y);
+                    callback.position = Vector2.new(x, y);
                     xpcall(() => {
                         callback.callback(callback);
                     }, Logger.critical);
@@ -58,7 +58,7 @@ export class InputManagerMouseHandler {
             if (callback.enabled) {
                 if (callback.pressType == PressType.RELEASE) {
                     callback.triggeringPlayer = GetTriggerPlayer();
-                    callback.position = new Point(x, y);
+                    callback.position = Vector2.new(x, y);
                     callback.callback(callback);
                 }
             }
@@ -68,9 +68,11 @@ export class InputManagerMouseHandler {
     private onMouseMoveAction() {
         let x = BlzGetTriggerPlayerMouseX();
         let y = BlzGetTriggerPlayerMouseY();
-        this.lastPosition[GetPlayerId(GetTriggerPlayer())] = new Point(x, y);
+        if (this.lastPosition[GetPlayerId(GetTriggerPlayer())]) this.lastPosition[GetPlayerId(GetTriggerPlayer())].recycle();
+        this.lastPosition[GetPlayerId(GetTriggerPlayer())] = Vector2.new(x, y);
         if (x != 0 && y != 0) {
-            this.lastCoordinate[GetPlayerId(GetTriggerPlayer())] = new Point(x, y);
+            if (this.lastCoordinate[GetPlayerId(GetTriggerPlayer())]) this.lastCoordinate[GetPlayerId(GetTriggerPlayer())].recycle();
+            this.lastCoordinate[GetPlayerId(GetTriggerPlayer())] = Vector2.new(x, y);
         }
     }
 
@@ -109,10 +111,10 @@ export class InputManagerMouseHandler {
     }
 
     public getLastMousePosition(triggerPlayer: player) {
-        return this.lastPosition[GetPlayerId(triggerPlayer)] || new Point(0, 0);
+        return this.lastPosition[GetPlayerId(triggerPlayer)] || Vector2.new(0, 0);
     }
 
     public getLastMouseCoordinate(triggerPlayer: player) {
-        return this.lastCoordinate[GetPlayerId(triggerPlayer)] || new Point(0, 0);
+        return this.lastCoordinate[GetPlayerId(triggerPlayer)] || Vector2.new(0, 0);
     }
 }

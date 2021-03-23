@@ -1,5 +1,5 @@
 import {UnitAction} from "./UnitAction";
-import {Point} from "../../Utility/Point";
+import {Vector2} from "../../Utility/Data/Vector2";
 import {UnitQueue} from "../Queues/UnitQueue";
 import {ImmediateOrders} from "./ImmediateOrders";
 
@@ -8,10 +8,10 @@ import {ImmediateOrders} from "./ImmediateOrders";
  */
 export class UnitActionImmediate implements UnitAction {
     isFinished: boolean = false;
-    private readonly toPoint: Point;
+    private readonly toPoint: Vector2;
     private readonly order: ImmediateOrders;
 
-    constructor(toPoint: Point, order: ImmediateOrders = ImmediateOrders.holdPosition) {
+    constructor(toPoint: Vector2, order: ImmediateOrders = ImmediateOrders.holdPosition) {
         this.toPoint = toPoint;
         this.order = order;
         this.isFinished = false;

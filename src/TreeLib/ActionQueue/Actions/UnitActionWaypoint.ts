@@ -1,5 +1,5 @@
 import {UnitAction} from "./UnitAction";
-import {Point} from "../../Utility/Point";
+import {Vector2} from "../../Utility/Data/Vector2";
 import {WaypointOrders} from "./WaypointOrders";
 import {Logger} from "../../Logger";
 import {UnitQueue} from "../Queues/UnitQueue";
@@ -9,7 +9,7 @@ import {UnitQueue} from "../Queues/UnitQueue";
  */
 export class UnitActionWaypoint implements UnitAction {
     isFinished: boolean = false;
-    public readonly toPoint: Point;
+    public readonly toPoint: Vector2;
     public readonly acceptableDistance: number;
     public readonly order: WaypointOrders;
     public readonly maxTime: number;
@@ -17,7 +17,7 @@ export class UnitActionWaypoint implements UnitAction {
     public updateTimer: number = 0;
     public idleFor: number = 0;
 
-    constructor(toPoint: Point, order: WaypointOrders = WaypointOrders.smart, acceptableDistance: number = 96, maxTime: number = 600) {
+    constructor(toPoint: Vector2, order: WaypointOrders = WaypointOrders.smart, acceptableDistance: number = 96, maxTime: number = 600) {
         this.toPoint = toPoint;
         this.order = order;
         this.acceptableDistance = acceptableDistance;
@@ -47,8 +47,11 @@ export class UnitActionWaypoint implements UnitAction {
     }
 
     public inObjectiveRange(target: unit) {
-        let targetPoint = Point.fromWidget(target);
+        let targetPoint = Vector2.fromWidget(target);
         let offset = targetPoint.getOffsetTo(this.toPoint);
+
+        targetPoint.recycle();
+        offset.recycle();
 
         if (offset.x > this.acceptableDistance
             || offset.x < -this.acceptableDistance

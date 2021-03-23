@@ -1,5 +1,5 @@
 import {Random} from "../Utility/Random";
-import {Point} from "../Utility/Point";
+import {Vector2} from "../Utility/Data/Vector2";
 
 /**
  * A Visually coherent noise algorithm similar to OpenSimplex.
@@ -22,7 +22,7 @@ export class TreeSimplex {
      * Gets data at a point, simplex 2d range is ±0.707 and not ±1
      * @param point point of impact.
      */
-    public getValueAtPoint(point: Point) {
+    public getValueAtPoint(point: Vector2) {
         return this.getValueAt(point.x, point.y);
     }
     /**

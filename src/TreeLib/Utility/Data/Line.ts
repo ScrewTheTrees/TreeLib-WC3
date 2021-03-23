@@ -1,4 +1,5 @@
-import {Point} from "./Point";
+import {Vector2} from "./Vector2";
+import {Quick} from "../../Quick";
 
 export class Line {
     public x1: number;
@@ -6,15 +7,40 @@ export class Line {
     public x2: number;
     public y2: number;
 
-    constructor(x1: number, y1: number, x2: number, y2: number) {
+    private static stash: Line[] = [];
+
+    public static new(x: number, y: number, x2: number, y2: number): Line {
+        if (this.stash.length > 0) return this.stash.pop()!.updateTo(x, y, x2, y2);
+        else return new Line(x, y, x2, y2)
+    }
+
+    public static recycle(p: Line) {
+        if (!Quick.Contains(this.stash, p))
+            Quick.Push(this.stash, p);
+    }
+
+    public recycle() {
+        Line.recycle(this);
+        return this;
+    }
+
+    private constructor(x1: number, y1: number, x2: number, y2: number) {
         this.x1 = x1;
         this.y1 = y1;
         this.x2 = x2;
         this.y2 = y2;
-
     }
 
-    distanceToSquared(point: Point) {
+    public updateTo(x: number, y: number, x2: number, y2: number) {
+        this.x1 = x;
+        this.y1 = y;
+        this.x2 = x2;
+        this.y2 = y2;
+        return this;
+    }
+
+
+    distanceToSquared(point: Vector2) {
         let A = point.x - this.x1;
         let B = point.y - this.y1;
         let C = this.x2 - this.x1;
@@ -43,7 +69,8 @@ export class Line {
         let dy = point.y - yy;
         return dx * dx + dy * dy;
     }
-    distanceTo(point: Point) {
+
+    distanceTo(point: Vector2) {
         return math.sqrt(this.distanceToSquared(point));
     }
 

@@ -1,4 +1,4 @@
-import {Point} from "../../Utility/Point";
+import {Vector2} from "../../Utility/Data/Vector2";
 import {WaypointOrders} from "./WaypointOrders";
 import {Logger} from "../../Logger";
 import {UnitGroupAction} from "./UnitGroupAction";
@@ -10,7 +10,7 @@ import {UnitGroupQueue} from "../Queues/UnitGroupQueue";
  */
 export class UnitGroupActionWaypoint implements UnitGroupAction {
     isFinished: boolean = false;
-    public readonly toPoint: Point;
+    public readonly toPoint: Vector2;
     public readonly acceptableDistance: number;
     public readonly order: WaypointOrders;
     public readonly maxTime: number;
@@ -18,7 +18,7 @@ export class UnitGroupActionWaypoint implements UnitGroupAction {
     public updateTimer: number = 0;
 
     //300 for acceptable distance is mainly for groups of 12 which has a a sweetspot around ~222, so we use a more decent size
-    constructor(toPoint: Point, order: WaypointOrders = WaypointOrders.smart, acceptableDistance: number = 400, maxTime: number = 1200) {
+    constructor(toPoint: Vector2, order: WaypointOrders = WaypointOrders.smart, acceptableDistance: number = 400, maxTime: number = 1200) {
         this.toPoint = toPoint;
         this.order = order;
         this.acceptableDistance = acceptableDistance;
@@ -47,15 +47,16 @@ export class UnitGroupActionWaypoint implements UnitGroupAction {
         DestroyGroup(g);
     }
 
-    private getDistanceToPoint(targets: unit[], point: Point): number {
+    private getDistanceToPoint(targets: unit[], point: Vector2): number {
         if (targets.length == 0) return 9999999;
         let num = 0;
-        let targetPoint = new Point(0, 0);
+        let targetPoint = Vector2.new(0, 0);
         for (let i = 0; i < targets.length; i++) {
             let target = targets[i];
             targetPoint.updateToWidget(target);
             num += targetPoint.distanceToSquared(point);
         }
+        targetPoint.recycle();
         return math.sqrt(num / targets.length);
     }
 

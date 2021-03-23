@@ -1,5 +1,5 @@
 import {Node} from "./Node";
-import {Point} from "../Utility/Point";
+import {Vector2} from "../Utility/Data/Vector2";
 import {Logger} from "../Logger";
 import {PriorityQueue} from "../Utility/Data/PriorityQueue";
 import {PathfindResult} from "./PathfindResult";
@@ -12,13 +12,13 @@ export class Pathfinder {
     public nodeTable: NodeTable = new NodeTable();
     public useCache: boolean = true;
 
-    public findPath(from: Point, to: Point): PathfindResult {
+    public findPath(from: Vector2, to: Vector2): PathfindResult {
         let startNode = this.getNodeClosestTo(from);
         let endNode = this.getNodeClosestTo(to);
         return this.findPathByNodes(startNode, endNode, from, to);
     }
 
-    public findPathByNodes(startNode: Node, endNode: Node, from: Point, to: Point): PathfindResult {
+    public findPathByNodes(startNode: Node, endNode: Node, from: Vector2, to: Vector2): PathfindResult {
         if (this.useCache) {
             let node1 = this.nodeTable.get(startNode, endNode);
             if (node1 != null) {
@@ -82,10 +82,10 @@ export class Pathfinder {
         Logger.verbose("compileNodes ", compileNodes.length);
 
         //Reverse Path and convert to points.
-        let points: Point[] = [];
+        let points: Vector2[] = [];
         for (let i = compileNodes.length - 1; i >= 0; i--) {
             let node = compileNodes[i];
-            points.push(Point.copy(node.point));
+            points.push(Vector2.copy(node.point));
         }
 
         let pathfindResult = new PathfindResult(points, finalNode == endNode, startNode, endNode, finalNode);
@@ -139,7 +139,7 @@ export class Pathfinder {
         return node;
     }
 
-    public getNodeClosestTo(point: Point): Node {
+    public getNodeClosestTo(point: Vector2): Node {
         let closest = this.nodes[0];
         if (this.nodes.length > 0) {
             let distance = point.distanceTo(closest.point);
@@ -157,7 +157,7 @@ export class Pathfinder {
         return closest;
     }
 
-    public getClosestWithCameFrom(point: Point): Node {
+    public getClosestWithCameFrom(point: Vector2): Node {
         let closest = this.findFirstWithCameFrom();
         if (this.nodes.length > 0) {
             let distance = point.distanceTo(closest.point);

@@ -1,16 +1,16 @@
-import {Point} from "../Utility/Point";
+import {Vector2} from "../Utility/Data/Vector2";
 import {Quick} from "../Quick";
 import {Node} from "./Node";
 
 export class PathfindResult {
-    public path: Point[];
+    public path: Vector2[];
     public reachedTheEnd: boolean;
-    private optimisedPath: Point[] | undefined;
+    private optimisedPath: Vector2[] | undefined;
     public startNode: Node;
     public endNode: Node;
     public finalNode: Node;
 
-    constructor(points: Point[], reachedTheEnd: boolean, startNode: Node, endNode: Node, finalNode: Node) {
+    constructor(points: Vector2[], reachedTheEnd: boolean, startNode: Node, endNode: Node, finalNode: Node) {
         this.path = points;
         this.reachedTheEnd = reachedTheEnd;
         this.startNode = startNode;
@@ -21,7 +21,7 @@ export class PathfindResult {
     /**
      * Removes redundant nodes to make path less complex
      */
-    getPathOptimised(): Point[] {
+    getPathOptimised(): Vector2[] {
         let path = this.optimisedPath;
         if (path == undefined) {
             path = [];
@@ -41,7 +41,7 @@ export class PathfindResult {
     }
 
     copy() {
-        let newPath: Point[] = [];
+        let newPath: Vector2[] = [];
         for (let i = 0; i < this.path.length; i++) {
             let value = this.path[i];
             newPath.push(value.copy());

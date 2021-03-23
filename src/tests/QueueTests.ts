@@ -2,7 +2,7 @@ import {Logger} from "../TreeLib/Logger";
 import {Players} from "../TreeLib/Structs/Players";
 import {ActionQueue} from "../TreeLib/ActionQueue/ActionQueue";
 import {UnitActionWaypoint} from "../TreeLib/ActionQueue/Actions/UnitActionWaypoint";
-import {Point} from "../TreeLib/Utility/Point";
+import {Vector2} from "../TreeLib/Utility/Data/Vector2";
 import {WaypointOrders} from "../TreeLib/ActionQueue/Actions/WaypointOrders";
 import {UnitActionKillUnit} from "../TreeLib/ActionQueue/Actions/UnitActionKillUnit";
 import {UnitActionDeath} from "../TreeLib/ActionQueue/Actions/UnitActionDeath";
@@ -25,10 +25,10 @@ export class QueueTests {
                 Quick.Push(units, CreateUnit(Players.BLUE, FourCC("hfoo"), -6000, 0, 0));
             }
             let walkAround = new UnitGroupQueue(units,
-                new UnitGroupActionWaypoint(new Point(-6000, -6000), WaypointOrders.attack),
-                new UnitGroupActionWaypoint(new Point(-6000, 6000), WaypointOrders.attack),
-                new UnitGroupActionWaypoint(new Point(6000, 6000), WaypointOrders.attack),
-                new UnitGroupActionWaypoint(new Point(6000, -6000), WaypointOrders.attack),
+                new UnitGroupActionWaypoint(Vector2.new(-6000, -6000), WaypointOrders.attack),
+                new UnitGroupActionWaypoint(Vector2.new(-6000, 6000), WaypointOrders.attack),
+                new UnitGroupActionWaypoint(Vector2.new(6000, 6000), WaypointOrders.attack),
+                new UnitGroupActionWaypoint(Vector2.new(6000, -6000), WaypointOrders.attack),
                 new UnitGroupActionGoToAction(0),
             );
 
@@ -37,11 +37,11 @@ export class QueueTests {
             Delay.addDelay(() => {
                 let mortar = CreateUnit(Players.RED, FourCC("hmtm"), -1400, -3000, 0);
                 ActionQueue.createUnitQueue(mortar,
-                    new UnitActionWaypoint(new Point(870, -3064)),
-                    new UnitActionWaypoint(new Point(870, -1450), WaypointOrders.smart),
-                    new UnitActionImmediate(new Point(870, -1450), ImmediateOrders.holdPosition),
+                    new UnitActionWaypoint(Vector2.new(870, -3064)),
+                    new UnitActionWaypoint(Vector2.new(870, -1450), WaypointOrders.smart),
+                    new UnitActionImmediate(Vector2.new(870, -1450), ImmediateOrders.holdPosition),
                     new UnitActionDelay(3),
-                    new UnitActionWaypoint(new Point(2000, -1450), WaypointOrders.attack),
+                    new UnitActionWaypoint(Vector2.new(2000, -1450), WaypointOrders.attack),
                     new UnitActionKillUnit(killKnight),
                     new UnitActionDeath(true)
                 )

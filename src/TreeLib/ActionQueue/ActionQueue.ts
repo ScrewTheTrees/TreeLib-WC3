@@ -4,7 +4,7 @@ import {Queue} from "./Queues/Queue";
 import {UnitQueue} from "./Queues/UnitQueue";
 import {UnitAction} from "./Actions/UnitAction";
 import {Logger} from "../Logger";
-import {Point} from "../Utility/Point";
+import {Vector2} from "../Utility/Data/Vector2";
 import {UnitActionWaypoint} from "./Actions/UnitActionWaypoint";
 import {WaypointOrders} from "./Actions/WaypointOrders";
 import {UnitActionGoToAction} from "./Actions/UnitActionGoToAction";
@@ -113,7 +113,7 @@ export class ActionQueue extends Entity {
      * @param point2
      * @param delay The delay on each edge, no delay by default
      */
-    public static createSimplePatrol(target: unit, point1: Point, point2: Point, delay: number = 0) {
+    public static createSimplePatrol(target: unit, point1: Vector2, point2: Vector2, delay: number = 0) {
         return this.getInstance().createUnitQueue(target,
             new UnitActionWaypoint(point1, WaypointOrders.attack),
             new UnitActionDelay(delay),
@@ -129,7 +129,7 @@ export class ActionQueue extends Entity {
      * @param point
      * @param delay the delay when the unit is ordered back... dont put it too low.
      */
-    public static createSimpleGuardPoint(target: unit, point: Point, delay: number = 15) {
+    public static createSimpleGuardPoint(target: unit, point: Vector2, delay: number = 15) {
         return this.getInstance().createUnitQueue(target,
             new UnitActionWaypoint(point, WaypointOrders.attack),
             new UnitActionDelay(delay),
@@ -143,7 +143,7 @@ export class ActionQueue extends Entity {
      * @param point
      * @param delay the delay when the unit is ordered back... dont put it too low.
      */
-    public static createGroupGuardPoint(targets: unit[], point: Point, delay: number = 15) {
+    public static createGroupGuardPoint(targets: unit[], point: Vector2, delay: number = 15) {
         return this.getInstance().createUnitGroupQueue(targets,
             new UnitGroupActionWaypoint(point, WaypointOrders.attack),
             new UnitGroupActionDelay(delay),

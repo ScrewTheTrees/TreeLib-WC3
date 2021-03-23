@@ -1,8 +1,8 @@
-import {Point} from "../Utility/Point";
+import {Vector2} from "../Utility/Data/Vector2";
 import {Quick} from "../Quick";
 
 export class Node {
-    public point: Point;
+    public point: Vector2;
     public neighbors: Node[] = [];
     public disabled = false;
 
@@ -13,7 +13,7 @@ export class Node {
     public cameFrom: Node | null = null;
     public costSoFar: number = 0;
 
-    constructor(point: Point) {
+    constructor(point: Vector2) {
         this.point = point;
     }
 

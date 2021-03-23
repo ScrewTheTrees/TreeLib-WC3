@@ -2,18 +2,36 @@
  * My wrapper for Locations, contains some useful helper functions and wrappers from other functions.
  * In particular it provides functions that automatically cleans up the locations automatically.
  */
-import {Delay} from "./Delay";
+import {Delay} from "../Delay";
+import {Quick} from "../../Quick";
 
-export class Point {
+export class Vector2 {
     public x: number;
     public y: number;
 
-    constructor(x: number, y: number) {
+    private constructor(x: number, y: number) {
         this.x = x;
         this.y = y;
     }
 
-    public distanceTo(target: Point): number {
+    private static stash: Vector2[] = [];
+
+    public static new(x: number, y: number): Vector2 {
+        if (this.stash.length > 0) return this.stash.pop()!.updateTo(x, y);
+        else return new Vector2(x, y)
+    }
+
+    public static recycle(p: Vector2) {
+        if (!Quick.Contains(this.stash, p))
+            Quick.Push(this.stash, p);
+    }
+
+    public recycle() {
+        Vector2.recycle(this);
+        return this;
+    }
+
+    public distanceTo(target: Vector2): number {
         return math.sqrt(((this.x - target.x) * (this.x - target.x)) + ((this.y - target.y) * (this.y - target.y)));
     }
 
@@ -21,29 +39,33 @@ export class Point {
         return math.sqrt(((this.x - targetX) * (this.x - targetX)) + ((this.y - targetY) * (this.y - targetY)));
     }
 
-    public distanceToSquared(target: Point): number {
+    public distanceToSquared(target: Vector2): number {
         return ((this.x - target.x) * (this.x - target.x)) + ((this.y - target.y) * (this.y - target.y));
     }
 
-    public directionTo(target: Point) {
+    public directionTo(target: Vector2) {
         let radians = math.atan(target.y - this.y, target.x - this.x);
         return (radians * 180 / Math.PI);
     }
 
-    public getOffsetTo(target: Point): Point {
+    public getOffsetTo(target: Vector2): Vector2 {
         let x = target.x - this.x;
         let y = target.y - this.y;
-        return new Point(x, y);
+        return Vector2.new(x, y);
     }
 
-    public addOffset(offset: Point): Point {
+    public addOffset(offset: Vector2): Vector2 {
         this.x += offset.x;
         this.y += offset.y;
         return this;
     }
 
-    public getBetween(offset: Point): Point {
-        return new Point((this.x + offset.x) / 2, (this.y + offset.y) / 2);
+    public getBetween(offset: Vector2): Vector2 {
+        return Vector2.new((this.x + offset.x) / 2, (this.y + offset.y) / 2);
+    }
+
+    public getAngle() {
+        return Math.atan2(this.x, this.y);
     }
 
     public updateToLocation(inputLoc: location) {
@@ -65,17 +87,23 @@ export class Point {
         return this;
     }
 
-    public updateTo(p: Point) {
+    public updateToPoint(p: Vector2) {
         this.x = p.x;
         this.y = p.y;
         return this;
     }
 
+    public updateTo(x: number, y: number) {
+        this.x = x;
+        this.y = y;
+        return this;
+    }
 
-    public polarProject(distance: number, angle: number): Point {
+
+    public polarProject(distance: number, angle: number): Vector2 {
         let x = this.x + distance * math.cos(angle * bj_DEGTORAD);
         let y = this.y + distance * math.sin(angle * bj_DEGTORAD);
-        return new Point(x, y);
+        return Vector2.new(x, y);
     }
 
     public toLocation() {
@@ -93,11 +121,11 @@ export class Point {
         return loc;
     }
 
-    public isAlignedWith(point: Point): boolean {
+    public isAlignedWith(point: Vector2): boolean {
         return (this.x == point.x || this.y == point.y);
     }
 
-    public static getCenterOfPoints(arr: Point[]) {
+    public static getCenterOfPoints(arr: Vector2[]) {
         let sumX = 0;
         let sumY = 0;
         for (let i = 0; i < arr.length; i++) {
@@ -106,42 +134,42 @@ export class Point {
         }
         sumX = sumX / arr.length;
         sumY = sumY / arr.length;
-        return new Point(sumX, sumY);
+        return Vector2.new(sumX, sumY);
     }
 
     public static fromLocation(inputLoc: location) {
-        return new Point(GetLocationX(inputLoc), GetLocationY(inputLoc));
+        return Vector2.new(GetLocationX(inputLoc), GetLocationY(inputLoc));
     }
 
     public static fromLocationClean(inputLoc: location) {
-        let point = new Point(GetLocationX(inputLoc), GetLocationY(inputLoc));
+        let point = Vector2.new(GetLocationX(inputLoc), GetLocationY(inputLoc));
         RemoveLocation(inputLoc);
         return point;
     }
 
     public static fromWidget(inputU: widget) {
-        return new Point(GetWidgetX(inputU), GetWidgetY(inputU));
+        return Vector2.new(GetWidgetX(inputU), GetWidgetY(inputU));
     }
 
     public static fromRectCenter(input: rect) {
-        return new Point(GetRectCenterX(input), GetRectCenterY(input));
+        return Vector2.new(GetRectCenterX(input), GetRectCenterY(input));
     }
 
     public static randomPointInRect(input: rect) {
-        return new Point(math.random(GetRectMinX(input) + 32, GetRectMaxX(input) - 32),
+        return Vector2.new(math.random(GetRectMinX(input) + 32, GetRectMaxX(input) - 32),
             math.random(GetRectMinY(input) + 32, GetRectMaxY(input) - 32)
         );
     }
 
-    public static copy(input: Point): Point {
-        return new Point(input.x, input.y);
+    public static copy(input: Vector2): Vector2 {
+        return Vector2.new(input.x, input.y);
     }
 
-    public copy(): Point {
-        return Point.copy(this);
+    public copy(): Vector2 {
+        return Vector2.copy(this);
     }
 
-    distanceToLine(lineStart: Point, lineEnd: Point) {
+    distanceToLine(lineStart: Vector2, lineEnd: Vector2) {
         let A = this.x - lineStart.x;
         let B = this.y - lineStart.y;
         let C = lineEnd.x - lineStart.x;
@@ -176,7 +204,7 @@ export class Point {
         return "point {x:" + this.x + ", y:" + this.y + " }";
     }
 
-    public equals(point: Point) {
+    public equals(point: Vector2) {
         return point.x == this.x && point.y == this.y;
     }
 }

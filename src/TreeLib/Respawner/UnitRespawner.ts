@@ -1,6 +1,6 @@
 import {Spawner} from "./Spawner";
 import {IsValidUnit} from "../Misc";
-import {Point} from "../Utility/Point";
+import {Vector2} from "../Utility/Data/Vector2";
 
 export class UnitRespawner implements Spawner {
     public target: unit;
@@ -10,13 +10,21 @@ export class UnitRespawner implements Spawner {
     public counter: number = 0;
     public isHero: boolean;
     public respawnAtCurrentLocation: boolean;
-    public respawnLocation: Point;
+    private _respawnLocation: Vector2;
     public doEyeCandy: boolean;
     public rotation: number;
     public onRespawn: ((self: UnitRespawner) => void) | undefined;
     public respawns: number;
     public filter: ((self: UnitRespawner) => boolean) | undefined;
 
+    get respawnLocation(): Vector2 {
+        return this._respawnLocation;
+    }
+
+    set respawnLocation(value: Vector2) {
+        this._respawnLocation.recycle();
+        this._respawnLocation = value;
+    }
 
     /**
      * See Respawner.createNewUnitRespawner
@@ -32,7 +40,7 @@ export class UnitRespawner implements Spawner {
         this.rotation = GetUnitFacing(this.target);
         this.respawns = maxRespawns;
 
-        this.respawnLocation = Point.fromWidget(this.target);
+        this._respawnLocation = Vector2.fromWidget(this.target);
     }
 
     update(timeStep: number): void {
@@ -41,7 +49,7 @@ export class UnitRespawner implements Spawner {
         } else {
             this.counter = 0;
             if (!this.respawnAtCurrentLocation) {
-                this.respawnLocation = Point.fromWidget(this.target);
+                this.respawnLocation = Vector2.fromWidget(this.target);
                 this.rotation = GetUnitFacing(this.target);
             }
         }

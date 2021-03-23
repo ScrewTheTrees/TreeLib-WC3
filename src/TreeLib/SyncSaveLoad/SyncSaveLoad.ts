@@ -1,8 +1,8 @@
 import {Hooks} from "../Hooks";
 import {StringBuilder} from "../Utility/StringBuilder";
 import {Logger} from "../Logger";
-import {EncodingBase64} from "../Utility/Data/Encodings/EncodingBase64";
-import {EncodingHex} from "../Utility/Data/Encodings/EncodingHex";
+import {EncodingBase64} from "../Utility/Encodings/EncodingBase64";
+import {EncodingHex} from "../Utility/Encodings/EncodingHex";
 
 export class SyncSaveLoad {
     private static instance: SyncSaveLoad;

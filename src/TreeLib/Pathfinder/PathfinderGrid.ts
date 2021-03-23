@@ -1,5 +1,5 @@
 import {Node} from "./Node";
-import {Point} from "../Utility/Point";
+import {Vector2} from "../Utility/Data/Vector2";
 import {Pathfinder} from "./Pathfinder";
 
 export class PathfinderGrid extends Pathfinder {
@@ -12,7 +12,7 @@ export class PathfinderGrid extends Pathfinder {
                 this.grid[i] = [];
             }
             for (let j = startY; j < endY; j += stepSize) {
-                let node = new Node(new Point(i + (stepSize / 2), j + (stepSize / 2)));
+                let node = new Node(Vector2.new(i + (stepSize / 2), j + (stepSize / 2)));
                 this.grid[i][j] = node;
 
                 let up = this.grid[i] != null ? this.grid[i][j - stepSize] : null;
