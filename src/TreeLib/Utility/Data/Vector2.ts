@@ -4,8 +4,9 @@
  */
 import {Delay} from "../Delay";
 import {Quick} from "../../Quick";
+import {Recyclable} from "./Recyclable";
 
-export class Vector2 {
+export class Vector2 implements Recyclable {
     public x: number;
     public y: number;
 

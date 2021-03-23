@@ -1,6 +1,7 @@
 import {Quick} from "../../Quick";
+import {Recyclable} from "./Recyclable";
 
-export class Vector3 {
+export class Vector3 implements Recyclable {
     public x: number;
     public y: number;
     public z: number;
