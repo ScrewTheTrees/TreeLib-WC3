@@ -35,8 +35,23 @@ export class Vector3 {
         return this;
     }
 
-    public isEmpty() {
-        return this.x == 0 && this.y == 0 && this.z == 0;
+    public distanceTo(target: Vector3) {
+        return math.sqrt(this.distanceToSquaredXYZ(target.x, target.y, target.z));
+    }
+
+    public distanceToXYZ(targetX: number, targetY: number, targetZ: number) {
+        return math.sqrt(this.distanceToSquaredXYZ(targetX, targetY, targetZ));
+    }
+
+    public distanceToSquared(target: Vector3) {
+        return this.distanceToSquaredXYZ(target.x, target.y, target.z);
+    }
+
+    public distanceToSquaredXYZ(targetX: number, targetY: number, targetZ: number) {
+        const xx = (this.x - targetX) * (this.x - targetX);
+        const yy = (this.y - targetY) * (this.y - targetY);
+        const zz = (this.z - targetZ) * (this.z - targetZ);
+        return xx + yy + zz;
     }
 
     public getYaw() {
@@ -45,5 +60,9 @@ export class Vector3 {
 
     public getPitch() {
         return Math.atan2(math.sqrt(this.z * this.z + this.x * this.x), this.y) + Math.PI;
+    }
+
+    public isEmpty() {
+        return this.x == 0 && this.y == 0 && this.z == 0;
     }
 }

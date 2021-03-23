@@ -40,7 +40,7 @@ export class Line {
     }
 
 
-    distanceToSquared(point: Vector2) {
+    public distanceToSquared(point: Vector2) {
         let A = point.x - this.x1;
         let B = point.y - this.y1;
         let C = this.x2 - this.x1;
@@ -70,7 +70,7 @@ export class Line {
         return dx * dx + dy * dy;
     }
 
-    distanceTo(point: Vector2) {
+    public distanceTo(point: Vector2) {
         return math.sqrt(this.distanceToSquared(point));
     }
 

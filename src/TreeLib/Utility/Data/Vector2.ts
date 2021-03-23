@@ -32,15 +32,21 @@ export class Vector2 {
     }
 
     public distanceTo(target: Vector2): number {
-        return math.sqrt(((this.x - target.x) * (this.x - target.x)) + ((this.y - target.y) * (this.y - target.y)));
+        return math.sqrt(this.distanceToSquaredXY(target.x, target.y));
     }
 
     public distanceToXY(targetX: number, targetY: number): number {
-        return math.sqrt(((this.x - targetX) * (this.x - targetX)) + ((this.y - targetY) * (this.y - targetY)));
+        return math.sqrt(this.distanceToSquaredXY(targetX, targetY));
     }
 
     public distanceToSquared(target: Vector2): number {
-        return ((this.x - target.x) * (this.x - target.x)) + ((this.y - target.y) * (this.y - target.y));
+        return this.distanceToSquaredXY(target.x, target.y);
+    }
+
+    public distanceToSquaredXY(targetX: number, targetY: number): number {
+        const xx = (this.x - targetX) * (this.x - targetX);
+        const yy = (this.y - targetY) * (this.y - targetY);
+        return (xx + yy);
     }
 
     public directionTo(target: Vector2) {
