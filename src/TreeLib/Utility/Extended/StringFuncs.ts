@@ -3,7 +3,7 @@ export class StringFuncs {
     public static blanks = "\n ";
 
     public static isBlank(s: string) {
-        return (this.blanks.indexOf(s) >= 0);
+        return (StringFuncs.blanks.indexOf(s) >= 0);
     }
 
     public static UnpackStringNewlines(value: string) {
@@ -13,7 +13,7 @@ export class StringFuncs {
         let skipToRealChar = true;
         for (let i = 0; i < value.length; i++) {
             let currentChar = value.charAt(i);
-            if (this.isBlank(currentChar) && previousChar == "\n") {
+            if (StringFuncs.isBlank(currentChar) && previousChar == "\n") {
                 skipToRealChar = true;
                 continue;
             }
@@ -44,7 +44,7 @@ export class StringFuncs {
         if (longerLength == 0) {
             return 1.0;
         }
-        return (longerLength - this.editDistance(longer, shorter)) / parseFloat(tostring(longerLength));
+        return (longerLength - StringFuncs.editDistance(longer, shorter)) / parseFloat(tostring(longerLength));
     }
 
     private static editDistance(s1: string, s2: string) {
