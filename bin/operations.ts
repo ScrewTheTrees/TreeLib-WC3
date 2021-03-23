@@ -39,7 +39,7 @@ switch (operation) {
             data += `export * from "${dir}"\n`;
         }
 
-        fs.writeFileSync("./index.ts", data);
+        fs.writeFileSync("./index.d.ts", data);
         break;
 }
 
