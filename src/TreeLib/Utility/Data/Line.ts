@@ -8,6 +8,13 @@ export class Line implements Recyclable {
     public x2: number;
     public y2: number;
 
+    private constructor(x1: number, y1: number, x2: number, y2: number) {
+        this.x1 = x1;
+        this.y1 = y1;
+        this.x2 = x2;
+        this.y2 = y2;
+    }
+
     private static stash: Line[] = [];
 
     public static new(x: number, y: number, x2: number, y2: number): Line {
@@ -25,13 +32,6 @@ export class Line implements Recyclable {
         return this;
     }
 
-    private constructor(x1: number, y1: number, x2: number, y2: number) {
-        this.x1 = x1;
-        this.y1 = y1;
-        this.x2 = x2;
-        this.y2 = y2;
-    }
-
     public updateTo(x: number, y: number, x2: number, y2: number) {
         this.x1 = x;
         this.y1 = y;
@@ -40,8 +40,7 @@ export class Line implements Recyclable {
         return this;
     }
 
-
-    public distanceToSquared(point: Vector2) {
+    public distanceToLineSquared(point: Vector2) {
         let A = point.x - this.x1;
         let B = point.y - this.y1;
         let C = this.x2 - this.x1;
@@ -71,8 +70,8 @@ export class Line implements Recyclable {
         return dx * dx + dy * dy;
     }
 
-    public distanceTo(point: Vector2) {
-        return math.sqrt(this.distanceToSquared(point));
+    public distanceToLine(point: Vector2) {
+        return math.sqrt(this.distanceToLineSquared(point));
     }
 
 
