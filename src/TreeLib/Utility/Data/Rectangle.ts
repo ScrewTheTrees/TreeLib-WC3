@@ -41,6 +41,16 @@ export class Rectangle implements Recyclable {
         return this.new(v1.x, v1.y, v2.x, v2.y);
     }
 
+
+
+    public intersects(other: Rectangle) {
+        return this.xMax > other.xMin
+            && this.xMin < other.xMax
+            && this.yMax > other.yMin
+            && this.yMin < other.yMax;
+    }
+
+    //WC3 API
     public toRect() {
         return Rect(this.xMin, this.yMin, this.xMax, this.yMax);
     }

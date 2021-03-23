@@ -45,4 +45,13 @@ export class Cube implements Recyclable {
         return this.new(v1.x, v1.y, v1.z, v2.x, v2.y, v2.z);
     }
 
+    public intersects(other: Cube) {
+        return this.xMax > other.xMin
+            && this.xMin < other.xMax
+            && this.yMax > other.yMin
+            && this.yMin < other.yMax
+            && this.zMax > other.zMin
+            && this.zMin < other.zMax;
+    }
+
 }
