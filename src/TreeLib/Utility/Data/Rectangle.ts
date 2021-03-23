@@ -1,7 +1,6 @@
 import {Quick} from "../../Quick";
 import {Recyclable} from "./Recyclable";
 import {Vector2} from "./Vector2";
-import {Vector3} from "./Vector3";
 
 export class Rectangle implements Recyclable {
     public xMin!: number;
@@ -38,7 +37,7 @@ export class Rectangle implements Recyclable {
         return this;
     }
 
-    public static fromVectors(v1: Vector2, v2: Vector3): Rectangle {
+    public static fromVectors(v1: Vector2, v2: Vector2): Rectangle {
         return this.new(v1.x, v1.y, v2.x, v2.y);
     }
 

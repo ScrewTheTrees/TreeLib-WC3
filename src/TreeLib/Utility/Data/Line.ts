@@ -2,7 +2,7 @@ import {Vector2} from "./Vector2";
 import {Quick} from "../../Quick";
 import {Recyclable} from "./Recyclable";
 
-export class Line  implements Recyclable {
+export class Line implements Recyclable {
     public x1: number;
     public y1: number;
     public x2: number;
