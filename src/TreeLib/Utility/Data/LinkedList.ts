@@ -52,6 +52,16 @@ export class LinkedList<T> {
         return null;
     }
 
+    public forEach(func: (data: T) => void): ListNode<T> | null {
+        let currentNode = this.first;
+        while (currentNode != null) {
+            func(currentNode.element);
+            currentNode = currentNode.next;
+        }
+
+        return null;
+    }
+
     public clear() {
         this.first = undefined;
         this.last = undefined;

@@ -1,21 +1,21 @@
 import {Quick} from "../../Quick";
 
-export class IndexSpawnTable {
-    private values: string[];
+export class IndexSpawnTable<T> {
+    private values: T[];
 
-    constructor(...values: string[]) {
+    constructor(...values: T[]) {
         this.values = values;
     }
 
-    public add(item: string) {
+    public add(item: T) {
         Quick.Push(this.values, item);
     }
 
     public purge() {
-        this.values = [];
+        Quick.Clear(this.values);
     }
 
-    public remove(id: string) {
+    public remove(id: T) {
         for (let i = 0; i < this.values.length; i++) {
             if (this.values[i] == id) {
                 Quick.Slice(this.values, i);
@@ -24,11 +24,7 @@ export class IndexSpawnTable {
         }
     }
 
-    public getRandom(): string {
+    public getRandom(): T {
         return this.values[GetRandomInt(0, this.values.length - 1)];
-    }
-
-    public getRandomAsId(): number {
-        return FourCC(this.values[GetRandomInt(0, this.values.length - 1)]);
     }
 }
