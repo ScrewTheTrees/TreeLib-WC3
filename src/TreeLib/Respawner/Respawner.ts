@@ -23,15 +23,14 @@ export class Respawner extends Entity {
     public paused = false;
 
     constructor() {
-        super();
-        this._timerDelay = 1;
+        super(1);
     }
 
     step(): void {
         if (!this.paused) {
             for (let index = 0; index < this.spawners.length; index++) {
                 let spawner = this.spawners[index];
-                spawner.update(this._timerDelay);
+                spawner.update(this.timerDelay);
                 if (spawner.respawns == 0) {
                     Quick.Slice(this.spawners, index);
                     index -= 1;

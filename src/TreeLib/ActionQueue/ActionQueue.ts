@@ -34,10 +34,9 @@ export class ActionQueue extends Entity {
     }
 
     private allQueues: Queue[] = [];
-    public _timerDelay: number = 0.5;
 
     constructor() {
-        super();
+        super(0.5);
     }
 
     public createUnitQueue(target: unit, ...actions: UnitAction[]): UnitQueue {
@@ -72,7 +71,7 @@ export class ActionQueue extends Entity {
                 Logger.LogVerbose("Spliced queue:", this.allQueues.length);
                 i -= 1;
             } else if (!queue.isPaused) {
-                queue.update(this._timerDelay);
+                queue.update(this.timerDelay);
             }
         }
     }

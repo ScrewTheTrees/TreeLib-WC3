@@ -33,7 +33,7 @@ export class InputManagerTest extends Entity {
     }
 
     step(): void {
-        this._timerDelay = 0.1;
+        this.timerDelay = 0.1;
         if (InputManager.isKeyButtonHeld(OSKEY_M, Player(0))) {
             Logger.warning("HOLDING M");
         }

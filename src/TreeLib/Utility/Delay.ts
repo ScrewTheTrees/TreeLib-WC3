@@ -18,8 +18,7 @@ export class Delay extends Entity {
     }
 
     private constructor() {
-        super();
-        this._timerDelay = 0.01;
+        super(0.01);
     }
 
     private queue: DelayDto[] = [];
@@ -33,21 +32,17 @@ export class Delay extends Entity {
     }
 
     step(): void {
-        {
-            {
-                for (let index = 0; index < this.queue.length; index++) {
-                    let queueDto = this.queue[index];
-                    queueDto.age += 0.01;
-                    if (queueDto.age >= queueDto.delay) {
-                        queueDto.function();
-                        queueDto.repeatCounter += 1;
-                        if (queueDto.repeatCounter >= queueDto.repeats) {
-                            Quick.Slice(this.queue, index);
-                            index -= 1;
-                        } else {
-                            queueDto.age = 0;
-                        }
-                    }
+        for (let index = 0; index < this.queue.length; index++) {
+            let queueDto = this.queue[index];
+            queueDto.age += 0.01;
+            if (queueDto.age >= queueDto.delay) {
+                queueDto.function();
+                queueDto.repeatCounter += 1;
+                if (queueDto.repeatCounter >= queueDto.repeats) {
+                    Quick.Slice(this.queue, index);
+                    index -= 1;
+                } else {
+                    queueDto.age = 0;
                 }
             }
         }

@@ -15,8 +15,7 @@ export class TemporaryEffects extends Entity {
     }
 
     constructor() {
-        super();
-        this._timerDelay = 0.5;
+        super(0.5);
     }
 
 
@@ -29,7 +28,7 @@ export class TemporaryEffects extends Entity {
     step(): void {
         for (let i = 0; i < this.runes.length; i++) {
             let value = this.runes[i];
-            value.currentTime += this._timerDelay;
+            value.currentTime += this.timerDelay;
             value.step();
             if (value.currentTime >= value.timer) {
                 value.destroy();
