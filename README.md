@@ -16,6 +16,9 @@ You can find me primarily in the Hive workshop discord: https://discord.hivework
 
 ## How to install
 Use a wc3 template like https://github.com/cipherxof/wc3-ts-template and then add "wc3-treelib" as a devDependency.
+
 npm install the dependencies.
+
 Go into your tsconfig.json and add "wc3-treelib" to the "types" array.
+
 You can now use all TreeLib functionality and hopefully get autocomplete in your IDE.
