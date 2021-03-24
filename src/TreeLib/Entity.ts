@@ -10,19 +10,20 @@ export abstract class Entity {
     public static pauseExecution = false;
 
     //TimerDelay API
-    private _timerDelay!: number;
+    private _timerDelay: number;
     get timerDelay(): number {
         return this._timerDelay;
     }
     set timerDelay(value: number) {
         this.remove();
-        value = Math.round(value * 10_00) / 10_00; //Should give 0.001 of precision.
+        value = Math.round(value * 1_000) / 1_000; //Should give 0.001 of precision.
         this._timerDelay = value;
         this.add();
     }
 
     public constructor(timerDelay: number = 0.01) {
-        this.timerDelay = timerDelay;
+        this._timerDelay = Math.round(timerDelay * 1_000) / 1_000;
+        this.add();
     }
     //Logic to execute when the logic beat hits.
     abstract step(): void;
