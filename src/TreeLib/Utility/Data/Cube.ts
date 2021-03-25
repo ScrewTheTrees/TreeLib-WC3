@@ -72,4 +72,42 @@ export class Cube implements Recyclable {
             && this.zMin < other.zMax;
     }
 
+
+    //Basic math
+    public addVector3(v: Vector3) {
+        this.xMin += v.x;
+        this.xMax += v.x;
+        this.yMin += v.y;
+        this.yMax += v.y;
+        this.zMin += v.z;
+        this.zMax += v.z;
+        return this;
+    }
+    public subVector3(v: Vector3) {
+        this.xMin -= v.x;
+        this.xMax -= v.x;
+        this.yMin -= v.y;
+        this.yMax -= v.y;
+        this.zMin -= v.z;
+        this.zMax -= v.z;
+        return this;
+    }
+    public mulVector3(v: Vector3) {
+        this.xMin *= v.x;
+        this.xMax *= v.x;
+        this.yMin *= v.y;
+        this.yMax *= v.y;
+        this.zMin *= v.z;
+        this.zMax *= v.z;
+        return this;
+    }
+    public divVector3(v: Vector3) {
+        this.xMin /= v.x;
+        this.xMax /= v.x;
+        this.yMin /= v.y;
+        this.yMax /= v.y;
+        this.zMin /= v.z;
+        this.zMax /= v.z;
+        return this;
+    }
 }

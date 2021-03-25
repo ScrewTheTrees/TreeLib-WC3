@@ -91,4 +91,30 @@ export class Vector3 implements Recyclable {
     public isEmpty() {
         return this.x == 0 && this.y == 0 && this.z == 0;
     }
+
+    //Basic math
+    public addVector3(v: Vector3) {
+        this.x += v.x;
+        this.y += v.y;
+        this.z += v.z;
+        return this;
+    }
+    public subVector3(v: Vector3) {
+        this.x -= v.x;
+        this.y -= v.y;
+        this.z -= v.z;
+        return this;
+    }
+    public mulVector3(v: Vector3) {
+        this.x *= v.x;
+        this.y *= v.y;
+        this.z *= v.z;
+        return this;
+    }
+    public divVector3(v: Vector3) {
+        this.x /= v.x;
+        this.y /= v.y;
+        this.z /= v.z;
+        return this;
+    }
 }
