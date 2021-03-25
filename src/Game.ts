@@ -9,6 +9,10 @@ import {InputManagerTest} from "./tests/InputManagerTest";
 import {UnitEventTracker} from "./TreeLib/UnitEventTracker/UnitEventTracker";
 import {UnitEventTypes} from "./TreeLib/UnitEventTracker/UnitEventTypes";
 import {EntityTests} from "./tests/EntityTests";
+import {Cube} from "./TreeLib/Utility/Data/Cube";
+import {Vector2} from "./TreeLib/Utility/Data/Vector2";
+import {Vector3} from "./TreeLib/Utility/Data/Vector3";
+import {Rectangle} from "./TreeLib/Utility/Data/Rectangle";
 
 export class Game {
 
@@ -27,6 +31,13 @@ export class Game {
             PathfindingTests.getInstance();
             UnitEventTracker.getInstance().registerAction(UnitEventTypes.CREATED_ANY, (u) => {
             });
+
+            Vector2.new(0, 0);
+            Vector3.new(0, 0, 0);
+            Rectangle.new(0, 0, 0, 0);
+            Cube.new(0, 0, 0, 0, 0, 0);
+
+
         }, Logger.critical);
     }
 }

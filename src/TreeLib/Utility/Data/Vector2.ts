@@ -5,6 +5,9 @@
 import {Delay} from "../Delay";
 import {Quick} from "../../Quick";
 import {Recyclable} from "./Recyclable";
+import {Rectangle} from "./Rectangle";
+import {Cube} from "./Cube";
+import {Vector3} from "./Vector3";
 
 export class Vector2 implements Recyclable {
     public x: number;
@@ -16,22 +19,47 @@ export class Vector2 implements Recyclable {
     }
 
     private static stash: Vector2[] = [];
-
     public static new(x: number, y: number): Vector2 {
         if (this.stash.length > 0) return this.stash.pop()!.updateTo(x, y);
         else return new Vector2(x, y)
     }
-
     public static recycle(p: Vector2) {
         if (!Quick.Contains(this.stash, p))
             Quick.Push(this.stash, p);
     }
-
     public recycle() {
         Vector2.recycle(this);
         return this;
     }
+    public updateTo(x: number, y: number) {
+        this.x = x;
+        this.y = y;
+        return this;
+    }
+    //Intersects
+    public intersectsVector2(other: Vector2): boolean {
+        return this.x == other.x
+            && this.y == other.y;
+    }
+    public intersectsVector3(other: Vector3): boolean {
+        return this.x == other.x
+            && this.y == other.y;
+    }
+    public intersectsRectangle(other: Rectangle) {
+        return this.x > other.xMin
+            && this.x < other.xMax
+            && this.y > other.yMin
+            && this.y < other.yMax;
+    }
+    public intersectsCube(other: Cube) {
+        return this.x > other.xMin
+            && this.x < other.xMax
+            && this.y > other.yMin
+            && this.y < other.yMax;
+    }
 
+
+    //Extensive API
     public distanceTo(target: Vector2): number {
         return math.sqrt(this.distanceToSquaredXY(target.x, target.y));
     }
@@ -99,13 +127,6 @@ export class Vector2 implements Recyclable {
         this.y = p.y;
         return this;
     }
-
-    public updateTo(x: number, y: number) {
-        this.x = x;
-        this.y = y;
-        return this;
-    }
-
 
     public polarProject(distance: number, angle: number): Vector2 {
         let x = this.x + distance * math.cos(angle * bj_DEGTORAD);
