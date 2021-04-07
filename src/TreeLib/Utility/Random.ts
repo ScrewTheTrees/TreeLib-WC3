@@ -7,7 +7,7 @@ export class Random {
     public static readonly MIN: number = -2147483648; // Int32 min
     public static readonly MAX: number = 2147483647; // Int32 max
 
-    private readonly _seed: number;
+    private _seed: number;
     private _value: number = NaN;
 
     constructor(seed: number) {
@@ -23,6 +23,11 @@ export class Random {
     public nextInt(min: number = 0, max: number = 10): number {
         this.recalculate();
         return Math.floor(Random.map(this._value, Random.MIN, Random.MAX, min, max + 1));
+    }
+
+    public changeSeed(seed: number) {
+        this._seed = Random.getSafeSeed(seed);
+        this.reset();
     }
 
     public reset(): void {
