@@ -108,6 +108,7 @@ export class UnitEventTracker {
         TriggerRegisterAnyUnitEventBJ(triggerUnitConstruction, EVENT_PLAYER_UNIT_CONSTRUCT_START);
         TriggerAddAction(triggerUnitConstruction, () => {
             unitEventTracker.executeEvent(UnitEventTypes.START_CONSTRUCTION, GetConstructingStructure());
+            unitEventTracker.executeEvent(UnitEventTypes.CREATED_ANY, GetConstructingStructure());
         });
     }
 
