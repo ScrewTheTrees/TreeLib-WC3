@@ -6,7 +6,8 @@ export class DamageHitContainer {
     public attackingUnitType!: number;
     public targetUnit!: unit;
     public targetUnitType!: number;
-    protected _damageNumber!: number;
+    protected _eventDamage!: number;
+    protected _isAttack!: boolean;
     protected _damageType!: damagetype;
     protected _attackType!: attacktype;
     protected _weaponType!: weapontype;
@@ -21,7 +22,8 @@ export class DamageHitContainer {
         this.attackingUnitType = GetUnitTypeId(this.attackingUnit);
         this.targetUnit = BlzGetEventDamageTarget();
         this.targetUnitType = GetUnitTypeId(this.targetUnit);
-        this._damageNumber = GetEventDamage();
+        this._eventDamage = GetEventDamage();
+        this._isAttack = BlzGetEventIsAttack();
         this._attackType = BlzGetEventAttackType();
         this._damageType = BlzGetEventDamageType();
         this._weaponType = BlzGetEventWeaponType();
@@ -36,12 +38,16 @@ export class DamageHitContainer {
     }
 
     get eventDamage() {
-        return this._damageNumber;
+        return this._eventDamage;
     }
 
     set eventDamage(damage: number) {
-        this._damageNumber = damage;
+        this._eventDamage = damage;
         BlzSetEventDamage(damage);
+    }
+
+    get isAttack() {
+        return this._isAttack;
     }
 
     get damageType() {
@@ -75,7 +81,7 @@ export class DamageHitContainer {
         let builder = new StringBuilder();
         builder.append("{")
             .append("damageNumber: ")
-            .append(this._damageNumber)
+            .append(this._eventDamage)
             .append(", attackingUnit: ")
             .append(this.attackingUnit)
             .append(", attackedUnit: ")
