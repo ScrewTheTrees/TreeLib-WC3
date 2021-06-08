@@ -1,5 +1,5 @@
 import {Hooks} from "../Hooks";
-import {UnitEventTypeGetName, UnitEventTypes} from "./UnitEventTypes";
+import {UnitEventTypes} from "./UnitEventTypes";
 import {Logger} from "../Logger";
 import {EventContainerList} from "./EventContainerList";
 import {UnitEventContainer} from "./UnitEventContainer";
@@ -37,7 +37,7 @@ export class UnitEventTracker {
         if (this.suspendEvents) return;
         {
             let eventContainer = this.getContainer(type);
-            Logger.verbose("Execute Event: " + UnitEventTypeGetName(type));
+            Logger.verbose("Execute Event: " + type);
             for (let cont of eventContainer.events) {
                 cont.callback(target);
             }

@@ -26,8 +26,3 @@ export enum UnitEventTypes {
     FINISH_REVIVE,      //Sends Revived hero.
     FINISH_CONSTRUCTION,//Cancel, sends finished building
 }
-
-export function UnitEventTypeGetName(type: UnitEventTypes) {
-    // @ts-ignore Shitty JS stuff :/
-    return Object.keys(UnitEventTypes).find(key => UnitEventTypes[key] == type) || "Invalid";
-}
