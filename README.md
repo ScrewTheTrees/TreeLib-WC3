@@ -1,6 +1,6 @@
 # TreeLib
 
-Treelib is a library of typescript made for Warcraft 3 the frozen throne.
+Treelib is a library of typescript made for Warcraft 3 v1.32+.
 It requires the map to be set to LUA as typescript compiles to lua.
 
 It's built for TSTL and not intended to work with other tooling currently.
