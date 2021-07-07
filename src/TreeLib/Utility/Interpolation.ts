@@ -31,7 +31,7 @@ export namespace Interpolation {
         return start + (-diff / divider);
     }
 
-    export function RotateToPoint(fromDir: number, toDir: number, turnSpeed: number) {
+    export function RotLerp(fromDir: number, toDir: number, turnSpeed: number) {
         let result = toDir - fromDir;
         while (result > 180) {
             result -= 360
@@ -49,5 +49,32 @@ export namespace Interpolation {
         }
 
         return (fromDir + turnDir) % 360;
+    }
+
+    export function RotDivisionSpring(fromDir: number, toDir: number, division: number, minimumStep: number = 1) {
+        let sturn: number;
+        fromDir = fromDir % 360;
+        toDir = toDir % 360;
+
+        if (toDir > fromDir) { //1
+            if (toDir > fromDir + 180) {
+                sturn = (toDir - 360 - fromDir);
+            } else { //2.
+                sturn = (toDir - fromDir);
+            }
+        } else {
+            if (fromDir > toDir + 180) { //3.
+                sturn = (360 - fromDir + toDir);
+            } else { //4.
+                sturn = (toDir - fromDir);
+            }
+        }
+
+        if (math.abs(fromDir - toDir) <= minimumStep || math.abs(fromDir - toDir) >= 360 - minimumStep) {
+            fromDir = toDir;
+        } else {
+            fromDir += sturn / division;
+        }
+        return fromDir;
     }
 }
