@@ -101,8 +101,8 @@ export class Vector2 implements Recyclable {
         }
         return Vector2._loc;
     }
-    public GetZ(v: Vector2) {
-        MoveLocation(Vector2.loc, v.x, v.y);
+    public getZ() {
+        MoveLocation(Vector2.loc, this.x, this.y);
         return GetLocationZ(Vector2.loc);
     }
 
