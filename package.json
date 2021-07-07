@@ -2,7 +2,7 @@
   "name": "wc3-treelib",
   "author": "Fredrik Grimmenhag (ScrewTheTrees)",
   "license": "MIT",
-  "version": "2.4.3",
+  "version": "2.4.4",
   "description": "Quality package.",
   "scripts": {
     "fullRecompileAndRun": "npm run clean && npm run compileTypescript && npm run compileAndRunMap",

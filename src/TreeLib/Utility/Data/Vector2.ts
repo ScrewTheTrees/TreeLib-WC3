@@ -140,9 +140,9 @@ export class Vector2 implements Recyclable {
     }
 
     public polarProject(distance: number, angle: number): Vector2 {
-        let x = this.x + distance * math.cos(angle * bj_DEGTORAD);
-        let y = this.y + distance * math.sin(angle * bj_DEGTORAD);
-        return Vector2.new(x, y);
+        this.x = this.x + distance * math.cos(angle * bj_DEGTORAD);
+        this.y = this.y + distance * math.sin(angle * bj_DEGTORAD);
+        return this;
     }
 
     public toLocation() {
