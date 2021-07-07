@@ -94,6 +94,17 @@ export class Vector2 implements Recyclable {
         this.y += offset.y;
         return this;
     }
+    private static _loc: location;
+    private static get loc() {
+        if (Vector2._loc == null) {
+            Vector2._loc = Location(0, 0);
+        }
+        return Vector2._loc;
+    }
+    public GetZ(v: Vector2) {
+        MoveLocation(Vector2.loc, v.x, v.y);
+        return GetLocationZ(Vector2.loc);
+    }
 
     public getBetween(offset: Vector2): Vector2 {
         return Vector2.new((this.x + offset.x) / 2, (this.y + offset.y) / 2);
