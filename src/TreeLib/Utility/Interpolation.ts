@@ -25,7 +25,7 @@ export namespace Interpolation {
     export function DivisionSpring(start: number, end: number, divider: number, minimumStep: number = 1) {
         let diff = start - end;
         if (diff <= minimumStep && diff >= -minimumStep) {
-            return diff;
+            return end;
         }
 
         return start + (-diff / divider);
