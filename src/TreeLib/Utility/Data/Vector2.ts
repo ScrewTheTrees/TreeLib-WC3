@@ -94,6 +94,21 @@ export class Vector2 implements Recyclable {
         this.y += offset.y;
         return this;
     }
+    public subtractOffset(offset: Vector2): Vector2 {
+        this.x -= offset.x;
+        this.y -= offset.y;
+        return this;
+    }
+    public divideOffset(offset: Vector2): Vector2 {
+        this.x /= offset.x;
+        this.y /= offset.y;
+        return this;
+    }
+    public multiplyOffset(offset: Vector2): Vector2 {
+        this.x *= offset.x;
+        this.y *= offset.y;
+        return this;
+    }
     private static _loc: location;
     private static get loc() {
         if (Vector2._loc == null) {
@@ -112,6 +127,9 @@ export class Vector2 implements Recyclable {
 
     public getAngle() {
         return Math.atan2(this.x, this.y);
+    }
+    public getAngleDegrees() {
+        return Math.atan2(this.x, this.y) * bj_DEGTORAD;
     }
 
     public updateToLocation(inputLoc: location) {
