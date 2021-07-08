@@ -6,14 +6,14 @@ export class MouseCallback {
     public button: mousebuttontype;
     public enabled: boolean = true;
     public pressType: PressType;
-    public triggeringPlayer: player | undefined;
-    private _position: Vector2 | undefined;
+    public triggeringPlayer!: player;
+    private _position!: Vector2;
 
-    get position(): Vector2 | undefined {
+    get position(): Vector2 {
         return this._position;
     }
 
-    set position(value: Vector2 | undefined) {
+    set position(value: Vector2) {
         if (this._position) this._position.recycle();
         this._position = value;
     }
