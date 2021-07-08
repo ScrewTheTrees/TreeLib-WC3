@@ -129,7 +129,7 @@ export class Vector2 implements Recyclable {
         return Math.atan2(this.x, this.y);
     }
     public getAngleDegrees() {
-        return Math.atan2(this.x, this.y) * bj_DEGTORAD;
+        return Math.atan2(this.x, this.y) * bj_RADTODEG;
     }
 
     public updateToLocation(inputLoc: location) {
