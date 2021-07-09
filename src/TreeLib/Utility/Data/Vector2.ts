@@ -82,6 +82,17 @@ export class Vector2 implements Recyclable {
         let radians = math.atan(target.y - this.y, target.x - this.x);
         return (radians * 180 / Math.PI);
     }
+    public directionFrom(target: Vector2) {
+        return target.directionTo(this);
+    }
+    public directionToXY(x: number, y: number) {
+        let radians = math.atan(y - this.y, x - this.x);
+        return (radians * 180 / Math.PI);
+    }
+    public directionFromXY(x: number, y: number) {
+        let radians = math.atan(this.y - y, this.x - x);
+        return (radians * 180 / Math.PI);
+    }
 
     public getOffsetTo(target: Vector2): Vector2 {
         let x = target.x - this.x;
@@ -126,10 +137,11 @@ export class Vector2 implements Recyclable {
     }
 
     public getAngle() {
-        return Math.atan2(this.x, this.y);
+        let radians = math.atan(this.y, this.x);
+        return (radians * 180);
     }
     public getAngleDegrees() {
-        return Math.atan2(this.x, this.y) * bj_RADTODEG;
+        return (this.getAngle() / Math.PI);
     }
 
     public updateToLocation(inputLoc: location) {
