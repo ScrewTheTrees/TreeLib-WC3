@@ -3,9 +3,9 @@ import {Vector2} from "../Utility/Data/Vector2";
 import {Pathfinder} from "./Pathfinder";
 import {PriorityQueue} from "../Utility/Data/PriorityQueue";
 import {PointWalkableChecker} from "../Pathing/PointWalkableChecker";
-import {Delay} from "wc3-treelib/src/TreeLib/Utility/Delay";
+import {Delay} from "../Utility/Delay";
 import {DelayDto} from "TreeLib/Utility/DelayDto";
-import {Logger} from "wc3-treelib/src/TreeLib/Logger";
+import {Logger} from "../Logger";
 
 export class PathfinderGrid extends Pathfinder {
     private grid: Node[][] = [];
@@ -85,7 +85,6 @@ export class PathfinderGrid extends Pathfinder {
                         this.addNode(node);
                         sr++;
                         if (sr >= 256) {
-                            //Logger.generic("x:", i, "y:", j);
                             sr = 0;
                             coroutine.yield();
                         }
@@ -110,10 +109,10 @@ export class PathfinderGrid extends Pathfinder {
     }
     public getNodeClosestTo(point: Vector2): Node {
         let p = point.copy().alignToGrid(this.stepSize);
-        if (p.x < this.startX) p.x = this.startX;
-        if (p.x > this.endX) p.x = this.endX - this.stepSize;
-        if (p.y < this.startY) p.y = this.startX;
-        if (p.y > this.endY) p.y = this.endY - this.stepSize;
+        if (p.x <= this.startX) p.x = this.startX + this.stepSize;
+        if (p.x >= this.endX) p.x = this.endX - this.stepSize;
+        if (p.y <= this.startY) p.y = this.startY + this.stepSize;
+        if (p.y >= this.endY) p.y = this.endY - this.stepSize;
         let g = this.grid[p.x][p.y];
         if (g == null) {
             let i = 100;
@@ -123,7 +122,7 @@ export class PathfinderGrid extends Pathfinder {
             frontier.push(next, i);
             vecs.push(next);
             while (g == null) {
-                i++;
+                i--;
                 let thing = frontier.get();
                 if (thing) {
                     let node = this.grid[thing.x][thing.y];
