@@ -111,9 +111,9 @@ export class PathfinderGrid extends Pathfinder {
     public getNodeClosestTo(point: Vector2): Node {
         let p = point.copy().alignToGrid(this.stepSize);
         if (p.x < this.startX) p.x = this.startX;
-        if (p.x > this.endX) p.x = this.endX - 1;
+        if (p.x > this.endX) p.x = this.endX - this.stepSize;
         if (p.y < this.startY) p.y = this.startX;
-        if (p.y > this.endY) p.y = this.endY - 1;
+        if (p.y > this.endY) p.y = this.endY - this.stepSize;
         let g = this.grid[p.x][p.y];
         if (g == null) {
             let i = 100;
@@ -123,22 +123,22 @@ export class PathfinderGrid extends Pathfinder {
             frontier.push(next, i);
             vecs.push(next);
             while (g == null) {
-                i--;
+                i++;
                 let thing = frontier.get();
                 if (thing) {
                     let node = this.grid[thing.x][thing.y];
                     if (node) g = node;
                     else {
-                        let v = thing.copy().updateTo(thing.x - 1, thing.y);
+                        let v = thing.copy().updateTo(thing.x - this.stepSize, thing.y);
                         frontier.push(v, i);
                         vecs.push(v);
-                        v = thing.copy().updateTo(thing.x + 1, thing.y);
+                        v = thing.copy().updateTo(thing.x + this.stepSize, thing.y);
                         frontier.push(v, i);
                         vecs.push(v);
-                        v = thing.copy().updateTo(thing.x, thing.y - 1);
+                        v = thing.copy().updateTo(thing.x, thing.y - this.stepSize);
                         frontier.push(v, i);
                         vecs.push(v);
-                        v = thing.copy().updateTo(thing.x, thing.y + 1);
+                        v = thing.copy().updateTo(thing.x, thing.y + this.stepSize);
                         frontier.push(v, i);
                         vecs.push(v);
                     }

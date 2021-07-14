@@ -194,8 +194,8 @@ export class Vector2 implements Recyclable {
         return this;
     }
     public alignToGrid(gridSize: number) {
-        this.x = Math.round(this.x / gridSize) * gridSize;
-        this.y = Math.round(this.y / gridSize) * gridSize;
+        this.x = math.floor(this.x / gridSize) * gridSize;
+        this.y = math.floor(this.y / gridSize) * gridSize;
         return this;
     }
     public polarProject(distance: number, angle: number): Vector2 {

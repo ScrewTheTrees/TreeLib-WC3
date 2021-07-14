@@ -44,6 +44,7 @@ export class Pathfinder {
 
         while (this.frontier.hasEntry() && currentDist < maxDist) {
             currentDist += 1;
+            opCount += 1;
             let current = this.frontier.get();
             if (current != null) {
                 this.traversed.push(current);
@@ -86,13 +87,13 @@ export class Pathfinder {
             iterateNode = iterateNode.cameFrom;
         }
 
-        Logger.generic("startNode", startNode.point.toString());
-        Logger.generic("finalNode", finalNode.point.toString());
-        Logger.generic("endNode", endNode.point.toString());
-        Logger.generic("highestPrios", highest);
-        Logger.generic("opCount", opCount);
-        Logger.generic("compileNodes ", compileNodes.length);
-        Logger.generic("reachedDist ", currentDist, "out of", maxDist);
+        Logger.verbose("startNode", startNode.point.toString());
+        Logger.verbose("finalNode", finalNode.point.toString());
+        Logger.verbose("endNode", endNode.point.toString());
+        Logger.verbose("highestPrios", highest);
+        Logger.verbose("opCount", opCount);
+        Logger.verbose("compileNodes ", compileNodes.length);
+        Logger.verbose("reachedDist ", currentDist, "out of", maxDist);
 
         //Reverse Path and convert to points.
         let points: Vector2[] = [];
