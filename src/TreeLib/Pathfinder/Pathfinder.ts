@@ -8,14 +8,15 @@ import {Quick} from "../Quick";
 
 export class Pathfinder {
     public nodes: Node[] = [];
+    private traversed: Node[] = [];
     private frontier = new PriorityQueue<Node>();
     public nodeTable: NodeTable = new NodeTable();
     public useCache: boolean = true;
 
-    public findPath(from: Vector2, to: Vector2, maxDist: number = math.maxinteger): PathfindResult {
+    public findPath(from: Vector2, to: Vector2, maxDist?: number): PathfindResult {
         let startNode = this.getNodeClosestTo(from);
         let endNode = this.getNodeClosestTo(to);
-        return this.findPathByNodes(startNode, endNode, from, to);
+        return this.findPathByNodes(startNode, endNode, from, to, maxDist);
     }
 
     public findPathByNodes(startNode: Node, endNode: Node, from: Vector2, to: Vector2, maxDist: number = math.maxinteger): PathfindResult {
@@ -35,22 +36,26 @@ export class Pathfinder {
         this.frontier.push(startNode, startNode.costSoFar + startNode.cost);
         startNode.cameFrom = null;
         startNode.costSoFar = this.distanceBetweenNodes(startNode, endNode) * startNode.cost;
+        this.traversed.push(startNode);
         let finalNode: Node = startNode;
         let highest = 0;
         let opCount = 0;
         let currentDist = 0;
 
         while (this.frontier.hasEntry() && currentDist < maxDist) {
+            currentDist += 1;
             let current = this.frontier.get();
             if (current != null) {
+                this.traversed.push(current);
                 for (let i = 0; i < current.neighbors.length; i++) {
                     let target = current.neighbors[i];
                     if (!target.disabled && this.isNodeBadCompared(current, target)) {
+                        this.traversed.push(target);
                         target.cameFrom = current;
                         target.costSoFar = this.getNodeNumber(current, target);
                         this.frontier.push(target, current.costSoFar + (this.distanceBetweenNodes(target, endNode) * target.cost));
 
-                        if (target.costSoFar < finalNode.costSoFar) {
+                        if (target.costSoFar >= finalNode.costSoFar) {
                             finalNode = target;
                         }
 
@@ -58,12 +63,12 @@ export class Pathfinder {
                     }
                     if (target == endNode) {
                         finalNode = target;
+                        this.traversed.push(finalNode);
                         this.frontier.clear();
                         i = current.neighbors.length + 1;
                     }
                 }
             }
-            currentDist += 1;
             if (this.frontier.entries.noOfEntries > highest) {
                 highest = this.frontier.entries.noOfEntries;
             }
@@ -123,11 +128,12 @@ export class Pathfinder {
     }
 
     public resetNodes() {
-        for (let i = 0; i < this.nodes.length; i++) {
-            let node = this.nodes[i];
+        for (let i = 0; i < this.traversed.length; i++) {
+            let node = this.traversed[i];
             node.cameFrom = null;
             node.costSoFar = 0;
         }
+        Quick.Clear(this.traversed);
     }
 
     public clearCache() {
