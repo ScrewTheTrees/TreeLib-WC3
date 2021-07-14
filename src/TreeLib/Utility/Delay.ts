@@ -59,7 +59,9 @@ export class Delay extends Entity {
      */
     public static addDelay(f: Function, delaySeconds: number = 1, repeats: number = 1) {
         if (repeats > 0) {
-            this.getInstance().addDelayFrom(new DelayDto(f, delaySeconds, repeats));
+            let del = new DelayDto(f, delaySeconds, repeats);
+            this.getInstance().addDelayFrom(del);
+            return del;
         }
     }
 

@@ -100,14 +100,16 @@ export class InputManagerMouseHandler {
 
     public addMousePressCallback(mouse: mousebuttontype, callback: (this: any, key: MouseCallback) => void) {
         let container = this.getMouseContainer(mouse);
-        container.callbacks.push(new MouseCallback(mouse, callback, PressType.PRESS));
-        return container;
+        let input = new MouseCallback(mouse, callback, PressType.PRESS);
+        container.callbacks.push(input);
+        return input;
     }
 
     public addMouseReleaseCallback(mouse: mousebuttontype, callback: (this: any, key: MouseCallback) => void) {
         let container = this.getMouseContainer(mouse);
-        container.callbacks.push(new MouseCallback(mouse, callback, PressType.RELEASE));
-        return container;
+        let input = new MouseCallback(mouse, callback, PressType.RELEASE);
+        container.callbacks.push(input);
+        return input;
     }
 
     public getLastMousePosition(triggerPlayer: player) {

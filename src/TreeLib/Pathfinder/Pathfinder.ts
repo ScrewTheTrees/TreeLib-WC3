@@ -12,13 +12,13 @@ export class Pathfinder {
     public nodeTable: NodeTable = new NodeTable();
     public useCache: boolean = true;
 
-    public findPath(from: Vector2, to: Vector2): PathfindResult {
+    public findPath(from: Vector2, to: Vector2, maxDist: number = math.maxinteger): PathfindResult {
         let startNode = this.getNodeClosestTo(from);
         let endNode = this.getNodeClosestTo(to);
         return this.findPathByNodes(startNode, endNode, from, to);
     }
 
-    public findPathByNodes(startNode: Node, endNode: Node, from: Vector2, to: Vector2): PathfindResult {
+    public findPathByNodes(startNode: Node, endNode: Node, from: Vector2, to: Vector2, maxDist: number = math.maxinteger): PathfindResult {
         if (this.useCache) {
             let node1 = this.nodeTable.get(startNode, endNode);
             if (node1 != null) {
@@ -35,11 +35,12 @@ export class Pathfinder {
         this.frontier.push(startNode, startNode.costSoFar + startNode.cost);
         startNode.cameFrom = null;
         startNode.costSoFar = this.distanceBetweenNodes(startNode, endNode) * startNode.cost;
-        let finalNode: Node | null = null;
+        let finalNode: Node = startNode;
         let highest = 0;
         let opCount = 0;
+        let currentDist = 0;
 
-        while (this.frontier.hasEntry()) {
+        while (this.frontier.hasEntry() && currentDist < maxDist) {
             let current = this.frontier.get();
             if (current != null) {
                 for (let i = 0; i < current.neighbors.length; i++) {
@@ -48,6 +49,11 @@ export class Pathfinder {
                         target.cameFrom = current;
                         target.costSoFar = this.getNodeNumber(current, target);
                         this.frontier.push(target, current.costSoFar + (this.distanceBetweenNodes(target, endNode) * target.cost));
+
+                        if (target.costSoFar < finalNode.costSoFar) {
+                            finalNode = target;
+                        }
+
                         opCount += 1;
                     }
                     if (target == endNode) {
@@ -57,6 +63,7 @@ export class Pathfinder {
                     }
                 }
             }
+            currentDist += 1;
             if (this.frontier.entries.noOfEntries > highest) {
                 highest = this.frontier.entries.noOfEntries;
             }
@@ -74,12 +81,13 @@ export class Pathfinder {
             iterateNode = iterateNode.cameFrom;
         }
 
-        Logger.verbose("startNode", startNode.point.toString());
-        Logger.verbose("finalNode", finalNode.point.toString());
-        Logger.verbose("endNode", endNode.point.toString());
-        Logger.verbose("highestPrios", highest);
-        Logger.verbose("opCount", opCount);
-        Logger.verbose("compileNodes ", compileNodes.length);
+        Logger.generic("startNode", startNode.point.toString());
+        Logger.generic("finalNode", finalNode.point.toString());
+        Logger.generic("endNode", endNode.point.toString());
+        Logger.generic("highestPrios", highest);
+        Logger.generic("opCount", opCount);
+        Logger.generic("compileNodes ", compileNodes.length);
+        Logger.generic("reachedDist ", currentDist, "out of", maxDist);
 
         //Reverse Path and convert to points.
         let points: Vector2[] = [];

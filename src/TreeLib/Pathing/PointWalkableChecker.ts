@@ -9,7 +9,7 @@ export class PointWalkableChecker {
         return this._instance;
     }
 
-    public maxRange = 10;
+    public maxRange = 6;
     public checkRect = Rect(0, 0, 256, 256);
     public hiddenItems: item[] = [];
     public checkItem = CreateItem(FourCC("afac"), 0, 0);

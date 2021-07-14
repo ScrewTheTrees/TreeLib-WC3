@@ -6,9 +6,20 @@ export namespace Quick {
         arr[index] = arr[arr.length - 1];
         arr.pop();
     }
+    export function Remove<T>(arr: T[], value: T) {
+        let index = arr.indexOf(value);
+        if (index >= 0) {
+            Slice(arr, index);
+        }
+    }
 
     export function Push<T>(arr: T[], value: T) {
         arr[arr.length] = value;
+    }
+    export function PushIfMissing<T>(arr: T[], value: T) {
+        if (!Quick.Contains(arr, value)) {
+            Push(arr, value);
+        }
     }
 
     export function Transfer<T>(from: T[], to: T[]) {

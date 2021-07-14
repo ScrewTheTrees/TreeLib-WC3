@@ -48,7 +48,7 @@ export class UnitActionWaypoint implements UnitAction {
 
     public inObjectiveRange(target: unit) {
         let targetPoint = Vector2.fromWidget(target);
-        let offset = targetPoint.getOffsetTo(this.toPoint);
+        let offset = targetPoint.createOffsetTo(this.toPoint);
 
         targetPoint.recycle();
         offset.recycle();

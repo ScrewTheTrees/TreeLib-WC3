@@ -66,14 +66,16 @@ export class InputManagerKeyboardHandler {
 
     public addKeyboardPressCallback(key: oskeytype, callback: (this: any, key: KeyCallback) => void, metaKeys?: MetaKey[]) {
         let container = this.getKeyContainer(key);
-        container.callbacks.push(new KeyCallback(key, callback, PressType.PRESS, metaKeys));
-        return container;
+        let input = new KeyCallback(key, callback, PressType.PRESS, metaKeys);
+        container.callbacks.push(input);
+        return input;
     }
 
     public addKeyboardReleaseCallback(key: oskeytype, callback: (this: any, key: KeyCallback) => void, metaKeys?: MetaKey[]) {
         let container = this.getKeyContainer(key);
-        container.callbacks.push(new KeyCallback(key, callback, PressType.RELEASE, metaKeys));
-        return container;
+        let input = new KeyCallback(key, callback, PressType.RELEASE, metaKeys);
+        container.callbacks.push(input);
+        return input;
     }
 
     public isKeyButtonHeld(key: oskeytype, triggeringPlayer: player) {

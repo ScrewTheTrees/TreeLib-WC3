@@ -94,7 +94,12 @@ export class Vector2 implements Recyclable {
         return (radians * 180 / Math.PI);
     }
 
-    public getOffsetTo(target: Vector2): Vector2 {
+    public offsetTo(target: Vector2): Vector2 {
+        this.x = target.x - this.x;
+        this.y = target.y - this.y;
+        return this;
+    }
+    public createOffsetTo(target: Vector2): Vector2 {
         let x = target.x - this.x;
         let y = target.y - this.y;
         return Vector2.new(x, y);
@@ -105,9 +110,19 @@ export class Vector2 implements Recyclable {
         this.y += offset.y;
         return this;
     }
+    public addOffsetNum(offset: number): Vector2 {
+        this.x += offset;
+        this.y += offset;
+        return this;
+    }
     public subtractOffset(offset: Vector2): Vector2 {
         this.x -= offset.x;
         this.y -= offset.y;
+        return this;
+    }
+    public subtractOffsetNum(offset: number): Vector2 {
+        this.x -= offset;
+        this.y -= offset;
         return this;
     }
     public divideOffset(offset: Vector2): Vector2 {
@@ -115,9 +130,19 @@ export class Vector2 implements Recyclable {
         this.y /= offset.y;
         return this;
     }
+    public divideOffsetNum(offset: number): Vector2 {
+        this.x /= offset;
+        this.y /= offset;
+        return this;
+    }
     public multiplyOffset(offset: Vector2): Vector2 {
         this.x *= offset.x;
         this.y *= offset.y;
+        return this;
+    }
+    public multiplyOffsetNum(offset: number): Vector2 {
+        this.x *= offset;
+        this.y *= offset;
         return this;
     }
     private static _loc: location;
@@ -168,7 +193,10 @@ export class Vector2 implements Recyclable {
         this.y = p.y;
         return this;
     }
-
+    public alignToGrid(gridSize: number) {
+        this.x = Math.round(this.x / gridSize) * gridSize;
+        this.y = Math.round(this.y / gridSize) * gridSize;
+    }
     public polarProject(distance: number, angle: number): Vector2 {
         this.x = this.x + distance * math.cos(angle * bj_DEGTORAD);
         this.y = this.y + distance * math.sin(angle * bj_DEGTORAD);
@@ -238,7 +266,7 @@ export class Vector2 implements Recyclable {
         return Vector2.copy(this);
     }
 
-    distanceToLine(lineStart: Vector2, lineEnd: Vector2) {
+    distanceToLineSquared(lineStart: Vector2, lineEnd: Vector2) {
         let A = this.x - lineStart.x;
         let B = this.y - lineStart.y;
         let C = lineEnd.x - lineStart.x;
@@ -265,7 +293,10 @@ export class Vector2 implements Recyclable {
 
         let dx = this.x - xx;
         let dy = this.y - yy;
-        return math.sqrt(dx * dx + dy * dy);
+        return dx * dx + dy * dy;
+    }
+    distanceToLine(lineStart: Vector2, lineEnd: Vector2) {
+        return math.sqrt(this.distanceToLineSquared(lineStart, lineEnd));
     }
 
 

@@ -10,7 +10,7 @@ export abstract class Entity {
     public static pauseExecution = false;
 
     //TimerDelay API
-    private _timerDelay: number;
+    protected _timerDelay: number;
     get timerDelay(): number {
         return this._timerDelay;
     }
@@ -51,7 +51,7 @@ export abstract class Entity {
     public static getDebugInfo() {
         const data: string[] = [];
         this.containers.forEach((container) => {
-            let str = `Container: ${container.identifier},  Entities: ${container.count()},  Disabled: ${container.disabled}`;
+            let str = `Container: ${container.identifier},  Entities: ${container.count()},  Disabled: ${container.isDisabled()}`;
             if (!container.isEmpty()) {
                 str += ",  Names(T5): ";
                 for (let i = 0; i < math.min(container.entities.length, 5); i++) {
@@ -72,7 +72,6 @@ class EntityContainer {
     public readonly entities: Entity[] = [];
     public readonly loop: trigger;
     public readonly identifier: number;
-    public disabled: boolean = false;
 
     public constructor(timeBetween: number) {
         this.loop = CreateTrigger();
@@ -85,6 +84,9 @@ class EntityContainer {
         });
     }
 
+    public isDisabled() {
+        return !IsTriggerEnabled(this.loop);
+    }
     public count() {
         return this.entities.length;
     }
@@ -93,20 +95,13 @@ class EntityContainer {
     }
 
     public add(e: Entity) {
-        if (!Quick.Contains(this.entities, e))
-            Quick.Push(this.entities, e);
-        if (this.disabled) {
+        Quick.PushIfMissing(this.entities, e);
+        if (!IsTriggerEnabled(this.loop)) {
             EnableTrigger(this.loop);
-            this.disabled = false;
         }
     }
     public remove(e: Entity) {
-        const index = this.entities.indexOf(e);
-        Quick.Slice(this.entities, index);
-        if (this.isEmpty()) {
-            DisableTrigger(this.loop);
-            this.disabled = true;
-        }
+        Quick.Remove(this.entities, e);
         return e;
     }
     private step() {

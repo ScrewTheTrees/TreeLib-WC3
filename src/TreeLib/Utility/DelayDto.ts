@@ -10,4 +10,8 @@ export class DelayDto {
         this.repeats = repeats;
         this.repeatCounter = 0;
     }
+
+    public finish() {
+        this.age = this.delay;
+    }
 }
