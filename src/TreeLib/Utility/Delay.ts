@@ -39,6 +39,8 @@ export class Delay extends Entity {
                 queueDto.function();
                 queueDto.repeatCounter += 1;
                 if (queueDto.repeatCounter >= queueDto.repeats) {
+                    // @ts-ignore
+                    queueDto.function = undefined;
                     Quick.Slice(this.queue, index);
                     index -= 1;
                 } else {

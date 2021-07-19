@@ -38,57 +38,46 @@ export class PathfinderGrid extends Pathfinder {
         this.endY = endY;
         this.stepSize = stepSize;
 
-        let routine = coroutine.create(() => {
+        let routine = coroutine.wrap(() => {
             xpcall(() => {
                 let sr = 0;
+                let previousNode: Node | undefined;
+                let previousX = startX;
+                let previousY = startY;
+
                 for (let i = startX; i < endX; i += stepSize) {
                     if (this.grid[i] == null) {
                         this.grid[i] = [];
                     }
                     for (let j = startY; j < endY; j += stepSize) {
                         let pos = Vector2.new(i + (stepSize / 2), j + (stepSize / 2));
-                        if (excludeNonWalkable && !walk.checkTerrainXY(pos.x, pos.y)) continue; //Not walkable.
+                        if (excludeNonWalkable && (!walk.checkTerrainXY(pos.x, pos.y))) {
+                            pos.recycle();
+                            sr++;
+                            continue; //Not walkable.
+                        }
+
                         let node = new Node(pos);
                         this.grid[i][j] = node;
-
-                        let up = this.grid[i] != null ? this.grid[i][j - stepSize] : null;
-                        let down = this.grid[i] != null ? this.grid[i][j + stepSize] : null;
-
-                        let left: Node | null = null;
-                        let upLeft: Node | null = null;
-                        let downLeft: Node | null = null;
-                        let right: Node | null = null;
-                        let upRight: Node | null = null;
-                        let downRight: Node | null = null;
-                        if (this.grid[i - stepSize] != null) { //Left
-                            left = this.grid[i - stepSize][j];
-                            upLeft = this.grid[i - stepSize][j - stepSize];
-                            downLeft = this.grid[i - stepSize][j + stepSize];
-                        }
-                        if (this.grid[i + stepSize] != null) { //Right
-                            right = this.grid[i + stepSize][j];
-                            upRight = this.grid[i + stepSize][j - stepSize];
-                            downRight = this.grid[i + stepSize][j + stepSize];
-                        }
-
-                        if (up) node.addNeighborTwoWay(up);
-                        if (down) node.addNeighborTwoWay(down);
-                        if (left) node.addNeighborTwoWay(left);
-                        if (right) node.addNeighborTwoWay(right);
-
-                        if (allowDiagonal) {
-                            if (upLeft && up && left) node.addNeighborTwoWay(upLeft);
-                            if (upRight && up && right) node.addNeighborTwoWay(upRight);
-                            if (downLeft && down && left) node.addNeighborTwoWay(downLeft);
-                            if (downRight && down && right) node.addNeighborTwoWay(downRight);
-                        }
                         this.addNode(node);
+
+                        if (previousNode != undefined) {
+                            this.connectNeighbors(previousX, previousY, stepSize, previousNode, allowDiagonal);
+                        }
+
+                        previousNode = node;
+                        previousX = i;
+                        previousY = j;
+
                         sr++;
                         if (sr >= 256) {
                             sr = 0;
                             coroutine.yield();
                         }
                     }
+                }
+                if (previousNode != undefined) {
+                    this.connectNeighbors(previousX, previousY, stepSize, previousNode, allowDiagonal);
                 }
             }, Logger.critical);
             done = true;
@@ -97,18 +86,62 @@ export class PathfinderGrid extends Pathfinder {
             let del: DelayDto;
             del = Delay.addDelay(() => {
                 if (!done) {
-                    coroutine.resume(routine);
+                    routine();
+                    del.repeatCounter = 0;
+                } else {
+                    // @ts-ignore
+                    routine = undefined;
+                    // @ts-ignore
+                    del = undefined;
                 }
-                del.repeatCounter = 0;
             }, 0.02, 2);
         } else {
             while (!done) {
-                coroutine.resume(routine);
+                routine();
+                // @ts-ignore
+                routine = undefined;
             }
         }
     }
+    private connectNeighbors(previousX: number, previousY: number, stepSize: number, previousNode: Node, allowDiagonal: boolean) {
+        let up = this.grid[previousX] != null ? this.grid[previousX][previousY - stepSize] : null;
+        let down = this.grid[previousX] != null ? this.grid[previousX][previousY + stepSize] : null;
+
+        let left: Node | null = null;
+        let upLeft: Node | null = null;
+        let downLeft: Node | null = null;
+        let right: Node | null = null;
+        let upRight: Node | null = null;
+        let downRight: Node | null = null;
+        if (this.grid[previousX - stepSize] != null) { //Left
+            left = this.grid[previousX - stepSize][previousY];
+            upLeft = this.grid[previousX - stepSize][previousY - stepSize];
+            downLeft = this.grid[previousX - stepSize][previousY + stepSize];
+        }
+        if (this.grid[previousX + stepSize] != null) { //Right
+            right = this.grid[previousX + stepSize][previousY];
+            upRight = this.grid[previousX + stepSize][previousY - stepSize];
+            downRight = this.grid[previousX + stepSize][previousY + stepSize];
+        }
+
+        if (up) previousNode.addNeighborTwoWay(up);
+        if (down) previousNode.addNeighborTwoWay(down);
+        if (left) previousNode.addNeighborTwoWay(left);
+        if (right) previousNode.addNeighborTwoWay(right);
+
+        if (allowDiagonal) {
+            if (upLeft && up && left) previousNode.addNeighborTwoWay(upLeft);
+            if (upRight && up && right) previousNode.addNeighborTwoWay(upRight);
+            if (downLeft && down && left) previousNode.addNeighborTwoWay(downLeft);
+            if (downRight && down && right) previousNode.addNeighborTwoWay(downRight);
+        }
+    }
     public getNodeClosestTo(point: Vector2): Node {
-        let p = point.copy().alignToGrid(this.stepSize);
+        let p = point.copy();
+        p.x -= this.stepSize / 2;
+        p.y -= this.stepSize / 2;
+        p.x = math.floor(p.x / this.stepSize) * this.stepSize;
+        p.y = math.floor(p.y / this.stepSize) * this.stepSize;
         if (p.x <= this.startX) p.x = this.startX + this.stepSize;
         if (p.x >= this.endX) p.x = this.endX - this.stepSize;
         if (p.y <= this.startY) p.y = this.startY + this.stepSize;
@@ -138,6 +171,19 @@ export class PathfinderGrid extends Pathfinder {
                         frontier.push(v, i);
                         vecs.push(v);
                         v = thing.copy().updateTo(thing.x, thing.y + this.stepSize);
+                        frontier.push(v, i);
+                        vecs.push(v);
+
+                        v = thing.copy().updateTo(thing.x - this.stepSize, thing.y - this.stepSize);
+                        frontier.push(v, i);
+                        vecs.push(v);
+                        v = thing.copy().updateTo(thing.x - this.stepSize, thing.y + this.stepSize);
+                        frontier.push(v, i);
+                        vecs.push(v);
+                        v = thing.copy().updateTo(thing.x + this.stepSize, thing.y - this.stepSize);
+                        frontier.push(v, i);
+                        vecs.push(v);
+                        v = thing.copy().updateTo(thing.x + this.stepSize, thing.y + this.stepSize);
                         frontier.push(v, i);
                         vecs.push(v);
                     }
