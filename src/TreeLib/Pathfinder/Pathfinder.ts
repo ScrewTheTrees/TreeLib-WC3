@@ -48,11 +48,11 @@ export class Pathfinder {
 
                 let current = this.frontier.get();
                 if (current != null) {
-                    this.traversed.push(current);
+                    Quick.Push(this.traversed, current);
                     for (let i = 0; i < current.neighbors.length; i++) {
                         let target = current.neighbors[i];
                         if (!target.disabled && this.isNodeBadCompared(current, target)) {
-                            this.traversed.push(target);
+                            Quick.Push(this.traversed, target);
                             target.cameFrom = current;
                             target.costSoFar = this.getNodeNumber(current, target);
                             let dist = this.distanceBetweenNodes(target, endNode) * target.cost;
@@ -68,7 +68,7 @@ export class Pathfinder {
                         }
                         if (target == endNode) {
                             finalNode = target;
-                            this.traversed.push(finalNode);
+                            Quick.Push(this.traversed, target);
                             this.frontier.clear();
                             i = current.neighbors.length;
                         }
@@ -90,14 +90,6 @@ export class Pathfinder {
                 Quick.Push(compileNodes, iterateNode);
                 iterateNode = iterateNode.cameFrom;
             }
-
-            Logger.verbose("startNode", startNode.point.toString());
-            Logger.verbose("finalNode", finalNode.point.toString());
-            Logger.verbose("endNode", endNode.point.toString());
-            Logger.verbose("highestPrios", highest);
-            Logger.verbose("opCount", opCount);
-            Logger.verbose("compileNodes ", compileNodes.length);
-            Logger.verbose("iterateNodes ", iterateNodes, "out of", maxIterateNodes);
 
             //Reverse Path and convert to points.
             let points: Vector2[] = [];
@@ -178,10 +170,10 @@ export class Pathfinder {
 
     public getClosestWithCameFrom(point: Vector2): Node {
         let closest = this.findFirstWithCameFrom();
-        if (this.nodes.length > 0) {
+        if (this.traversed.length > 0) {
             let distance = point.distanceTo(closest.point);
-            for (let index = 0; index < this.nodes.length; index++) {
-                let value = this.nodes[index];
+            for (let index = 0; index < this.traversed.length; index++) {
+                let value = this.traversed[index];
                 if (!value.disabled && value.cameFrom != null) {
                     if (point.distanceTo(value.point) < distance) {
                         closest = value;
@@ -194,13 +186,13 @@ export class Pathfinder {
     }
 
     public findFirstWithCameFrom() {
-        for (let i = 0; i < this.nodes.length; i++) {
-            let node = this.nodes[i];
+        for (let i = 0; i < this.traversed.length; i++) {
+            let node = this.traversed[i];
             if (node.cameFrom != null) {
                 return node;
             }
         }
-        return this.nodes[0];
+        return this.traversed[0];
     }
 
     public addNode(node: Node) {

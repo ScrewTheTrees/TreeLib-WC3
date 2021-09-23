@@ -1,3 +1,5 @@
+import {Quick} from "wc3-treelib/src/TreeLib/Quick";
+
 export class LinkedList<T> {
     public first?: ListNode<T>;
     public last?: ListNode<T>;
@@ -5,7 +7,7 @@ export class LinkedList<T> {
     public noOfEntries: number = 0;
 
     public insertAtStart(element: T) {
-        const node: ListNode<T> = new ListNode(this, element);
+        const node: ListNode<T> = ListNode.new(this, element);
         let next = this.first;
 
         if (next) next.previous = node; //Point old head to new head.
@@ -19,7 +21,7 @@ export class LinkedList<T> {
     }
 
     public insertAtEnd(element: T) {
-        const node: ListNode<T> = new ListNode(this, element);
+        const node: ListNode<T> = ListNode.new(this, element);
         let previous = this.last;
 
         if (previous) previous.next = node; //Point old head to new head.
@@ -63,6 +65,12 @@ export class LinkedList<T> {
     }
 
     public clear() {
+        let currentNode = this.first;
+        while (currentNode != null) {
+            currentNode.recycle();
+            currentNode = currentNode.next;
+        }
+
         this.first = undefined;
         this.last = undefined;
         this.noOfEntries = 0;
@@ -75,7 +83,7 @@ class ListNode<T> {
     public next?: ListNode<T>;
     public element: T;
 
-    constructor(ownerList: LinkedList<T>, element: T, previous?: ListNode<T>, next?: ListNode<T>) {
+    private constructor(ownerList: LinkedList<T>, element: T, previous?: ListNode<T>, next?: ListNode<T>) {
         this.ownerList = ownerList;
         this.element = element;
         this.previous = previous;
@@ -114,6 +122,33 @@ class ListNode<T> {
         this.previous = undefined;
 
         this.ownerList.noOfEntries -= 1;
+        this.recycle();
+        return this;
+    }
+
+    //Stash API
+    private static stash: ListNode<any>[] = [];
+
+    public static new<T>(ownerList: LinkedList<T>, element: T, previous?: ListNode<T>, next?: ListNode<T>): ListNode<T> {
+        if (this.stash.length > 0) return this.stash.pop()!.updateTo(ownerList, element, previous, next);
+        else return new ListNode(ownerList, element, previous, next);
+    }
+
+    public static recycle(p: ListNode<any>) {
+        if (!Quick.Contains(this.stash, p))
+            Quick.Push(this.stash, p);
+    }
+
+    public recycle(): this {
+        ListNode.recycle(this);
+        return this;
+    }
+
+    public updateTo(ownerList: LinkedList<T>, element: T, previous?: ListNode<T>, next?: ListNode<T>): ListNode<T> {
+        this.ownerList = ownerList;
+        this.element = element;
+        this.previous = previous;
+        this.next = next;
         return this;
     }
 }

@@ -98,9 +98,9 @@ export class PathfinderGrid extends Pathfinder {
         } else {
             while (!done) {
                 routine();
-                // @ts-ignore
-                routine = undefined;
             }
+            // @ts-ignore
+            routine = undefined;
         }
     }
     private connectNeighbors(previousX: number, previousY: number, stepSize: number, previousNode: Node, allowDiagonal: boolean) {

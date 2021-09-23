@@ -16,11 +16,21 @@ export class PriorityQueue<T> {
         }
     }
 
+    public searchLowerPriority(entry: PriorityEntry<T>) {
+        let currentNode = this.entries.first;
+        while (currentNode != null) {
+            if (currentNode.element.priority > entry.priority) {
+                return currentNode;
+            }
+            currentNode = currentNode.next;
+        }
+
+        return null;
+    }
+
     public push(value: T, priority: number) {
         let entry = PriorityEntry.new(value, priority);
-        const referenceField = this.entries.search((t) => {
-            return entry.priority <= t.priority; //If Ts priority is above entry, insert entry before T
-        });
+        const referenceField = this.searchLowerPriority(entry);
         if (referenceField) {
             referenceField.insertBefore(entry);
         } else {
