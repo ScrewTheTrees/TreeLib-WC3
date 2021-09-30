@@ -10,8 +10,26 @@ export class Node {
     public cost = 1;
 
     //Pathfinding
-    public cameFrom: Node | null = null;
-    public costSoFar: number = 0;
+    public cameFrom: Node[] = [];
+    public costSoFar: number[] = [];
+
+    public setCameFrom(index: number, cameFrom: Node | null, cost: number) {
+        if (cameFrom) this.cameFrom[index] = cameFrom;
+        this.costSoFar[index] = cost;
+    }
+
+    public clearIndex(index: number) {
+        Quick.Slice(this.cameFrom,index);
+        Quick.Slice(this.costSoFar,index);
+    }
+
+    public getCostSoFar(index: number) {
+        return this.costSoFar[index] || 0;
+    }
+
+    public getCameFrom(index: number): Node | undefined {
+        return this.cameFrom[index];
+    }
 
     constructor(point: Vector2) {
         this.point = point;

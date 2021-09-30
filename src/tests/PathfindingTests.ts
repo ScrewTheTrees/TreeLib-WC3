@@ -40,7 +40,7 @@ export class PathfindingTests {
             let coord = InputManager.getLastMouseCoordinate(Player(0));
             let path = this.pathfinder.findPath(Vector2.new(0, 0), coord);
             let actions: UnitAction[] = [];
-            let newPath = path.getPathOptimised();
+            let newPath = path.optimisePath();
             print("newPath: ", path.path.length, " -> ", newPath.length);
             let u = CreateUnit(Player(0), FourCC("hfoo"), 0, 0, 0);
             for (let i = 0; i < newPath.length; i++) {

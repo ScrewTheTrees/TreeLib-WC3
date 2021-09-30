@@ -5,115 +5,193 @@ import {PriorityQueue} from "../Utility/Data/PriorityQueue";
 import {PathfindResult} from "./PathfindResult";
 import {NodeTable} from "./NodeTable";
 import {Quick} from "../Quick";
+import {DelayDto} from "../Utility/DelayDto";
+import {Delay} from "../Utility/Delay";
+import {TreeThread} from "../Utility/TreeThread";
 
 export class Pathfinder {
     public nodes: Node[] = [];
-    private traversed: Node[] = [];
-    private frontier = new PriorityQueue<Node>();
     public nodeTable: NodeTable = new NodeTable();
     public useCache: boolean = true;
+    public nextIndex = 0;
+
+    public findPathAsync(from: Vector2,
+                         to: Vector2,
+                         maxIterateNodes: number = math.maxinteger,
+                         asyncMax: number = 256,
+                         onFinish?: (result: PathfindResult) => any) {
+        let startNode = this.getNodeClosestTo(from);
+        let endNode = this.getNodeClosestTo(to);
+        return this.findPathByNodesAsync(startNode, endNode, maxIterateNodes, asyncMax, onFinish);
+    }
 
     public findPath(from: Vector2, to: Vector2, maxDist?: number) {
         let startNode = this.getNodeClosestTo(from);
         let endNode = this.getNodeClosestTo(to);
-        return this.findPathByNodes(startNode, endNode, from, to, maxDist);
+        return this.findPathByNodes(startNode, endNode, maxDist);
     }
-    public findPathByNodes(startNode: Node, endNode: Node, from: Vector2, to: Vector2, maxIterateNodes: number = math.maxinteger) {
-            if (this.useCache) {
-                let node1 = this.nodeTable.get(startNode, endNode);
-                if (node1 != null) {
-                    Logger.verbose("Used cached path.");
-                    return node1.value.copy();
-                }
+
+    public findPathByNodesAsync(startNode: Node,
+                                endNode: Node,
+                                maxIterateNodes: number = math.maxinteger,
+                                asyncMax: number = 256,
+                                onFinish?: (result: PathfindResult) => any) {
+        let done = false;
+        let routine = coroutine.create(() => {
+            xpcall(() => {
+                let result = this.findPathByNodes(startNode, endNode, maxIterateNodes, asyncMax)
+                if (onFinish) onFinish(result);
+            }, Logger.critical);
+            done = true;
+        })
+        coroutine.resume(routine);
+        Delay.addDelay((delay: DelayDto) => {
+            if (!done) {
+                delay.repeatCounter = 0;
+                coroutine.resume(routine);
+            } else {
+                delay.repeatCounter = delay.repeats;
+            }
+        }, 0.02, 2);
+    }
+
+    public findPathByNodes(startNode: Node, endNode: Node, maxIterateNodes: number = math.maxinteger, asyncMax: number = -1) {
+        print(os.clock(), "Start/Setup.");
+        if (this.useCache) {
+            let node1 = this.nodeTable.get(startNode, endNode);
+            if (node1 != null) {
+                Logger.verbose("Used cached path.");
+                return node1.value.copy();
+            }
+        }
+
+        let pathFindIndex = this.nextIndex++;
+        let isAsync = true;
+        if (asyncMax <= 0) isAsync = false;
+
+        const frontier = new PriorityQueue<Node>();
+        const nodesInOrder: Node[] = [];
+
+        Quick.Push(nodesInOrder, startNode);
+        Quick.Push(nodesInOrder, endNode);
+
+        //Logic
+        startNode.setCameFrom(pathFindIndex, null, this.distanceBetweenNodes(startNode, endNode) * startNode.cost);
+        frontier.push(startNode, startNode.getCostSoFar(pathFindIndex) + startNode.cost);
+
+        let finalNode: Node = startNode;
+        let finalDist: number = math.maxinteger;
+        let highest = 0;
+        let opCount = 0;
+        let iterateNodes = 0;
+        let foundPath = false;
+
+        print(os.clock(), "Main Frontier Loop.");
+        while (frontier.hasEntry() && iterateNodes < maxIterateNodes) {
+            iterateNodes += 1;
+            opCount += 1;
+
+            if (isAsync && iterateNodes % asyncMax == 0) {
+                coroutine.yield();
             }
 
-            //Setup
-            this.frontier.clear();
-            this.resetNodes();
+            let current = frontier.get();
+            if (current != null) {
+                Quick.Push(nodesInOrder, current);
+                for (let i = 0; i < current.neighbors.length; i++) {
+                    let target = current.neighbors[i];
 
-            //Logic
-            this.frontier.push(startNode, startNode.costSoFar + startNode.cost);
-            startNode.cameFrom = null;
-            startNode.costSoFar = this.distanceBetweenNodes(startNode, endNode) * startNode.cost;
-            this.traversed.push(startNode);
-            let finalNode: Node = startNode;
-            let finalDist: number = math.maxinteger;
-            let highest = 0;
-            let opCount = 0;
-            let iterateNodes = 0;
+                    if (!target.disabled && this.isNodeBadCompared(pathFindIndex, current, target)) {
+                        if (target.getCameFrom(pathFindIndex)) Quick.Push(nodesInOrder, target);
 
-            while (this.frontier.hasEntry() && iterateNodes < maxIterateNodes) {
-                iterateNodes += 1;
-                opCount += 1;
+                        target.setCameFrom(pathFindIndex, current, this.getNodeNumber(pathFindIndex, current, target));
+                        let dist = this.distanceBetweenNodes(target, endNode) * target.cost;
+                        frontier.push(target, current.getCostSoFar(pathFindIndex) + dist);
 
-                let current = this.frontier.get();
-                if (current != null) {
-                    Quick.Push(this.traversed, current);
-                    for (let i = 0; i < current.neighbors.length; i++) {
-                        let target = current.neighbors[i];
-                        if (!target.disabled && this.isNodeBadCompared(current, target)) {
-                            Quick.Push(this.traversed, target);
-                            target.cameFrom = current;
-                            target.costSoFar = this.getNodeNumber(current, target);
-                            let dist = this.distanceBetweenNodes(target, endNode) * target.cost;
-
-                            this.frontier.push(target, current.costSoFar + dist);
-
-                            if (dist < finalDist) {
-                                finalDist = dist;
-                                finalNode = target;
-                            }
-
-                            opCount += 1;
-                        }
-                        if (target == endNode) {
+                        if (dist < finalDist) {
+                            finalDist = dist;
                             finalNode = target;
-                            Quick.Push(this.traversed, target);
-                            this.frontier.clear();
-                            i = current.neighbors.length;
                         }
+
+                        opCount += 1;
+                    }
+                    if (target == endNode) {
+                        foundPath = true;
+                        finalNode = target;
+                        i = math.maxinteger;
+                        break;
                     }
                 }
-                if (this.frontier.entries.noOfEntries > highest) {
-                    highest = this.frontier.entries.noOfEntries;
+                if (current == endNode) {
+                    foundPath = true;
+                    finalNode = current;
+                    break;
                 }
             }
-            if (finalNode == null) {
-                finalNode = this.getClosestWithCameFrom(to) || startNode;
+            if (frontier.entries.noOfEntries > highest) {
+                highest = frontier.entries.noOfEntries;
             }
+        }//while
 
-            // Backtrack to get path
-            let compileNodes: Node[] = [];
-            let iterateNode: Node | null = finalNode;
-            startNode.cameFrom = null;
-            while (iterateNode != null) {
-                Quick.Push(compileNodes, iterateNode);
-                iterateNode = iterateNode.cameFrom;
-            }
+        print(os.clock(), "getClosestWithCameFrom.");
 
-            //Reverse Path and convert to points.
-            let points: Vector2[] = [];
-            for (let i = compileNodes.length - 1; i >= 0; i--) {
-                let node = compileNodes[i];
-                points.push(Vector2.copy(node.point));
-            }
+        if (finalNode == null) {
+            finalNode = this.getClosestWithCameFrom(pathFindIndex, nodesInOrder, endNode.point, asyncMax * 2) || startNode;
+        }
 
-            let pathfindResult = new PathfindResult(points, finalNode == endNode, startNode, endNode, finalNode);
-            if (this.useCache) {
-                this.nodeTable.push(startNode, endNode, pathfindResult);
-                return pathfindResult.copy();
-            }
-           return pathfindResult;
+        print(os.clock(), "Backtrack.");
+        // Backtrack to get path
+        let compileNodes: Node[] = [];
+        let iterateNode: Node | undefined = finalNode;
+        startNode.clearIndex(pathFindIndex);
+        while (iterateNode != null) {
+            Quick.Push(compileNodes, iterateNode);
+            iterateNode = iterateNode.getCameFrom(pathFindIndex);
+        }
+
+        print(os.clock(), "Reverse Path and convert to points.");
+
+        //Reverse Path and convert to points.
+        let points: Vector2[] = [];
+        for (let i = compileNodes.length - 1; i >= 0; i--) {
+            let node = compileNodes[i];
+            points.push(Vector2.copy(node.point));
+        }
+
+        let pathfindResult = new PathfindResult(points, finalNode == endNode, startNode, endNode, finalNode);
+        if (this.useCache) {
+            this.nodeTable.push(startNode, endNode, pathfindResult);
+            return pathfindResult.finalise().copy();
+        }
+
+        print(os.clock(), "Done?");
+
+        //Clear
+        TreeThread.RunCoroutineUntilDone(
+            () => {
+                iterateNodes = 0;
+                frontier.clear(true);
+                for (let node of nodesInOrder) {
+                    node.clearIndex(pathFindIndex);
+
+                    iterateNodes++;
+                    if (iterateNodes % 32 == 0) coroutine.yield();
+                }
+                print(os.clock(), "Cleaned nodes in order.")
+            });
+
+
+        return pathfindResult.finalise();
     }
 
-    public getNodeNumber(current: Node, target: Node) {
-        return current.costSoFar + (this.distanceBetweenNodes(current, target) * target.cost);
+    public getNodeNumber(pathFindIndex: number, current: Node, target: Node) {
+        return current.getCostSoFar(pathFindIndex) + (this.distanceBetweenNodes(current, target) * target.cost);
     }
 
-    public isNodeBadCompared(current: Node, target: Node): boolean {
-        if (target.costSoFar <= 0)
+    public isNodeBadCompared(pathFindIndex: number, current: Node, target: Node): boolean {
+        if (target.getCostSoFar(pathFindIndex) <= 0)
             return true; // Touch this node, its empty.
-        if (current.costSoFar + (this.distanceBetweenNodes(current, target) * target.cost) < target.costSoFar)
+        if (this.getNodeNumber(pathFindIndex, current, target) < target.getCostSoFar(pathFindIndex))
             return true; // Target node is higher cost, add it to prio queue so it can be reevaluated.
 
         return false;
@@ -122,15 +200,6 @@ export class Pathfinder {
     public distanceBetweenNodes(current: Node, target: Node): number {
         let dist = math.abs(current.point.distanceTo(target.point));
         return dist >= 1 ? dist : 0;
-    }
-
-    public resetNodes() {
-        for (let i = 0; i < this.traversed.length; i++) {
-            let node = this.traversed[i];
-            node.cameFrom = null;
-            node.costSoFar = 0;
-        }
-        Quick.Clear(this.traversed);
     }
 
     public clearCache() {
@@ -168,31 +237,32 @@ export class Pathfinder {
         return closest;
     }
 
-    public getClosestWithCameFrom(point: Vector2): Node {
-        let closest = this.findFirstWithCameFrom();
-        if (this.traversed.length > 0) {
-            let distance = point.distanceTo(closest.point);
-            for (let index = 0; index < this.traversed.length; index++) {
-                let value = this.traversed[index];
-                if (!value.disabled && value.cameFrom != null) {
-                    if (point.distanceTo(value.point) < distance) {
-                        closest = value;
-                        distance = point.distanceTo(value.point);
-                    }
+    public getClosestWithCameFrom(pathFindIndex: number, nodesInOrder: Node[], point: Vector2, asyncNumber: number = -1): Node {
+        let closest = this.findFirstWithCameFrom(nodesInOrder);
+        let distance = point.distanceTo(closest.point);
+        let iterate = 0;
+
+        for (let value of nodesInOrder) {
+            if (!value.disabled && value.getCameFrom(pathFindIndex) != undefined) {
+                if (point.distanceTo(value.point) < distance) {
+                    closest = value;
+                    distance = point.distanceTo(value.point);
+                    iterate++;
+                    if (asyncNumber > 0 && iterate % asyncNumber == 0) coroutine.yield();
                 }
             }
         }
         return closest;
     }
 
-    public findFirstWithCameFrom() {
-        for (let i = 0; i < this.traversed.length; i++) {
-            let node = this.traversed[i];
+    public findFirstWithCameFrom(nodesInOrder: Node[]) {
+        for (let i = 0; i < nodesInOrder.length; i++) {
+            let node = nodesInOrder[i];
             if (node.cameFrom != null) {
                 return node;
             }
         }
-        return this.traversed[0];
+        return nodesInOrder[0];
     }
 
     public addNode(node: Node) {

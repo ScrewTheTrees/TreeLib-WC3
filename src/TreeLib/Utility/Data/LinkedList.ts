@@ -1,4 +1,5 @@
-import {Quick} from "wc3-treelib/src/TreeLib/Quick";
+import {Quick} from "../../Quick";
+
 
 export class LinkedList<T> {
     public first?: ListNode<T>;
@@ -64,11 +65,14 @@ export class LinkedList<T> {
         return null;
     }
 
-    public clear() {
+    public clear(isCoroutine: boolean = false) {
         let currentNode = this.first;
+        let count = 0;
         while (currentNode != null) {
             currentNode.recycle();
             currentNode = currentNode.next;
+            count++;
+            if (isCoroutine && count % 32 == 0) coroutine.yield();
         }
 
         this.first = undefined;

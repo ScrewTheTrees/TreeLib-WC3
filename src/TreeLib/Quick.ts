@@ -6,6 +6,7 @@ export namespace Quick {
         arr[index] = arr[arr.length - 1];
         arr.pop();
     }
+
     export function Remove<T>(arr: T[], value: T) {
         let index = arr.indexOf(value);
         if (index >= 0) {

@@ -25,13 +25,32 @@ export class PointWalkableChecker {
         }
     }
 
-    public checkTerrainXY(x: number, y: number): boolean {
+    public checkTerrainIsWalkableXY(x: number, y: number): boolean {
         const p = Vector2.new(x, y);
-        const result = this.checkTerrain(p)
+        const result = this.checkTerrainIsWalkable(p)
         p.recycle();
         return result;
     }
-    private checkTerrain(p: Vector2): boolean {
+
+    public checkTerrainIsWalkableCircleXY(x: number, y: number, radius: number, precision: number = 8): boolean {
+        const p = Vector2.new(x, y);
+        let result = this.checkTerrainIsWalkable(p);
+        if (!result) {
+            let checkPoint = p.copy();
+            let angle = 0;
+            let anglePerStep = 360 / precision;
+            for (let i = 0; i < precision; i++) {
+                checkPoint.updateToPoint(p);
+                result = this.checkTerrainIsWalkable(checkPoint.polarProject(radius, angle));
+                if (!result) break;
+                angle += anglePerStep;
+            }
+            checkPoint.recycle();
+        }
+        p.recycle();
+        return result;
+    }
+    private checkTerrainIsWalkable(p: Vector2): boolean {
         MoveRectTo(this.checkRect, p.x, p.y);
         EnumItemsInRect(this.checkRect, null, () => this.hideItem(GetEnumItem()));
         SetItemPosition(this.checkItem, p.x, p.y);

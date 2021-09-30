@@ -23,7 +23,7 @@ export class Delay extends Entity {
 
     private queue: DelayDto[] = [];
 
-    public addDelay(f: Function, delaySeconds: number, repeats: number = 1) {
+    public addDelay(f: (this: any, delayDto: DelayDto) => any, delaySeconds: number, repeats: number = 1) {
         this.addDelayFrom(new DelayDto(f, delaySeconds, repeats));
     }
 
@@ -36,7 +36,7 @@ export class Delay extends Entity {
             let queueDto = this.queue[index];
             queueDto.age += 0.01;
             if (queueDto.age >= queueDto.delay) {
-                queueDto.function();
+                queueDto.function(queueDto);
                 queueDto.repeatCounter += 1;
                 if (queueDto.repeatCounter >= queueDto.repeats) {
                     // @ts-ignore
@@ -59,7 +59,7 @@ export class Delay extends Entity {
      * @param delaySeconds the time before the delay executes.
      * @param repeats How many times it will run, 1 runs it once. 0 and under wont run at all
      */
-    public static addDelay(f: Function, delaySeconds: number = 1, repeats: number = 1): DelayDto {
+    public static addDelay(f: (this: any, delayDto: DelayDto) => any, delaySeconds: number = 1, repeats: number = 1): DelayDto {
         let del = new DelayDto(f, delaySeconds, repeats);
         this.getInstance().addDelayFrom(del);
         return del;

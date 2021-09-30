@@ -42,11 +42,14 @@ export class PriorityQueue<T> {
         return this.entries.noOfEntries > 0;
     }
 
-    public clear() {
+    public clear(isCoroutine: boolean = false) {
+        let count = 0;
         this.entries.forEach((entry) => {
             entry.recycle();
+            count++;
+            if (isCoroutine && count % 32 == 0) coroutine.yield();
         });
-        this.entries.clear();
+        this.entries.clear(true);
     }
 }
 

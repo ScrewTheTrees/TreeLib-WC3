@@ -51,7 +51,7 @@ export class PathfinderGrid extends Pathfinder {
                     }
                     for (let j = startY; j < endY; j += stepSize) {
                         let pos = Vector2.new(i + (stepSize / 2), j + (stepSize / 2));
-                        if (excludeNonWalkable && (!walk.checkTerrainXY(pos.x, pos.y))) {
+                        if (excludeNonWalkable && (!walk.checkTerrainIsWalkableXY(pos.x, pos.y))) {
                             pos.recycle();
                             sr++;
                             continue; //Not walkable.
@@ -138,8 +138,8 @@ export class PathfinderGrid extends Pathfinder {
     }
     public getNodeClosestTo(point: Vector2): Node {
         let p = point.copy();
-        p.x -= this.stepSize / 2;
-        p.y -= this.stepSize / 2;
+        //p.x -= 4;
+        //p.y -= 4;
         p.x = math.floor(p.x / this.stepSize) * this.stepSize;
         p.y = math.floor(p.y / this.stepSize) * this.stepSize;
         if (p.x <= this.startX) p.x = this.startX + this.stepSize;
