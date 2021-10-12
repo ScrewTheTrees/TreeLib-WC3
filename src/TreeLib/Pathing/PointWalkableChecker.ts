@@ -51,6 +51,8 @@ export class PointWalkableChecker {
         return result;
     }
     private checkTerrainIsWalkable(p: Vector2): boolean {
+        if (IsTerrainPathable(p.x, p.y, PATHING_TYPE_WALKABILITY)) return false; //Cant walk here
+
         MoveRectTo(this.checkRect, p.x, p.y);
         EnumItemsInRect(this.checkRect, null, () => this.hideItem(GetEnumItem()));
         SetItemPosition(this.checkItem, p.x, p.y);

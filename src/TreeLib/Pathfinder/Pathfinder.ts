@@ -34,7 +34,7 @@ export class Pathfinder {
     public findPathByNodesAsync(startNode: Node,
                                 endNode: Node,
                                 maxIterateNodes: number = math.maxinteger,
-                                asyncMax: number = 256,
+                                asyncMax: number = 128,
                                 onFinish?: (result: PathfindResult) => any) {
         let done = false;
         let routine = coroutine.create(() => {
@@ -56,7 +56,7 @@ export class Pathfinder {
     }
 
     public findPathByNodes(startNode: Node, endNode: Node, maxIterateNodes: number = math.maxinteger, asyncMax: number = -1) {
-        print(os.clock(), "Start/Setup.");
+        // print(os.clock(), "Start/Setup.");
         if (this.useCache) {
             let node1 = this.nodeTable.get(startNode, endNode);
             if (node1 != null) {
@@ -77,7 +77,7 @@ export class Pathfinder {
 
         //Logic
         startNode.setCameFrom(pathFindIndex, null, this.distanceBetweenNodes(startNode, endNode) * startNode.cost);
-        frontier.push(startNode, startNode.getCostSoFar(pathFindIndex) + startNode.cost);
+        frontier.insertWithPriority(startNode, startNode.getCostSoFar(pathFindIndex) + startNode.cost);
 
         let finalNode: Node = startNode;
         let finalDist: number = math.maxinteger;
@@ -86,8 +86,8 @@ export class Pathfinder {
         let iterateNodes = 0;
         let foundPath = false;
 
-        print(os.clock(), "Main Frontier Loop.");
-        while (frontier.hasEntry() && iterateNodes < maxIterateNodes) {
+        // print(os.clock(), "Main Frontier Loop.");
+        while (frontier.size() > 0 && iterateNodes < maxIterateNodes) {
             iterateNodes += 1;
             opCount += 1;
 
@@ -95,7 +95,7 @@ export class Pathfinder {
                 coroutine.yield();
             }
 
-            let current = frontier.get();
+            let current = frontier.popLowestPriority();
             if (current != null) {
                 Quick.Push(nodesInOrder, current);
                 for (let i = 0; i < current.neighbors.length; i++) {
@@ -106,7 +106,7 @@ export class Pathfinder {
 
                         target.setCameFrom(pathFindIndex, current, this.getNodeNumber(pathFindIndex, current, target));
                         let dist = this.distanceBetweenNodes(target, endNode) * target.cost;
-                        frontier.push(target, current.getCostSoFar(pathFindIndex) + dist);
+                        frontier.insertWithPriority(target, current.getCostSoFar(pathFindIndex) + dist);
 
                         if (dist < finalDist) {
                             finalDist = dist;
@@ -128,28 +128,34 @@ export class Pathfinder {
                     break;
                 }
             }
-            if (frontier.entries.noOfEntries > highest) {
-                highest = frontier.entries.noOfEntries;
+            if (frontier.size() > highest) {
+                highest = frontier.size();
             }
         }//while
 
-        print(os.clock(), "getClosestWithCameFrom.");
+        // print(os.clock(), "getClosestWithCameFrom. : Frontier size", frontier.size());
 
         if (finalNode == null) {
             finalNode = this.getClosestWithCameFrom(pathFindIndex, nodesInOrder, endNode.point, asyncMax * 2) || startNode;
         }
 
-        print(os.clock(), "Backtrack.");
+        // print(os.clock(), "Backtrack.");
         // Backtrack to get path
         let compileNodes: Node[] = [];
         let iterateNode: Node | undefined = finalNode;
+        iterateNodes = 0;
         startNode.clearIndex(pathFindIndex);
         while (iterateNode != null) {
             Quick.Push(compileNodes, iterateNode);
             iterateNode = iterateNode.getCameFrom(pathFindIndex);
+
+            iterateNodes++;
+            if (isAsync && iterateNodes % asyncMax == 0) {
+                coroutine.yield();
+            }
         }
 
-        print(os.clock(), "Reverse Path and convert to points.");
+        // print(os.clock(), "Reverse Path and convert to points.");
 
         //Reverse Path and convert to points.
         let points: Vector2[] = [];
@@ -164,7 +170,7 @@ export class Pathfinder {
             return pathfindResult.finalise().copy();
         }
 
-        print(os.clock(), "Done?");
+        // print(os.clock(), "Done?");
 
         //Clear
         TreeThread.RunCoroutineUntilDone(
@@ -175,9 +181,11 @@ export class Pathfinder {
                     node.clearIndex(pathFindIndex);
 
                     iterateNodes++;
-                    if (iterateNodes % 32 == 0) coroutine.yield();
+                    if (isAsync && iterateNodes % 32 == 0) {
+                        coroutine.yield();
+                    }
                 }
-                print(os.clock(), "Cleaned nodes in order.")
+                // print(os.clock(), "Cleaned nodes in order.")
             });
 
 

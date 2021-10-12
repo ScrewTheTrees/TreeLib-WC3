@@ -19,8 +19,8 @@ export class Node {
     }
 
     public clearIndex(index: number) {
-        Quick.Slice(this.cameFrom,index);
-        Quick.Slice(this.costSoFar,index);
+        Quick.Slice(this.cameFrom, index);
+        Quick.Slice(this.costSoFar, index);
     }
 
     public getCostSoFar(index: number) {

@@ -152,47 +152,47 @@ export class PathfinderGrid extends Pathfinder {
             let vecs: Vector2[] = [];
             let frontier = new PriorityQueue<Vector2>();
             let next = p.copy();
-            frontier.push(next, i);
+            frontier.insertWithPriority(next, i);
             vecs.push(next);
             while (g == null) {
                 i--;
-                let thing = frontier.get();
+                let thing = frontier.popLowestPriority();
                 if (thing) {
                     let node = this.grid[thing.x][thing.y];
                     if (node) g = node;
                     else {
                         let v = thing.copy().updateTo(thing.x - this.stepSize, thing.y);
-                        frontier.push(v, i);
+                        frontier.insertWithPriority(v, i);
                         vecs.push(v);
                         v = thing.copy().updateTo(thing.x + this.stepSize, thing.y);
-                        frontier.push(v, i);
+                        frontier.insertWithPriority(v, i);
                         vecs.push(v);
                         v = thing.copy().updateTo(thing.x, thing.y - this.stepSize);
-                        frontier.push(v, i);
+                        frontier.insertWithPriority(v, i);
                         vecs.push(v);
                         v = thing.copy().updateTo(thing.x, thing.y + this.stepSize);
-                        frontier.push(v, i);
+                        frontier.insertWithPriority(v, i);
                         vecs.push(v);
 
                         v = thing.copy().updateTo(thing.x - this.stepSize, thing.y - this.stepSize);
-                        frontier.push(v, i);
+                        frontier.insertWithPriority(v, i);
                         vecs.push(v);
                         v = thing.copy().updateTo(thing.x - this.stepSize, thing.y + this.stepSize);
-                        frontier.push(v, i);
+                        frontier.insertWithPriority(v, i);
                         vecs.push(v);
                         v = thing.copy().updateTo(thing.x + this.stepSize, thing.y - this.stepSize);
-                        frontier.push(v, i);
+                        frontier.insertWithPriority(v, i);
                         vecs.push(v);
                         v = thing.copy().updateTo(thing.x + this.stepSize, thing.y + this.stepSize);
-                        frontier.push(v, i);
+                        frontier.insertWithPriority(v, i);
                         vecs.push(v);
                     }
                 }
             }
             for (let vec of vecs) {
                 vec.recycle();
-                frontier.clear();
             }
+            frontier.clear();
         }
         p.recycle();
         return g;

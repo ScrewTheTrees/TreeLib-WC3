@@ -1,6 +1,9 @@
 import {Quick} from "../../Quick";
 
-
+/**
+ * Linked lists are a fraud, there is no hardware made to support it, on paper it sounds really nice but
+ * most other forms can outperform it in all ways... don't use it nerd.
+ */
 export class LinkedList<T> {
     public first?: ListNode<T>;
     public last?: ListNode<T>;

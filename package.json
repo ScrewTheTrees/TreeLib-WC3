@@ -2,7 +2,7 @@
   "name": "wc3-treelib",
   "author": "Fredrik Grimmenhag (ScrewTheTrees)",
   "license": "MIT",
-  "version": "2.4.8",
+  "version": "2.5.0",
   "description": "Quality package.",
   "scripts": {
     "fullRecompileAndRun": "npm run clean && npm run compileTypescript && npm run compileAndRunMap",
@@ -11,7 +11,8 @@
     "compileTypescript": "tstl -p tsconfig.json",
     "compileAndRunMap": "npm run compileMap && ts-node bin/operations run",
     "compileMap": "ts-node bin/operations build",
-    "regenerateIndex": "ts-node bin/operations regenerateIndex"
+    "regenerateIndex": "ts-node bin/operations regenerateIndex",
+    "test": "ts-node bin/Test"
   },
   "directories": {
     "lib": "lib"
@@ -19,9 +20,9 @@
   "main": "index.d.ts",
   "devDependencies": {
     "fs-extra": "^9.0.1",
-    "lua-types": "^2.6.1",
+    "lua-types": "2.6.1",
     "rimraf": "^3.0.2",
-    "ts-node": "^9.0.0",
+    "ts-node": "8.0.1",
     "typescript": "^3.9.7",
     "typescript-to-lua": "^0.31.0",
     "winston": "^3.3.3"

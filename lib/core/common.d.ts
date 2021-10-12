@@ -1,5 +1,6 @@
 /** @noSelfInFile **/
 
+declare interface handle { __handle: never; }
 declare interface agent extends handle { __agent: never; }
 declare interface event extends agent { __event: never; }
 declare interface player extends agent { __player: never; }
