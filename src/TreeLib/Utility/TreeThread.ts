@@ -12,6 +12,7 @@ export abstract class TreeThread extends Entity {
     private routine: Function | undefined;
     private _isManual: boolean = false;
     public isFinished: boolean = false;
+    public lastYieldDuration: number = 0;
 
     protected constructor(timerDelay: number = 0.01, manual: boolean = false) {
         super(timerDelay);
@@ -44,11 +45,13 @@ export abstract class TreeThread extends Entity {
     }
     protected yield() {
         coroutine.yield();
+        this.lastYieldDuration = this.timerDelay;
     }
     protected yieldTimed(totalSeconds: number, ...args: any[]) {
         for (let i = 0; i < totalSeconds; i += this.timerDelay) {
             this.yield();
         }
+        this.lastYieldDuration = totalSeconds;
     }
     public resume() {
         if (!this.isFinished) {

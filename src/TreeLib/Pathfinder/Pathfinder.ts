@@ -8,6 +8,7 @@ import {Quick} from "../Quick";
 import {DelayDto} from "../Utility/DelayDto";
 import {Delay} from "../Utility/Delay";
 import {TreeThread} from "../Utility/TreeThread";
+import {TreePromise} from "../Utility/TreePromise";
 
 export class Pathfinder {
     public nodes: Node[] = [];
@@ -18,11 +19,10 @@ export class Pathfinder {
     public findPathAsync(from: Vector2,
                          to: Vector2,
                          maxIterateNodes: number = math.maxinteger,
-                         asyncMax: number = 256,
-                         onFinish?: (result: PathfindResult) => any) {
+                         asyncMax: number = 256): TreePromise<PathfindResult> {
         let startNode = this.getNodeClosestTo(from);
         let endNode = this.getNodeClosestTo(to);
-        return this.findPathByNodesAsync(startNode, endNode, maxIterateNodes, asyncMax, onFinish);
+        return this.findPathByNodesAsync(startNode, endNode, maxIterateNodes, asyncMax);
     }
 
     public findPath(from: Vector2, to: Vector2, maxDist?: number) {
@@ -34,25 +34,25 @@ export class Pathfinder {
     public findPathByNodesAsync(startNode: Node,
                                 endNode: Node,
                                 maxIterateNodes: number = math.maxinteger,
-                                asyncMax: number = 128,
-                                onFinish?: (result: PathfindResult) => any) {
-        let done = false;
+                                asyncMax: number = 128): TreePromise<PathfindResult> {
+        let promise = new TreePromise<PathfindResult>();
         let routine = coroutine.create(() => {
             xpcall(() => {
                 let result = this.findPathByNodes(startNode, endNode, maxIterateNodes, asyncMax)
-                if (onFinish) onFinish(result);
-            }, Logger.critical);
-            done = true;
+                promise.apply(result)
+            }, (error) => {
+                promise.fail(error);
+            });
         })
-        coroutine.resume(routine);
         Delay.addDelay((delay: DelayDto) => {
-            if (!done) {
+            if (!promise.isFinished) {
                 delay.repeatCounter = 0;
                 coroutine.resume(routine);
             } else {
                 delay.repeatCounter = delay.repeats;
             }
         }, 0.02, 2);
+        return promise;
     }
 
     public findPathByNodes(startNode: Node, endNode: Node, maxIterateNodes: number = math.maxinteger, asyncMax: number = -1) {
