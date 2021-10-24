@@ -1,13 +1,15 @@
-import {Node} from "./Node";
+import {Node, RectangleNode} from "./Node";
 import {Vector2} from "../Utility/Data/Vector2";
 import {Pathfinder} from "./Pathfinder";
 import {PointWalkableChecker} from "../Pathing/PointWalkableChecker";
 import {Delay} from "../Utility/Delay";
 import {DelayDto} from "../Utility/DelayDto";
 import {Logger} from "../Logger";
+import {Rectangle} from "../Utility/Data/Rectangle";
+import {Quick} from "../Quick";
 
-export class PathfinderGrid extends Pathfinder {
-    private grid: Node[][] = [];
+export class PathfinderRectangle extends Pathfinder<RectangleNode> {
+    private grid: RectangleNode[][] = [];
     private stepSize: number;
     private startX: number;
     private startY: number;
@@ -19,6 +21,7 @@ export class PathfinderGrid extends Pathfinder {
         super();
         let walk = PointWalkableChecker.getInstance();
         let done = false;
+        let halfStep = stepSize / 2;
         let xx = math.max(startX, endX);
         let yy = math.max(startY, endY);
         startX = math.min(startX, endX)
@@ -49,16 +52,16 @@ export class PathfinderGrid extends Pathfinder {
                         this.grid[i] = [];
                     }
                     for (let j = startY; j < endY; j += stepSize) {
-                        let pos = Vector2.new(i + (stepSize / 2), j + (stepSize / 2));
+                        if (this.grid[i][j] != null) continue; //Already Occupied.
+
+                        let pos = Vector2.new(i + halfStep, j + halfStep);
                         if (excludeNonWalkable && (!walk.checkTerrainIsWalkableXY(pos.x, pos.y))) {
                             pos.recycle();
                             sr++;
                             continue; //Not walkable.
                         }
 
-                        let node = new Node(pos);
-                        this.grid[i][j] = node;
-                        this.addNode(node);
+                        let node = this.generateRectangleNode(i, j, pos);
 
                         if (previousNode != undefined) {
                             this.connectNeighbors(previousX, previousY, stepSize, previousNode, allowDiagonal);
@@ -135,7 +138,7 @@ export class PathfinderGrid extends Pathfinder {
             if (downRight && down && right) previousNode.addNeighborTwoWay(downRight);
         }
     }
-    public getNodeClosestTo(point: Vector2): Node {
+    public getNodeClosestTo(point: Vector2): RectangleNode {
         let p = point.copy();
         //p.x -= 4;
         //p.y -= 4;
@@ -172,5 +175,82 @@ export class PathfinderGrid extends Pathfinder {
         }
         p.recycle();
         return g;
+    }
+    private generateRectangleNode(startI: number, startJ: number, pos: Vector2): RectangleNode {
+        let halfStep = this.stepSize / 2;
+        let node = new RectangleNode(pos, Rectangle.new(pos.x - halfStep, pos.y - halfStep, pos.x + halfStep, pos.y + halfStep));
+        let checker = PointWalkableChecker.getInstance();
+
+        this.grid[startI][startJ] = node;
+        this.addNode(node);
+
+        let addCandidates: Vector2[] = [];
+        let iterateSize = this.stepSize;
+        let hit = false;
+        let iterations = 0;
+        while (!hit && iterations < 4) {
+            let checkI = startI + iterateSize;
+            let checkJ = startJ + iterateSize;
+
+            for (let i = startI; i <= startI + iterateSize; i + this.stepSize) {
+                if (this.grid[i][checkJ] != null || !checker.checkTerrainIsWalkableXY(i, checkJ)) {
+                    hit = true;
+                    break;
+                } else {
+                    Quick.Push(addCandidates, Vector2.new(i, checkJ))
+                }
+            }
+            for (let j = startJ; j <= checkJ; j + this.stepSize) {
+                if (this.grid[checkI][j] != null || !checker.checkTerrainIsWalkableXY(checkI, j)) {
+                    hit = true;
+                    break;
+                } else {
+                    Quick.Push(addCandidates, Vector2.new(checkI, j))
+                }
+            }
+
+
+            for (let k = addCandidates.length - 1; k >= 0; k--) {
+                let candice = addCandidates[k];
+                if (!hit) this.grid[candice.x][candice.y] = node;
+                candice.recycle();
+                delete addCandidates[k];
+            }
+            if (!hit) {
+                node.boundary.xMax += this.stepSize;
+                node.boundary.yMax += this.stepSize;
+                node.point.x += halfStep;
+                node.point.y += halfStep;
+
+                iterations++;
+                iterateSize += this.stepSize;
+            }
+        }
+        this.addConnectionsRect(node, //Below
+            node.boundary.xMin,
+            node.boundary.xMax,
+            node.boundary.yMin - this.stepSize,
+            node.boundary.yMin - this.stepSize
+        )
+        this.addConnectionsRect(node, //Left
+            node.boundary.xMin - this.stepSize,
+            node.boundary.xMin - this.stepSize,
+            node.boundary.yMin,
+            node.boundary.yMax,
+        )
+        return node;
+    }
+
+    private addConnectionsRect(node: RectangleNode, x1: number, x2: number, y1: number, y2: number) {
+        let minX = math.min(x1, x2);
+        let maxX = math.max(x1, x2);
+        let minY = math.min(y1, y2);
+        let maxY = math.max(y1, y2);
+
+        for (let x = minX; x <= maxX; x += this.stepSize) {
+            for (let y = minY; y <= maxY; y += this.stepSize) {
+                node.addNeighborTwoWay(this.grid[x][y]);
+            }
+        }
     }
 }

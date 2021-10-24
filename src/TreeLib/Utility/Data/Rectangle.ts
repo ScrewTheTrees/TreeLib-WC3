@@ -3,6 +3,7 @@ import {Recyclable} from "./Recyclable";
 import {Vector2} from "./Vector2";
 import {Cube} from "./Cube";
 import {Vector3} from "./Vector3";
+import {TreeMath} from "../TreeMath";
 
 export class Rectangle implements Recyclable {
     public xMin!: number;
@@ -36,6 +37,23 @@ export class Rectangle implements Recyclable {
     }
     public static fromVectors(v1: Vector2, v2: Vector2): Rectangle {
         return this.new(v1.x, v1.y, v2.x, v2.y);
+    }
+
+    //Madness
+    public closestPointInside(other: Vector2): Vector2 {
+        let xx = TreeMath.Clamp(other.x, this.xMin, this.xMax)
+        let yy = TreeMath.Clamp(other.y, this.yMin, this.yMax)
+        return Vector2.new(xx, yy);
+    }
+    public closestPointInsideWithBoundary(other: Vector2, boundary: number = 1): Vector2 {
+        let xDiff = (this.xMax - this.xMin) / 2; //32
+        let yDiff = (this.yMax - this.yMin) / 2; //32
+        if (boundary < xDiff) xDiff = boundary;
+        if (boundary < yDiff) yDiff = boundary;
+
+        let xx = TreeMath.Clamp(other.x, this.xMin + xDiff, this.xMax - xDiff)
+        let yy = TreeMath.Clamp(other.y, this.yMin + yDiff, this.yMax - yDiff)
+        return Vector2.new(xx, yy);
     }
 
     //Intersects

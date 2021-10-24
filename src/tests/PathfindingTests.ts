@@ -40,12 +40,12 @@ export class PathfindingTests {
             let coord = InputManager.getLastMouseCoordinate(Player(0));
             let path = this.pathfinder.findPath(Vector2.new(0, 0), coord);
             let actions: UnitAction[] = [];
-            let newPath = path.optimisePath();
+            let newPath = path.path;
             print("newPath: ", path.path.length, " -> ", newPath.length);
             let u = CreateUnit(Player(0), FourCC("hfoo"), 0, 0, 0);
             for (let i = 0; i < newPath.length; i++) {
-                let value = Vector2.copy(newPath[i]);
-                actions.push(new UnitActionWaypoint(value, WaypointOrders.attack, 96));
+                let value = newPath[i];
+                actions.push(new UnitActionWaypoint(value.point, WaypointOrders.attack, 96));
             }
             actions.push(new UnitActionDeath(true));
             ActionQueue.createUnitQueue(u, ...actions);

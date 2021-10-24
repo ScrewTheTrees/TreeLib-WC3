@@ -1,4 +1,5 @@
 import {Quick} from "../Quick";
+import {Logger} from "../Logger";
 
 export class TreePromise<T> {
     public data: T | undefined;
@@ -12,24 +13,28 @@ export class TreePromise<T> {
         this.data = value;
         this.error = undefined;
         this.isFinished = true;
-        for (let call of this.thenCallbacks) {
-            call(value);
-        }
-        for (let final of this.finallyCallbacks) {
-            final();
-        }
+        xpcall(() => {
+            for (let call of this.thenCallbacks) {
+                call(value);
+            }
+            for (let final of this.finallyCallbacks) {
+                final();
+            }
+        }, Logger.critical)
         return this;
     }
     public fail(error: any) {
         this.data = undefined;
         this.error = error;
         this.isFinished = true;
-        for (let call of this.errorCallbacks) {
-            call(error);
-        }
-        for (let final of this.finallyCallbacks) {
-            final();
-        }
+        xpcall(() => {
+            for (let call of this.errorCallbacks) {
+                call(error);
+            }
+            for (let final of this.finallyCallbacks) {
+                final();
+            }
+        }, Logger.critical)
         return this;
     }
     public then(callback: (data: T) => void) {

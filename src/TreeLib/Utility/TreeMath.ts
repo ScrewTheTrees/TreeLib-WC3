@@ -1,5 +1,8 @@
 export namespace TreeMath {
     export function Clamp(value: number, min: number, max: number) {
+        let x = Math.min(min, max)
+        max = Math.max(min, max);
+        min = x;
         if (value > max) {
             value = max;
         } else if (value < min) {
@@ -8,8 +11,7 @@ export namespace TreeMath {
         return value;
     }
 
-    export function Lerp(a: number, b: number, t: number)
-    {
+    export function Lerp(a: number, b: number, t: number) {
         return a + (b - a) * TreeMath.Clamp(t, 0, 1);
     }
 

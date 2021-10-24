@@ -1,9 +1,7 @@
-import {Vector2} from "../Utility/Data/Vector2";
-import {Quick} from "../Quick";
 import {Node} from "./Node";
 
-export class PathfindResult {
-    public path: Vector2[];
+export class PathfindResult<T extends Node = Node> {
+    public path: T[];
     public reachedTheEnd: boolean;
     public startNode: Node;
     public endNode: Node;
@@ -11,7 +9,7 @@ export class PathfindResult {
     public optimisedPath: boolean = false;
     public finishedGenerating: boolean = false;
 
-    constructor(points: Vector2[], reachedTheEnd: boolean, startNode: Node, endNode: Node, finalNode: Node) {
+    constructor(points: T[], reachedTheEnd: boolean, startNode: Node, endNode: Node, finalNode: Node) {
         this.path = points;
         this.reachedTheEnd = reachedTheEnd;
         this.startNode = startNode;
@@ -25,33 +23,33 @@ export class PathfindResult {
     }
 
     /**
-     * Removes redundant nodes to make path less complex
+     * Removes redundant nodes to make path less complex, this might not be the best idea if you need precision.
+     * (Need a lot of fixing).
      */
-    optimisePath(recycle: boolean = false): Vector2[] {
+    /*optimisePath(recycle: boolean = false): Vector2[] {
         if (!this.optimisedPath) {
-            for (let i = 1; i < this.path.length - 1; i++) {
+            for (let i = this.path.length - 2; i > 0; i--) {
                 let node = this.path[i];
                 let previous = this.path[i - 1];
                 let next = this.path[i + 1];
 
-                if (Math.round(next.directionTo(node) * 100) != Math.round(node.directionTo(previous) * 100)) {//0.01 is good enough for comparison in this context.
+                if (Math.round(previous.directionTo(node) * 10) == Math.round(node.directionTo(next) * 10)) {//0.1 is good enough for comparison in this context.
                     Quick.Slice(this.path, i);
                     if (recycle) node.recycle();
-                    i--;
                 }
             }
             this.optimisedPath = true;
         }
         return this.path;
-    }
+    }*/
 
-    copy() {
-        let newPath: Vector2[] = [];
+    copy(): PathfindResult<T> {
+        let newPath: T[] = [];
         for (let i = 0; i < this.path.length; i++) {
             let value = this.path[i];
-            newPath.push(value.copy());
+            newPath.push(value);
         }
 
-        return new PathfindResult(newPath, this.reachedTheEnd, this.startNode, this.endNode, this.finalNode);
+        return new PathfindResult<T>(newPath, this.reachedTheEnd, this.startNode, this.endNode, this.finalNode);
     }
 }

@@ -32,9 +32,8 @@ export namespace Quick {
     }
 
     export function Clear<T>(arr: T[]) {
-        const count = arr.length;
-        for (let i = 0; i < count; i++) {
-            delete arr[i];
+        while (arr.pop() != undefined) {
+
         }
     }
 

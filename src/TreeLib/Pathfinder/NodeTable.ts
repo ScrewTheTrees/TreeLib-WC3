@@ -3,19 +3,20 @@ import {PathfindResult} from "./PathfindResult";
 import {LabelValue} from "../Utility/LabelValue";
 import {Quick} from "../Quick";
 
-export class NodeTable {
-    public list: LabelValue<Node, ResultContainer>[] = [];
+//Unused until further notice.
+export class NodeTable<T extends Node = Node> {
+    public list: LabelValue<T, ResultContainer<T>>[] = [];
 
-    public push(origin: Node, target: Node, result: PathfindResult) {
+    public push(origin: T, target: T, result: PathfindResult) {
         let previous = this.getContainer(origin);
         if (previous == null) {
-            previous = new LabelValue<Node, ResultContainer>(origin, new ResultContainer());
+            previous = new LabelValue<T, ResultContainer<T>>(origin, new ResultContainer());
             Quick.Push(this.list, previous);
         }
         previous.value.push(target, result);
     }
 
-    public get(origin: Node, target: Node): LabelValue<Node, PathfindResult> | null {
+    public get(origin: T, target: T): LabelValue<T, PathfindResult> | null {
         for (let i = 0; i < this.list.length; i++) {
             let value = this.list[i];
             if (value.label == origin) {
@@ -25,7 +26,7 @@ export class NodeTable {
         return null;
     }
 
-    public getContainer(origin: Node): LabelValue<Node, ResultContainer> | null {
+    public getContainer(origin: T): LabelValue<T, ResultContainer<T>> | null {
         for (let i = 0; i < this.list.length; i++) {
             let value = this.list[i];
             if (value.label == origin) {
@@ -39,7 +40,7 @@ export class NodeTable {
         this.list = [];
     }
 
-    public clearByOriginNode(origin: Node) {
+    public clearByOriginNode(origin: T) {
         let container = this.getContainer(origin);
         if (container) {
             container.value = new ResultContainer();
@@ -47,19 +48,19 @@ export class NodeTable {
     }
 }
 
-class ResultContainer {
-    public list: LabelValue<Node, PathfindResult>[] = [];
+class ResultContainer<T extends Node> {
+    public list: LabelValue<T, PathfindResult>[] = [];
 
-    public push(node: Node, pathfindResult: PathfindResult) {
+    public push(node: T, pathfindResult: PathfindResult) {
         let previous = this.get(node);
         if (previous != null) {
             Quick.Slice(this.list, this.list.indexOf(previous));
         }
 
-        Quick.Push(this.list, new LabelValue<Node, PathfindResult>(node, pathfindResult));
+        Quick.Push(this.list, new LabelValue<T, PathfindResult>(node, pathfindResult));
     }
 
-    public get(node: Node): LabelValue<Node, PathfindResult> | null {
+    public get(node: T): LabelValue<T, PathfindResult> | null {
         for (let i = 0; i < this.list.length; i++) {
             let value = this.list[i];
             if (value.label == node) {

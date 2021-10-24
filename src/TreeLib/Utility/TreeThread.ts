@@ -4,19 +4,17 @@
  */
 import {Entity} from "../Entity";
 import {Logger} from "../Logger";
-import {DelayDto} from "./DelayDto";
-import {Delay} from "./Delay";
 
 
 export abstract class TreeThread extends Entity {
-    private routine: Function | undefined;
+    private routine: LuaThread | undefined;
     private _isManual: boolean = false;
     public isFinished: boolean = false;
     public lastYieldDuration: number = 0;
 
     protected constructor(timerDelay: number = 0.01, manual: boolean = false) {
         super(timerDelay);
-        this.routine = coroutine.wrap(() => this.runSecret());
+        this.routine = coroutine.create(() => this.runSecret());
         this.isManual = manual;
     }
 
@@ -30,7 +28,7 @@ export abstract class TreeThread extends Entity {
 
     public reset() {
         if (!this.isFinished) this.onEnd();
-        this.routine = coroutine.wrap(() => this.runSecret());
+        this.routine = coroutine.create(() => this.runSecret());
         this.isFinished = false;
         if (!this.isManual) this.add();
         this.onStart();
@@ -55,7 +53,7 @@ export abstract class TreeThread extends Entity {
     }
     public resume() {
         if (!this.isFinished) {
-            if (this.routine) this.routine();
+            if (this.routine) coroutine.resume(this.routine);
             this.onUpdateStep();
         }
     }
@@ -89,20 +87,16 @@ export abstract class TreeThread extends Entity {
         } else this.add();
     }
 
-    public static RunCoroutineUntilDone(func: (this: any) => any) {
-        let done = false;
-        let routine = coroutine.create(() => {
-            xpcall(() => func(), Logger.critical);
-            done = true;
-        })
-        Delay.addDelay((delay: DelayDto) => {
-            if (!done) {
-                delay.repeatCounter = 0;
-                coroutine.resume(routine);
-            } else {
-                delay.repeatCounter = delay.repeats;
-            }
-        }, 0.02, 2);
-        return routine;
+    public static RunUntilDone(func: (this: any) => any) {
+        return new SimpleTreeCoroutine(func, 0.01, false);
+    }
+}
+
+export class SimpleTreeCoroutine extends TreeThread {
+    public constructor(public func: (this: any) => void, timerDelay: number = 0.01, manual: boolean = false) {
+        super(timerDelay, manual);
+    }
+    protected execute(): void {
+        this.func();
     }
 }
