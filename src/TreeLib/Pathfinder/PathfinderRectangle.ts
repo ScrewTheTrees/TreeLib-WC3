@@ -48,11 +48,8 @@ export class PathfinderRectangle extends Pathfinder<RectangleNode> {
                 let previousY = startY;
 
                 for (let i = startX; i < endX; i += stepSize) {
-                    if (this.grid[i] == null) {
-                        this.grid[i] = [];
-                    }
                     for (let j = startY; j < endY; j += stepSize) {
-                        if (this.grid[i][j] != null) continue; //Already Occupied.
+                        if (this.getGridElement(i, j) != null) continue; //Already Occupied.
 
                         let pos = Vector2.new(i + halfStep, j + halfStep);
                         if (excludeNonWalkable && (!walk.checkTerrainIsWalkableXY(pos.x, pos.y))) {
@@ -61,6 +58,8 @@ export class PathfinderRectangle extends Pathfinder<RectangleNode> {
                             continue; //Not walkable.
                         }
 
+                        coroutine.yield();
+                        print(i, j);
                         let node = this.generateRectangleNode(i, j, pos);
 
                         if (previousNode != undefined) {
@@ -72,7 +71,7 @@ export class PathfinderRectangle extends Pathfinder<RectangleNode> {
                         previousY = j;
 
                         sr++;
-                        if (sr >= 256) {
+                        if (sr >= 32) {
                             sr = 0;
                             coroutine.yield();
                         }
@@ -105,6 +104,18 @@ export class PathfinderRectangle extends Pathfinder<RectangleNode> {
             routine = undefined;
         }
     }
+    public getGridElement(i: number, j: number) {
+        if (this.grid[i] == null) {
+            this.grid[i] = [];
+        }
+        return this.grid[i][j];
+    }
+    public setGridElement(i: number, j: number, element: RectangleNode) {
+        if (this.grid[i] == null) {
+            this.grid[i] = [];
+        }
+        this.grid[i][j] = element;
+    }
     private connectNeighbors(previousX: number, previousY: number, stepSize: number, previousNode: Node, allowDiagonal: boolean) {
         let up = this.grid[previousX] != null ? this.grid[previousX][previousY - stepSize] : null;
         let down = this.grid[previousX] != null ? this.grid[previousX][previousY + stepSize] : null;
@@ -121,7 +132,7 @@ export class PathfinderRectangle extends Pathfinder<RectangleNode> {
             downLeft = this.grid[previousX - stepSize][previousY + stepSize];
         }
         if (this.grid[previousX + stepSize] != null) { //Right
-            right = this.grid[previousX + stepSize][previousY];
+            right = this.getGridElement(previousX + stepSize, previousY);
             upRight = this.grid[previousX + stepSize][previousY - stepSize];
             downRight = this.grid[previousX + stepSize][previousY + stepSize];
         }
@@ -181,7 +192,7 @@ export class PathfinderRectangle extends Pathfinder<RectangleNode> {
         let node = new RectangleNode(pos, Rectangle.new(pos.x - halfStep, pos.y - halfStep, pos.x + halfStep, pos.y + halfStep));
         let checker = PointWalkableChecker.getInstance();
 
-        this.grid[startI][startJ] = node;
+        this.setGridElement(startI, startJ, node);
         this.addNode(node);
 
         let addCandidates: Vector2[] = [];
@@ -192,16 +203,17 @@ export class PathfinderRectangle extends Pathfinder<RectangleNode> {
             let checkI = startI + iterateSize;
             let checkJ = startJ + iterateSize;
 
-            for (let i = startI; i <= startI + iterateSize; i + this.stepSize) {
-                if (this.grid[i][checkJ] != null || !checker.checkTerrainIsWalkableXY(i, checkJ)) {
+            for (let i = startI; i <= startI + iterateSize; i += this.stepSize) {
+                if (this.getGridElement(i, checkJ) != null || !checker.checkTerrainIsWalkableXY(i, checkJ)) {
                     hit = true;
                     break;
                 } else {
                     Quick.Push(addCandidates, Vector2.new(i, checkJ))
                 }
             }
-            for (let j = startJ; j <= checkJ; j + this.stepSize) {
-                if (this.grid[checkI][j] != null || !checker.checkTerrainIsWalkableXY(checkI, j)) {
+            //TODO: Make x/y expand independently.
+            for (let j = startJ; j <= checkJ; j += this.stepSize) {
+                if (this.getGridElement(checkI, j) != null || !checker.checkTerrainIsWalkableXY(checkI, j)) {
                     hit = true;
                     break;
                 } else {
@@ -209,10 +221,9 @@ export class PathfinderRectangle extends Pathfinder<RectangleNode> {
                 }
             }
 
-
             for (let k = addCandidates.length - 1; k >= 0; k--) {
                 let candice = addCandidates[k];
-                if (!hit) this.grid[candice.x][candice.y] = node;
+                if (!hit) this.setGridElement(candice.x, candice.y, node);
                 candice.recycle();
                 delete addCandidates[k];
             }
@@ -249,7 +260,7 @@ export class PathfinderRectangle extends Pathfinder<RectangleNode> {
 
         for (let x = minX; x <= maxX; x += this.stepSize) {
             for (let y = minY; y <= maxY; y += this.stepSize) {
-                node.addNeighborTwoWay(this.grid[x][y]);
+                node.addNeighborTwoWay(this.getGridElement(x, y));
             }
         }
     }

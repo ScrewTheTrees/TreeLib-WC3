@@ -85,7 +85,7 @@ export class Pathfinder<T extends Node = Node> {
 
                     if (!target.disabled && this.isNodeBadCompared(pathFindIndex, current, target)) {
                         if (!target.getCameFrom(pathFindIndex)) Quick.Push(nodesInOrder, target);
-                        target.setCameFrom(pathFindIndex, current, this.getNodeNumber(pathFindIndex, current, target));
+                        target.setCameFrom(pathFindIndex, current, this.getNodePriority(pathFindIndex, current, target));
 
                         let dist = this.distanceBetweenNodes(target, endNode) * target.cost;
                         frontier.insertWithPriority(target, current.getCostSoFar(pathFindIndex) + dist);
@@ -100,7 +100,6 @@ export class Pathfinder<T extends Node = Node> {
                     if (target == endNode) {
                         foundPath = true;
                         finalNode = target;
-                        i = math.maxinteger;
                         break;
                     }
                 }
@@ -174,14 +173,14 @@ export class Pathfinder<T extends Node = Node> {
         return pathfindResult.finalise();
     }
 
-    public getNodeNumber(pathFindIndex: number, current: T, target: T) {
+    public getNodePriority(pathFindIndex: number, current: T, target: T) {
         return current.getCostSoFar(pathFindIndex) + (this.distanceBetweenNodes(current, target) * target.cost);
     }
 
     public isNodeBadCompared(pathFindIndex: number, current: T, target: T): boolean {
         if (target.getCostSoFar(pathFindIndex) <= 0)
             return true; // Touch this node, its empty.
-        if (this.getNodeNumber(pathFindIndex, current, target) < target.getCostSoFar(pathFindIndex))
+        if (this.getNodePriority(pathFindIndex, current, target) < target.getCostSoFar(pathFindIndex))
             return true; // Target node is higher cost, add it to prio queue so it can be reevaluated.
 
         return false;
