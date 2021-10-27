@@ -1,4 +1,3 @@
-import {Logger} from "./Logger";
 import {Quick} from "./Quick";
 
 /**
@@ -11,6 +10,8 @@ export abstract class Entity {
 
     //TimerDelay API
     protected _timerDelay: number;
+    protected _timer: timer = CreateTimer();
+
     get timerDelay(): number {
         return this._timerDelay;
     }
@@ -19,6 +20,13 @@ export abstract class Entity {
         value = Math.round(value * 1_000) / 1_000; //Should give 0.001 of precision.
         this._timerDelay = value;
         this.add();
+    }
+    public timerYield(time: number) {
+        this.resetTimer();
+        TimerStart(this._timer, time, true, () => {
+            this.resetTimer();
+            this.step();
+        });
     }
 
     public constructor(timerDelay: number = 0.01) {
@@ -43,15 +51,28 @@ export abstract class Entity {
     public remove() {
         const container = Entity.getContainer(this.timerDelay);
         container.remove(this);
+        this.removeTimer();
     }
     public add() {
         Entity.getContainer(this.timerDelay).add(this);
+        this.resetTimer();
+        TimerStart(this._timer, this.timerDelay, true, () => {
+            this.step();
+        });
+    }
+    private removeTimer() {
+        PauseTimer(this._timer);
+        DestroyTimer(this._timer);
+    }
+    private resetTimer() {
+        this.removeTimer();
+        this._timer = CreateTimer();
     }
 
     public static getDebugInfo() {
         const data: string[] = [];
         this.containers.forEach((container) => {
-            let str = `Container: ${container.identifier},  Entities: ${container.count()},  Disabled: ${container.isDisabled()}`;
+            let str = `Container: ${container.identifier},  Entities: ${container.count()}`;
             if (!container.isEmpty()) {
                 str += ",  Names(T5): ";
                 for (let i = 0; i < math.min(container.entities.length, 5); i++) {
@@ -70,23 +91,12 @@ export abstract class Entity {
 
 class EntityContainer {
     public readonly entities: Entity[] = [];
-    public readonly loop: trigger;
     public readonly identifier: number;
 
     public constructor(timeBetween: number) {
-        this.loop = CreateTrigger();
         this.identifier = timeBetween;
-        TriggerRegisterTimerEvent(this.loop, timeBetween, true);
-        TriggerAddAction(this.loop, () => {
-            if (!Entity.pauseExecution) {
-                this.step();
-            }
-        });
     }
 
-    public isDisabled() {
-        return !IsTriggerEnabled(this.loop);
-    }
     public count() {
         return this.entities.length;
     }
@@ -96,19 +106,9 @@ class EntityContainer {
 
     public add(e: Entity) {
         Quick.PushIfMissing(this.entities, e);
-        if (!IsTriggerEnabled(this.loop)) {
-            EnableTrigger(this.loop);
-        }
     }
     public remove(e: Entity) {
         Quick.Remove(this.entities, e);
         return e;
-    }
-    private step() {
-        xpcall(() => {
-            for (let entity of this.entities) {
-                entity.step();
-            }
-        }, Logger.LogCritical);
     }
 }
