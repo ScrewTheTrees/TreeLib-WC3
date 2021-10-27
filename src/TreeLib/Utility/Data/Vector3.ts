@@ -45,18 +45,18 @@ export class Vector3 implements Recyclable {
             && this.z == other.z;
     }
     public intersectsRectangle(other: Rectangle) {
-        return this.x > other.xMin
-            && this.x < other.xMax
-            && this.y > other.yMin
-            && this.y < other.yMax;
+        return this.x >= other.xMin
+            && this.x <= other.xMax
+            && this.y >= other.yMin
+            && this.y <= other.yMax;
     }
     public intersectsCube(other: Cube) {
-        return this.x > other.xMin
-            && this.x < other.xMax
-            && this.y > other.yMin
-            && this.y < other.yMax
-            && this.z > other.zMin
-            && this.z < other.zMax;
+        return this.x >= other.xMin
+            && this.x <= other.xMax
+            && this.y >= other.yMin
+            && this.y <= other.yMax
+            && this.z >= other.zMin
+            && this.z <= other.zMax;
     }
 
 

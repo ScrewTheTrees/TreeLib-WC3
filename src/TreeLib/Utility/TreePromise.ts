@@ -1,14 +1,19 @@
 import {Quick} from "../Quick";
 import {Logger} from "../Logger";
 
-export class TreePromise<T> {
+export class TreePromise<T, H = undefined> {
     public data: T | undefined;
+    public handler?: H;
     public error: any;
     public isError: boolean = false;
     public isFinished: boolean = false;
     public thenCallbacks: ((data: T) => void)[] = [];
     public errorCallbacks: ((error: any) => void)[] = [];
     public finallyCallbacks: (() => void)[] = [];
+
+    constructor(handler?: H) {
+        this.handler = handler;
+    }
 
     public apply(value: T) {
         this.data = value;

@@ -46,16 +46,16 @@ export class Vector2 implements Recyclable {
             && this.y == other.y;
     }
     public intersectsRectangle(other: Rectangle) {
-        return this.x > other.xMin
-            && this.x < other.xMax
-            && this.y > other.yMin
-            && this.y < other.yMax;
+        return this.x >= other.xMin
+            && this.x <= other.xMax
+            && this.y >= other.yMin
+            && this.y <= other.yMax;
     }
     public intersectsCube(other: Cube) {
-        return this.x > other.xMin
-            && this.x < other.xMax
-            && this.y > other.yMin
-            && this.y < other.yMax;
+        return this.x >= other.xMin
+            && this.x <= other.xMax
+            && this.y >= other.yMin
+            && this.y <= other.yMax;
     }
 
 
@@ -202,6 +202,10 @@ export class Vector2 implements Recyclable {
         this.x = this.x + distance * math.cos(angle * bj_DEGTORAD);
         this.y = this.y + distance * math.sin(angle * bj_DEGTORAD);
         return this;
+    }
+    public polarProjectTowards(distance: number, vec: Vector2): Vector2 {
+        let angle = this.directionTo(vec);
+        return this.polarProject(distance, angle);
     }
 
     public toLocation() {

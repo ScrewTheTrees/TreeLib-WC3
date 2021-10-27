@@ -87,16 +87,16 @@ export abstract class TreeThread extends Entity {
         } else this.add();
     }
 
-    public static RunUntilDone(func: (this: any) => any) {
+    public static RunUntilDone(func: (routine: SimpleTreeCoroutine) => any) {
         return new SimpleTreeCoroutine(func, 0.01, false);
     }
 }
 
 export class SimpleTreeCoroutine extends TreeThread {
-    public constructor(public func: (this: any) => void, timerDelay: number = 0.01, manual: boolean = false) {
+    public constructor(public func: (routine: SimpleTreeCoroutine) => void, timerDelay: number = 0.01, manual: boolean = false) {
         super(timerDelay, manual);
     }
     protected execute(): void {
-        this.func();
+        this.func(this);
     }
 }

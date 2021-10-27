@@ -47,38 +47,29 @@ export class PathfinderRectangle extends Pathfinder<RectangleNode> {
                 let previousX = startX;
                 let previousY = startY;
 
-                for (let i = startX; i < endX; i += stepSize) {
-                    for (let j = startY; j < endY; j += stepSize) {
-                        if (this.getGridElement(i, j) != null) continue; //Already Occupied.
+                for (let y = startY; y < endY; y += stepSize) {
+                    for (let x = startX; x < endX; x += stepSize) {
+                        if (this.getGridElementByCoordinate(x, y) != null) continue; //Already Occupied.
 
-                        let pos = Vector2.new(i + halfStep, j + halfStep);
+                        let pos = Vector2.new(x + halfStep, y + halfStep);
                         if (excludeNonWalkable && (!walk.checkTerrainIsWalkableXY(pos.x, pos.y))) {
                             pos.recycle();
                             sr++;
                             continue; //Not walkable.
                         }
 
-                        coroutine.yield();
-                        print(i, j);
-                        let node = this.generateRectangleNode(i, j, pos);
-
-                        if (previousNode != undefined) {
-                            this.connectNeighbors(previousX, previousY, stepSize, previousNode, allowDiagonal);
-                        }
+                        let node = this.generateRectangleNode(x, y, generateAsync ? 512 : -1);
 
                         previousNode = node;
-                        previousX = i;
-                        previousY = j;
+                        previousX = x;
+                        previousY = y;
 
                         sr++;
-                        if (sr >= 32) {
+                        if (sr >= 8) {
                             sr = 0;
                             coroutine.yield();
                         }
                     }
-                }
-                if (previousNode != undefined) {
-                    this.connectNeighbors(previousX, previousY, stepSize, previousNode, allowDiagonal);
                 }
             }, Logger.critical);
             done = true;
@@ -104,50 +95,21 @@ export class PathfinderRectangle extends Pathfinder<RectangleNode> {
             routine = undefined;
         }
     }
-    public getGridElement(i: number, j: number) {
-        if (this.grid[i] == null) {
-            this.grid[i] = [];
+    public getGridElementByCoordinate(x: number, y: number) {
+        x = math.floor(x / this.stepSize);
+        y = math.floor(y / this.stepSize);
+        if (this.grid[x] == null) {
+            this.grid[x] = [];
         }
-        return this.grid[i][j];
+        return this.grid[x][y];
     }
-    public setGridElement(i: number, j: number, element: RectangleNode) {
-        if (this.grid[i] == null) {
-            this.grid[i] = [];
+    public setGridElementByCoordinate(x: number, y: number, element: RectangleNode) {
+        x = math.floor(x / this.stepSize);
+        y = math.floor(y / this.stepSize);
+        if (this.grid[x] == null) {
+            this.grid[x] = [];
         }
-        this.grid[i][j] = element;
-    }
-    private connectNeighbors(previousX: number, previousY: number, stepSize: number, previousNode: Node, allowDiagonal: boolean) {
-        let up = this.grid[previousX] != null ? this.grid[previousX][previousY - stepSize] : null;
-        let down = this.grid[previousX] != null ? this.grid[previousX][previousY + stepSize] : null;
-
-        let left: Node | null = null;
-        let upLeft: Node | null = null;
-        let downLeft: Node | null = null;
-        let right: Node | null = null;
-        let upRight: Node | null = null;
-        let downRight: Node | null = null;
-        if (this.grid[previousX - stepSize] != null) { //Left
-            left = this.grid[previousX - stepSize][previousY];
-            upLeft = this.grid[previousX - stepSize][previousY - stepSize];
-            downLeft = this.grid[previousX - stepSize][previousY + stepSize];
-        }
-        if (this.grid[previousX + stepSize] != null) { //Right
-            right = this.getGridElement(previousX + stepSize, previousY);
-            upRight = this.grid[previousX + stepSize][previousY - stepSize];
-            downRight = this.grid[previousX + stepSize][previousY + stepSize];
-        }
-
-        if (up) previousNode.addNeighborTwoWay(up);
-        if (down) previousNode.addNeighborTwoWay(down);
-        if (left) previousNode.addNeighborTwoWay(left);
-        if (right) previousNode.addNeighborTwoWay(right);
-
-        if (allowDiagonal) {
-            if (upLeft && up && left) previousNode.addNeighborTwoWay(upLeft);
-            if (upRight && up && right) previousNode.addNeighborTwoWay(upRight);
-            if (downLeft && down && left) previousNode.addNeighborTwoWay(downLeft);
-            if (downRight && down && right) previousNode.addNeighborTwoWay(downRight);
-        }
+        this.grid[x][y] = element;
     }
     public getNodeClosestTo(point: Vector2): RectangleNode {
         let p = point.copy();
@@ -159,25 +121,25 @@ export class PathfinderRectangle extends Pathfinder<RectangleNode> {
         if (p.x >= this.endX) p.x = this.endX - this.stepSize;
         if (p.y <= this.startY) p.y = this.startY + this.stepSize;
         if (p.y >= this.endY) p.y = this.endY - this.stepSize;
-        let g = this.grid[p.x][p.y];
+        let g = this.getGridElementByCoordinate(p.x, p.y);
         if (g == null) {
             let offset = this.stepSize;
             while (g == null) {
                 for (let i = -this.stepSize; i <= offset; i += this.stepSize) {
-                    let val = this.grid[p.x + i][p.y - offset];
+                    let val = this.getGridElementByCoordinate(p.x + i, p.y - offset);
                     if (val != null) return val;
                 }
                 for (let i = -this.stepSize; i <= offset; i += this.stepSize) {
-                    let val = this.grid[p.x + i][p.y + offset];
+                    let val = this.getGridElementByCoordinate(p.x + i, p.y + offset);
                     if (val != null) return val;
                 }
 
                 for (let i = -this.stepSize; i <= offset; i += this.stepSize) {
-                    let val = this.grid[p.x + offset][p.y + i];
+                    let val = this.getGridElementByCoordinate(p.x + offset, p.y + i);
                     if (val != null) return val;
                 }
                 for (let i = -this.stepSize; i <= offset; i += this.stepSize) {
-                    let val = this.grid[p.x - offset][p.y + i];
+                    let val = this.getGridElementByCoordinate(p.x - offset, p.y + i);
                     if (val != null) return val;
                 }
 
@@ -187,81 +149,136 @@ export class PathfinderRectangle extends Pathfinder<RectangleNode> {
         p.recycle();
         return g;
     }
-    private generateRectangleNode(startI: number, startJ: number, pos: Vector2): RectangleNode {
+    private generateRectangleNode(startX: number, startY: number, maxOps: number = -1): RectangleNode {
         let halfStep = this.stepSize / 2;
-        let node = new RectangleNode(pos, Rectangle.new(pos.x - halfStep, pos.y - halfStep, pos.x + halfStep, pos.y + halfStep));
+        let node = new RectangleNode(Vector2.new(startX + halfStep, startY + halfStep), Rectangle.new(startX, startY, startX + this.stepSize, startY + this.stepSize));
         let checker = PointWalkableChecker.getInstance();
 
-        this.setGridElement(startI, startJ, node);
+        this.setGridElementByCoordinate(startX, startY, node);
         this.addNode(node);
 
-        let addCandidates: Vector2[] = [];
-        let iterateSize = this.stepSize;
-        let hit = false;
-        let iterations = 0;
-        while (!hit && iterations < 4) {
-            let checkI = startI + iterateSize;
-            let checkJ = startJ + iterateSize;
+        let xExpandCandidates: Vector2[] = [];
+        let yExpandCandidates: Vector2[] = [];
+        let horizontalIterateSize = 0;
+        let verticalIterateSize = 0;
+        let hitTop = false;
+        let hitRight = false;
+        let iterations = 64;
+        let extras = 2 + ((startX % (this.stepSize * 3)) / this.stepSize); //0, 64, 128
+        let operations = 0;
 
-            for (let i = startI; i <= startI + iterateSize; i += this.stepSize) {
-                if (this.getGridElement(i, checkJ) != null || !checker.checkTerrainIsWalkableXY(i, checkJ)) {
-                    hit = true;
-                    break;
-                } else {
-                    Quick.Push(addCandidates, Vector2.new(i, checkJ))
-                }
-            }
-            //TODO: Make x/y expand independently.
-            for (let j = startJ; j <= checkJ; j += this.stepSize) {
-                if (this.getGridElement(checkI, j) != null || !checker.checkTerrainIsWalkableXY(checkI, j)) {
-                    hit = true;
-                    break;
-                } else {
-                    Quick.Push(addCandidates, Vector2.new(checkI, j))
-                }
-            }
+        //Main loop.
+        while ((!hitTop || !hitRight) && iterations > 0 && extras > 0) {
+            let checkX = startX + horizontalIterateSize; // 0
+            let checkY = startY + verticalIterateSize;   // 0
 
-            for (let k = addCandidates.length - 1; k >= 0; k--) {
-                let candice = addCandidates[k];
-                if (!hit) this.setGridElement(candice.x, candice.y, node);
-                candice.recycle();
-                delete addCandidates[k];
+            if (!hitTop) { //Check top rectangle.
+                let nextY = checkY + this.stepSize;
+                for (let x = startX; x <= checkX; x += this.stepSize) { // Start at startX, iterate all nodes to the right (only 0 now)
+                    let checkNode = this.getGridElementByCoordinate(x, nextY); //Get node at all the X coordinates above the highest Y (64)
+                    if ((checkNode != null && checkNode != node) //If the node is not empty, or else if this node is not this.
+                        || !checker.checkTerrainIsWalkableXY(x + halfStep, nextY + halfStep) //Or if the terrain here is not walkable
+                    ) {
+                        hitTop = true; //Top has been hit, end it here.
+                        break;
+                    } else { //If this place can be added to this node
+                        Quick.Push(xExpandCandidates, Vector2.new(x, nextY)); //Add to frontier
+                    }
+                    operations++;
+                    if (maxOps > 0 && operations % maxOps == 0 ) coroutine.yield();
+                }
+                for (let candice of xExpandCandidates) {
+                    if (!hitTop) this.setGridElementByCoordinate(candice.x, candice.y, node);
+                    candice.recycle();
+                    operations++;
+                    if (maxOps > 0 && operations % maxOps == 0 ) coroutine.yield();
+                }
+                Quick.Clear(xExpandCandidates);
             }
-            if (!hit) {
-                node.boundary.xMax += this.stepSize;
+            if (!hitTop) {
+                verticalIterateSize += this.stepSize;
                 node.boundary.yMax += this.stepSize;
-                node.point.x += halfStep;
                 node.point.y += halfStep;
-
-                iterations++;
-                iterateSize += this.stepSize;
             }
+
+            checkX = startX + horizontalIterateSize; // 0
+            checkY = startY + verticalIterateSize;   // 0 or 64
+            if (!hitRight) { //Check right rectangle
+                let nextX = checkX + this.stepSize;
+                for (let y = startY; y <= checkY; y += this.stepSize) { //Start at StartY, iterate all nodes vertically, (Either 0 or also 64)
+                    let checkNode = this.getGridElementByCoordinate(nextX, y); //Get node at all the Y coordinates, one step to the right of highest X (0, 64)
+                    if ((checkNode != null && checkNode != node) //If the node is not empty, or else if this node is not this.
+                        || !checker.checkTerrainIsWalkableXY(nextX + halfStep, y + halfStep) //Or if the terrain here is not walkable
+                    ) {
+                        hitRight = true; //Top has been hit, end it here.
+                        break;
+                    } else { //If this place can be added to this node
+                        Quick.Push(yExpandCandidates, Vector2.new(nextX, y)); //Add to frontier
+                    }
+                    operations++;
+                    if (maxOps > 0 && operations % maxOps == 0 ) coroutine.yield();
+                }
+            }
+            for (let candice of yExpandCandidates) {
+                if (!hitRight) this.setGridElementByCoordinate(candice.x, candice.y, node);
+                candice.recycle();
+                operations++;
+                if (maxOps > 0 && operations % maxOps == 0 ) coroutine.yield();
+            }
+            Quick.Clear(yExpandCandidates);
+            if (!hitRight) {
+                horizontalIterateSize += this.stepSize;
+                node.boundary.xMax += this.stepSize;
+                node.point.x += halfStep;
+            }
+            if (hitTop != hitRight) {
+                extras--;
+            } else {
+                extras++;
+                if (iterations <= 60) extras = 64;
+            }
+            iterations--;
         }
-        this.addConnectionsRect(node, //Below
-            node.boundary.xMin,
-            node.boundary.xMax,
-            node.boundary.yMin - this.stepSize,
-            node.boundary.yMin - this.stepSize
-        )
+
+        this.addConnectionsRect(node, //Bottom
+            startX,
+            startX + horizontalIterateSize,
+            startY - this.stepSize,
+            startY - this.stepSize
+        );
+        this.addConnectionsRect(node, //Top
+            startX,
+            startX + horizontalIterateSize,
+            startY + verticalIterateSize + this.stepSize,
+            startY + verticalIterateSize + this.stepSize
+        );
         this.addConnectionsRect(node, //Left
-            node.boundary.xMin - this.stepSize,
-            node.boundary.xMin - this.stepSize,
-            node.boundary.yMin,
-            node.boundary.yMax,
-        )
+            startX - this.stepSize,
+            startX - this.stepSize,
+            startY,
+            startY + verticalIterateSize,
+        );
+        this.addConnectionsRect(node, //Right
+            startX + horizontalIterateSize + this.stepSize,
+            startX + horizontalIterateSize + this.stepSize,
+            startY,
+            startY + verticalIterateSize,
+        );
         return node;
     }
 
     private addConnectionsRect(node: RectangleNode, x1: number, x2: number, y1: number, y2: number) {
         let minX = math.min(x1, x2);
         let maxX = math.max(x1, x2);
+
         let minY = math.min(y1, y2);
         let maxY = math.max(y1, y2);
 
         for (let x = minX; x <= maxX; x += this.stepSize) {
             for (let y = minY; y <= maxY; y += this.stepSize) {
-                node.addNeighborTwoWay(this.getGridElement(x, y));
+                node.addNeighborTwoWay(this.getGridElementByCoordinate(x, y));
             }
         }
     }
+
 }

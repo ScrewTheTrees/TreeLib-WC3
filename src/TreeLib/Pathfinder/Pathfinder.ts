@@ -15,7 +15,7 @@ export class Pathfinder<T extends Node = Node> {
     public findPathAsync(from: Vector2,
                          to: Vector2,
                          maxIterateNodes: number = math.maxinteger,
-                         asyncMax: number = 256): TreePromise<PathfindResult<T>> {
+                         asyncMax: number = 256): TreePromise<PathfindResult<T>, TreeThread> {
         let startNode = this.getNodeClosestTo(from);
         let endNode = this.getNodeClosestTo(to);
         return this.findPathByNodesAsync(startNode, endNode, maxIterateNodes, asyncMax);
@@ -30,9 +30,9 @@ export class Pathfinder<T extends Node = Node> {
     public findPathByNodesAsync(startNode: T,
                                 endNode: T,
                                 maxIterateNodes: number = math.maxinteger,
-                                asyncMax: number = 128): TreePromise<PathfindResult<T>> {
-        let promise = new TreePromise<PathfindResult<T>>();
-        TreeThread.RunUntilDone(() => {
+                                asyncMax: number = 128): TreePromise<PathfindResult<T>, TreeThread> {
+        let promise = new TreePromise<PathfindResult<T>, TreeThread>();
+        promise.handler = TreeThread.RunUntilDone(() => {
             xpcall(() => {
                 let result = this.findPathByNodes(startNode, endNode, maxIterateNodes, asyncMax)
                 promise.apply(result)

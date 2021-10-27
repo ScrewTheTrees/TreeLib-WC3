@@ -22,6 +22,10 @@ export class PathfindResult<T extends Node = Node> {
         return this;
     }
 
+    public getNode(index: number) {
+        return this.path[index];
+    }
+
     /**
      * Removes redundant nodes to make path less complex, this might not be the best idea if you need precision.
      * (Need a lot of fixing).

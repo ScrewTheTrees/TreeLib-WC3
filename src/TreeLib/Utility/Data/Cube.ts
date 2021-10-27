@@ -44,32 +44,32 @@ export class Cube implements Recyclable {
 
     //Intersects
     public intersectsVector2(other: Vector2): boolean {
-        return other.x > this.xMin
-            && other.x < this.xMax
-            && other.y > this.yMin
-            && other.y < this.yMax;
+        return other.x >= this.xMin
+            && other.x <= this.xMax
+            && other.y >= this.yMin
+            && other.y <= this.yMax;
     }
     public intersectsVector3(other: Vector3): boolean {
-        return other.x > this.xMin
-            && other.x < this.xMax
-            && other.y > this.yMin
-            && other.y < this.yMax
-            && other.z > this.zMin
-            && other.z < this.zMax;
+        return other.x >= this.xMin
+            && other.x <= this.xMax
+            && other.y >= this.yMin
+            && other.y <= this.yMax
+            && other.z >= this.zMin
+            && other.z <= this.zMax;
     }
     public intersectRectangle(other: Rectangle) {
-        return this.xMax > other.xMin
-            && this.xMin < other.xMax
-            && this.yMax > other.yMin
-            && this.yMin < other.yMax;
+        return this.xMax >= other.xMin
+            && this.xMin <= other.xMax
+            && this.yMax >= other.yMin
+            && this.yMin <= other.yMax;
     }
     public intersectsCube(other: Cube) {
-        return this.xMax > other.xMin
-            && this.xMin < other.xMax
-            && this.yMax > other.yMin
-            && this.yMin < other.yMax
-            && this.zMax > other.zMin
-            && this.zMin < other.zMax;
+        return this.xMax >= other.xMin
+            && this.xMin <= other.xMax
+            && this.yMax >= other.yMin
+            && this.yMin <= other.yMax
+            && this.zMax >= other.zMin
+            && this.zMin <= other.zMax;
     }
 
 

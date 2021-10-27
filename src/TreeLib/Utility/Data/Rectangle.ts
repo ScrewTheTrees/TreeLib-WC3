@@ -58,28 +58,28 @@ export class Rectangle implements Recyclable {
 
     //Intersects
     public intersectsVector2(other: Vector2): boolean {
-        return other.x > this.xMin
-            && other.x < this.xMax
-            && other.y > this.yMin
-            && other.y < this.yMax;
+        return other.x >= this.xMin
+            && other.x <= this.xMax
+            && other.y >= this.yMin
+            && other.y <= this.yMax;
     }
     public intersectsVector3(other: Vector3): boolean {
-        return other.x > this.xMin
-            && other.x < this.xMax
-            && other.y > this.yMin
-            && other.y < this.yMax;
+        return other.x >= this.xMin
+            && other.x <= this.xMax
+            && other.y >= this.yMin
+            && other.y <= this.yMax;
     }
     public intersectRectangle(second: Rectangle) {
-        return this.xMax > second.xMin
-            && this.xMin < second.xMax
-            && this.yMax > second.yMin
-            && this.yMin < second.yMax;
+        return this.xMax >= second.xMin
+            && this.xMin <= second.xMax
+            && this.yMax >= second.yMin
+            && this.yMin <= second.yMax;
     }
     public intersectCube(second: Cube) {
-        return this.xMax > second.xMin
-            && this.xMin < second.xMax
-            && this.yMax > second.yMin
-            && this.yMin < second.yMax;
+        return this.xMax >= second.xMin
+            && this.xMin <= second.xMax
+            && this.yMax >= second.yMin
+            && this.yMin <= second.yMax;
     }
 
     //WC3 API
