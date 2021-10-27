@@ -1,13 +1,14 @@
 import {Queue} from "./Queue";
 import {UnitAction} from "../Actions/UnitAction";
 import {Logger} from "../../Logger";
-import {IsValidUnit} from "../../Misc";
 import {Quick} from "../../Quick";
+import {Entity} from "../../Entity";
+import {IsValidUnit} from "../../Misc";
 
 /**
  * A unit queue is a queue for a singular unit operating on its own.
  */
-export class UnitQueue implements Queue {
+export class UnitQueue extends Entity implements Queue {
     isFinished: boolean = false;
     isPaused: boolean = false;
     public target: unit;
@@ -15,6 +16,7 @@ export class UnitQueue implements Queue {
     public currentActionIndex = 0;
 
     constructor(target: unit, ...unitActions: UnitAction[]) {
+        super(0.25);
         this.target = target;
         this.allActions.push(...unitActions);
     }
@@ -32,24 +34,30 @@ export class UnitQueue implements Queue {
                 }
             }
         } else {
-            this.isFinished = true;
+            this.finish();
             Logger.LogVerbose("Finished queue.");
         }
     }
 
-    update(timeStep: number): void {
+    step() {
         if (IsValidUnit(this.target)) {
             if (IsUnitAliveBJ(this.target)) {
-                this.performAction(timeStep);
+                this.performAction(this.timerDelay);
             }
         } else {
             Logger.LogVerbose("Unit has been removed, queue will be removed.");
-            this.isFinished = true;
+            this.finish();
         }
     }
 
     public init() {
+        this.add();
         this.allActions[this.currentActionIndex].init(this.target, this);
+    }
+
+    public finish(): void {
+        this.remove();
+        this.isFinished = true;
     }
 
     public addAction(action: UnitAction): UnitQueue {

@@ -3,11 +3,12 @@ import {Logger} from "../../Logger";
 import {Quick} from "../../Quick";
 import {UnitGroupAction} from "../Actions/UnitGroupAction";
 import {IsValidUnit} from "../../Misc";
+import {Entity} from "../../Entity";
 
 /**
  * A unit queue is a queue for a several unit operating together. (Most actions are capped at 12 units)
  */
-export class UnitGroupQueue implements Queue {
+export class UnitGroupQueue extends Entity implements Queue {
     isFinished: boolean = false;
     isPaused: boolean = false;
     public targets: unit[];
@@ -15,6 +16,7 @@ export class UnitGroupQueue implements Queue {
     public currentActionIndex = 0;
 
     constructor(targets: unit[], ...unitActions: UnitGroupAction[]) {
+        super(0.25);
         this.targets = targets;
         this.allActions.push(...unitActions);
     }
@@ -32,13 +34,13 @@ export class UnitGroupQueue implements Queue {
                 }
             }
         } else {
-            this.isFinished = true;
+            this.finish();
             Logger.LogVerbose("Finished queue.");
         }
 
     }
 
-    update(timeStep: number): void {
+    step(): void {
         for (let i = this.targets.length; i >= 0; i--) {
             let u = this.targets[i];
             if (!IsValidUnit(u) || IsUnitDeadBJ(u)) {
@@ -47,7 +49,7 @@ export class UnitGroupQueue implements Queue {
         }
         //if (IsValidUnit(this.target)) {
         //if (IsUnitAliveBJ(this.target)) {
-        this.performAction(timeStep);
+        this.performAction(this.timerDelay);
         //}
         //} else {
         //Logger.LogVerbose("Unit has been removed, queue will be removed.");
@@ -56,7 +58,13 @@ export class UnitGroupQueue implements Queue {
     }
 
     public init() {
+        this.add();
         this.allActions[this.currentActionIndex].init(this.targets, this);
+    }
+
+    public finish(): void {
+        this.remove();
+        this.isFinished = true;
     }
 
     public addAction(action: UnitGroupAction): UnitGroupQueue {

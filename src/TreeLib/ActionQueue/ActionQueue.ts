@@ -36,7 +36,7 @@ export class ActionQueue extends Entity {
     private allQueues: Queue[] = [];
 
     constructor() {
-        super(0.5);
+        super(1);
     }
 
     public createUnitQueue(target: unit, ...actions: UnitAction[]): UnitQueue {
@@ -68,10 +68,7 @@ export class ActionQueue extends Entity {
             let queue = this.allQueues[i];
             if (queue.isFinished) {
                 Quick.Slice(this.allQueues, i);
-                Logger.LogVerbose("Spliced queue:", this.allQueues.length);
                 i -= 1;
-            } else if (!queue.isPaused) {
-                queue.update(this.timerDelay);
             }
         }
     }
