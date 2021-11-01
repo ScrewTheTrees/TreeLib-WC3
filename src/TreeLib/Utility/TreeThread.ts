@@ -31,7 +31,6 @@ export abstract class TreeThread extends Entity {
         this.routine = coroutine.create(() => this.runSecret());
         this.isFinished = false;
         if (!this.isManual) this.add();
-        this.onStart();
     }
     public stop() {
         if (!this.isFinished) {
@@ -57,15 +56,12 @@ export abstract class TreeThread extends Entity {
             this.onUpdateStep();
         }
     }
-    protected isolate(func: (this: void, ...arg: any[]) => any) {
-        xpcall(func, Logger.critical);
-    }
 
     private runSecret() {
         this.onStart();
-        this.isolate(() => {
+        xpcall(() => {
             this.execute();
-        });
+        }, Logger.critical);
         this.stop();
     }
 
@@ -88,12 +84,12 @@ export abstract class TreeThread extends Entity {
     }
 
     public static RunUntilDone(func: (routine: SimpleTreeCoroutine) => any) {
-        return new SimpleTreeCoroutine(func, 0.01, false);
+        return new SimpleTreeCoroutine(func, 0.05, false);
     }
 }
 
 export class SimpleTreeCoroutine extends TreeThread {
-    public constructor(public func: (routine: SimpleTreeCoroutine) => void, timerDelay: number = 0.01, manual: boolean = false) {
+    public constructor(public func: (routine: SimpleTreeCoroutine) => void, timerDelay: number = 0.05, manual: boolean = false) {
         super(timerDelay, manual);
     }
     protected execute(): void {

@@ -184,11 +184,13 @@ export class PriorityQueue<T> {
     }
 
     public clear(async: boolean = false) {
+        let iterations = 0;
         let entry = this.entries.pop();
         while (entry != null) {
             entry.recycle();
             entry = this.entries.pop();
-            if (async) coroutine.yield();
+            iterations++;
+            if (async && iterations % 8 == 0) coroutine.yield();
         }
         //Quick.Push(this.entries, PriorityBucket.new(0));
     }

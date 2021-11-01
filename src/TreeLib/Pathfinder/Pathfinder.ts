@@ -9,8 +9,6 @@ import {TreePromise} from "../Utility/TreePromise";
 export class Pathfinder<T extends Node = Node> {
     public nodes: T[] = [];
     public nextIndex = 0;
-    public emptyIndexes: number[] = [];
-    public hardDebug: boolean = false;
 
     public findPathAsync(from: Vector2,
                          to: Vector2,
@@ -44,10 +42,12 @@ export class Pathfinder<T extends Node = Node> {
     }
 
     public findPathByNodes(startNode: T, endNode: T, maxIterateNodes: number = math.maxinteger, asyncMax: number = -1): PathfindResult<T> {
-        print(os.clock(), "Start/Setup.", " - Index Length:", this.emptyIndexes.length);
+        // print(os.clock(), "Start/Setup.", " - Index Length:", this.emptyIndexes.length);
 
         //let pathFindIndex = this.emptyIndexes.pop() || ++this.nextIndex;
-        let pathFindIndex = ++this.nextIndex;
+        let pathFindIndex = this.nextIndex++;
+        if (this.nextIndex >= 500) this.nextIndex = 0;
+
         let isAsync = true;
         if (asyncMax <= 0) isAsync = false;
 
@@ -68,7 +68,7 @@ export class Pathfinder<T extends Node = Node> {
         let iterateNodes = 0;
         let foundPath = false;
 
-        print(os.clock(), "Main Frontier Loop.", " - Index:", pathFindIndex);
+        // print(os.clock(), "Main Frontier Loop.", " - Index:", pathFindIndex);
         while (frontier.size() > 0 && iterateNodes < maxIterateNodes) {
             iterateNodes += 1;
             opCount += 1;
@@ -112,16 +112,15 @@ export class Pathfinder<T extends Node = Node> {
             if (frontier.size() > highest) {
                 highest = frontier.size();
             }
-            if (this.hardDebug) print(os.clock(), "while frontier.size()");
         }//while
 
-        print(os.clock(), "getClosestWithCameFrom. : Frontier size", frontier.size(), " - Index:", pathFindIndex);
+        // print(os.clock(), "getClosestWithCameFrom. : Frontier size", frontier.size(), " - Index:", pathFindIndex);
 
         if (finalNode == null) {
             finalNode = this.getClosestWithCameFrom(pathFindIndex, nodesInOrder, endNode.point, asyncMax * 2) || startNode;
         }
 
-        print(os.clock(), "Backtrack.", " - Index:", pathFindIndex);
+        // print(os.clock(), "Backtrack.", " - Index:", pathFindIndex);
         // Backtrack to get path
         let compileNodes: T[] = [];
         let iterateNode: T | undefined = finalNode;
@@ -134,12 +133,11 @@ export class Pathfinder<T extends Node = Node> {
             iterateNode = temp;
             iterateNodes++;
             if (isAsync && iterateNodes % asyncMax == 0) {
-                if (this.hardDebug) print(os.clock(), "stuck in iterateNode");
                 coroutine.yield();
             }
         }
 
-        print(os.clock(), "Reverse Path and convert to points.", " - Index:", pathFindIndex);
+        // print(os.clock(), "Reverse Path and convert to points.", " - Index:", pathFindIndex);
 
         //Reverse Path and convert to points.
         let points: T[] = [];
@@ -150,23 +148,22 @@ export class Pathfinder<T extends Node = Node> {
 
         let pathfindResult = new PathfindResult(points, finalNode == endNode, startNode, endNode, finalNode);
 
-        print(os.clock(), "Done?", points.length, " - Index:", pathFindIndex);
+        // print(os.clock(), "Done?", points.length, " - Index:", pathFindIndex);
 
         //Clear
         TreeThread.RunUntilDone(
             () => {
-                print(os.clock(), "Start cleaning.", " - Index:", pathFindIndex);
-                frontier.clear(true);
+                // print(os.clock(), "Start cleaning.", " - Index:", pathFindIndex);
                 for (let node of nodesInOrder) {
                     node.clearIndex(pathFindIndex);
 
                     iterateNodes++;
-                    if (isAsync && iterateNodes % 16 == 0) {
+                    if (isAsync && iterateNodes % 1024 == 0) {
                         coroutine.yield();
                     }
                 }
-                Quick.Push(this.emptyIndexes, pathFindIndex);
-                print(os.clock(), "Finished Cleaning.", " - Index:", pathFindIndex);
+                frontier.clear(true);
+                // print(os.clock(), "Finished Cleaning.", " - Index:", pathFindIndex);
             });
 
 
@@ -232,7 +229,6 @@ export class Pathfinder<T extends Node = Node> {
                     closest = value;
                     distance = point.distanceTo(value.point);
                     iterate++;
-                    if (this.hardDebug) print(os.clock(), "stuck in getClosestWithCameFrom");
                     if (asyncNumber > 0 && iterate % asyncNumber == 0) {
                         coroutine.yield();
                     }

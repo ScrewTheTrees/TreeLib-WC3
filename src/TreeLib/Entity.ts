@@ -11,26 +11,33 @@ export abstract class Entity {
     //TimerDelay API
     protected _timerDelay: number;
     protected _timer: timer = CreateTimer();
+    public lastStepSize: number;
 
     get timerDelay(): number {
         return this._timerDelay;
     }
     set timerDelay(value: number) {
-        this.remove();
         value = Math.round(value * 1_000) / 1_000; //Should give 0.001 of precision.
+        this.remove();
         this._timerDelay = value;
         this.add();
     }
     public timerYield(time: number) {
         this.resetTimer();
-        TimerStart(this._timer, time, true, () => {
+        TimerStart(this._timer, time, false, () => {
+            this.lastStepSize = time;
             this.resetTimer();
+            TimerStart(this._timer, this.timerDelay, true, () => {
+                this.lastStepSize = this.timerDelay;
+                this.step();
+            });
             this.step();
         });
     }
 
     public constructor(timerDelay: number = 0.01) {
         this._timerDelay = Math.round(timerDelay * 1_000) / 1_000;
+        this.lastStepSize = this.timerDelay;
         this.add();
     }
     //Logic to execute when the logic beat hits.
@@ -57,6 +64,7 @@ export abstract class Entity {
         Entity.getContainer(this.timerDelay).add(this);
         this.resetTimer();
         TimerStart(this._timer, this.timerDelay, true, () => {
+            this.lastStepSize = this.timerDelay;
             this.step();
         });
     }
