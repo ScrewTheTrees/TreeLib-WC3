@@ -2,11 +2,10 @@ import {Node, RectangleNode} from "./Node";
 import {Vector2} from "../Utility/Data/Vector2";
 import {Pathfinder} from "./Pathfinder";
 import {PointWalkableChecker} from "../Pathing/PointWalkableChecker";
-import {Delay} from "../Utility/Delay";
-import {DelayDto} from "../Utility/DelayDto";
 import {Logger} from "../Logger";
 import {Rectangle} from "../Utility/Data/Rectangle";
 import {Quick} from "../Quick";
+import {TreeThread} from "../Utility/TreeThread";
 
 export class PathfinderRectangle extends Pathfinder<RectangleNode> {
     private grid: RectangleNode[][] = [];
@@ -15,12 +14,12 @@ export class PathfinderRectangle extends Pathfinder<RectangleNode> {
     private startY: number;
     private endX: number;
     private endY: number;
+    public isFinishGenerating: boolean = false;
 
     constructor(startX: number, startY: number, endX: number, endY: number, stepSize: number,
                 allowDiagonal: boolean = true, excludeNonWalkable: boolean = false, generateAsync: boolean = false) {
         super();
         let walk = PointWalkableChecker.getInstance();
-        let done = false;
         let halfStep = stepSize / 2;
         let xx = math.max(startX, endX);
         let yy = math.max(startY, endY);
@@ -40,60 +39,49 @@ export class PathfinderRectangle extends Pathfinder<RectangleNode> {
         this.endY = endY;
         this.stepSize = stepSize;
 
-        let routine = coroutine.create(() => {
-            xpcall(() => {
-                let sr = 0;
-                let previousNode: Node | undefined;
-                let previousX = startX;
-                let previousY = startY;
+        if (generateAsync) {
+            TreeThread.RunUntilDone(() => {
+                this.generateMesh(startX, startY, endY, stepSize, endX, halfStep, excludeNonWalkable, walk, generateAsync);
+                this.isFinishGenerating = true;
+            });
+        } else {
+            this.generateMesh(startX, startY, endY, stepSize, endX, halfStep, excludeNonWalkable, walk, generateAsync);
+            this.isFinishGenerating  = true;
+        }
+    }
+    private generateMesh(startX: number, startY: number, endY: number, stepSize: number, endX: number, halfStep: number, excludeNonWalkable: boolean, walk: PointWalkableChecker, generateAsync: boolean) {
+        xpcall(() => {
+            let sr = 0;
+            let previousNode: Node | undefined;
+            let previousX = startX;
+            let previousY = startY;
 
-                for (let y = startY; y < endY; y += stepSize) {
-                    for (let x = startX; x < endX; x += stepSize) {
-                        if (this.getGridElementByCoordinate(x, y) != null) continue; //Already Occupied.
+            for (let y = startY; y < endY; y += stepSize) {
+                for (let x = startX; x < endX; x += stepSize) {
+                    if (this.getGridElementByCoordinate(x, y) != null) continue; //Already Occupied.
 
-                        let pos = Vector2.new(x + halfStep, y + halfStep);
-                        if (excludeNonWalkable && (!walk.checkTerrainIsWalkableXY(pos.x, pos.y))) {
-                            pos.recycle();
-                            sr++;
-                            continue; //Not walkable.
-                        }
-
-                        let node = this.generateRectangleNode(x, y, generateAsync ? 512 : -1);
-
-                        previousNode = node;
-                        previousX = x;
-                        previousY = y;
-
+                    let pos = Vector2.new(x + halfStep, y + halfStep);
+                    if (excludeNonWalkable && (!walk.checkTerrainIsWalkableXY(pos.x, pos.y))) {
+                        pos.recycle();
                         sr++;
-                        if (sr >= 8) {
-                            sr = 0;
-                            coroutine.yield();
-                        }
+                        continue; //Not walkable.
+                    }
+
+                    print(x,y);
+                    let node = this.generateRectangleNode(x, y, generateAsync ? 1024 : -1);
+
+                    previousNode = node;
+                    previousX = x;
+                    previousY = y;
+
+                    sr++;
+                    if (sr >= 8) {
+                        sr = 0;
+                        coroutine.yield();
                     }
                 }
-            }, Logger.critical);
-            done = true;
-        });
-        if (generateAsync) {
-            let del: DelayDto;
-            del = Delay.addDelay(() => {
-                if (!done) {
-                    coroutine.resume(routine);
-                    del.repeatCounter = 0;
-                } else {
-                    // @ts-ignore
-                    routine = undefined;
-                    // @ts-ignore
-                    del = undefined;
-                }
-            }, 0.02, 2);
-        } else {
-            while (!done) {
-                coroutine.resume(routine);
             }
-            // @ts-ignore
-            routine = undefined;
-        }
+        }, Logger.critical);
     }
     public getGridElementByCoordinate(x: number, y: number) {
         x = math.floor(x / this.stepSize);
@@ -185,13 +173,13 @@ export class PathfinderRectangle extends Pathfinder<RectangleNode> {
                         Quick.Push(xExpandCandidates, Vector2.new(x, nextY)); //Add to frontier
                     }
                     operations++;
-                    if (maxOps > 0 && operations % maxOps == 0 ) coroutine.yield();
+                    if (maxOps > 0 && operations % maxOps == 0) coroutine.yield();
                 }
                 for (let candice of xExpandCandidates) {
                     if (!hitTop) this.setGridElementByCoordinate(candice.x, candice.y, node);
                     candice.recycle();
                     operations++;
-                    if (maxOps > 0 && operations % maxOps == 0 ) coroutine.yield();
+                    if (maxOps > 0 && operations % maxOps == 0) coroutine.yield();
                 }
                 Quick.Clear(xExpandCandidates);
             }
@@ -216,14 +204,14 @@ export class PathfinderRectangle extends Pathfinder<RectangleNode> {
                         Quick.Push(yExpandCandidates, Vector2.new(nextX, y)); //Add to frontier
                     }
                     operations++;
-                    if (maxOps > 0 && operations % maxOps == 0 ) coroutine.yield();
+                    if (maxOps > 0 && operations % maxOps == 0) coroutine.yield();
                 }
             }
             for (let candice of yExpandCandidates) {
                 if (!hitRight) this.setGridElementByCoordinate(candice.x, candice.y, node);
                 candice.recycle();
                 operations++;
-                if (maxOps > 0 && operations % maxOps == 0 ) coroutine.yield();
+                if (maxOps > 0 && operations % maxOps == 0) coroutine.yield();
             }
             Quick.Clear(yExpandCandidates);
             if (!hitRight) {

@@ -1,6 +1,5 @@
 /**
  * Coroutine that can be reset, tracks "isFinished", has special Yield.
- * Runs in a 0.01 interval
  */
 import {Entity} from "../Entity";
 import {Logger} from "../Logger";
@@ -31,6 +30,7 @@ export abstract class TreeThread extends Entity {
         this.routine = coroutine.create(() => this.runSecret());
         this.isFinished = false;
         if (!this.isManual) this.add();
+        this.resume();
     }
     public stop() {
         if (!this.isFinished) {
@@ -40,12 +40,13 @@ export abstract class TreeThread extends Entity {
         }
         this.isFinished = true;
     }
-    protected yield() {
+    public yield() {
         coroutine.yield();
         this.lastYieldDuration = this.timerDelay;
     }
-    protected yieldTimed(totalSeconds: number, ...args: any[]) {
+    public yieldTimed(totalSeconds: number, inYield?: () => any) {
         for (let i = 0; i < totalSeconds; i += this.timerDelay) {
+            if (inYield) inYield();
             this.yield();
         }
         this.lastYieldDuration = totalSeconds;
