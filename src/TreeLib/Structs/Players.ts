@@ -1,4 +1,8 @@
+import {Quick} from "../Quick";
+
 export class Players {
+    public static MaxPlayers = 28; //27
+
     public static get RED() {return Player(0)};
     public static get BLUE() {return Player(1)};
     public static get TEAL() {return Player(2)};
@@ -69,4 +73,18 @@ export class Players {
     public static get NEUTRAL_EXTRA() {
         return Player(GetBJPlayerNeutralExtra())
     };
+
+    private static _idList: player[] = [];
+    public static get idList() {
+        if (this._idList) return this._idList;
+        this._idList = [];
+        for (let i = 0; i < Players.MaxPlayers; i++) {
+            Quick.Push(this._idList, Player(i));
+        }
+        return this._idList;
+    }
+
+    public static fromId(id: number) {
+        return this.idList[id];
+    }
 }

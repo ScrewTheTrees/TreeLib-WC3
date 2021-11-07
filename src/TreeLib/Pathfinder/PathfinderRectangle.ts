@@ -67,7 +67,6 @@ export class PathfinderRectangle extends Pathfinder<RectangleNode> {
                         continue; //Not walkable.
                     }
 
-                    print(x,y);
                     let node = this.generateRectangleNode(x, y, generateAsync ? 1024 : -1);
 
                     previousNode = node;

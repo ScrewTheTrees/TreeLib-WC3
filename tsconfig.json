@@ -3,13 +3,12 @@
     "allowJs": true,
     "strict": true,
     "sourceMap": false,
-    "target": "es6",
+
+    "target": "ESNext",
+    "lib": ["ESNext"],
 
     "outDir": "./",
     "baseUrl": "./src",
-    "lib": [
-      "es6"
-    ],
 
     "moduleResolution": "classic",
     "paths": {
@@ -35,7 +34,8 @@
   },
   "include": [
     "src",
-    "lib"
+    "lib",
+    "./index.d.ts"
   ],
   "exclude": [],
   "tstl": {

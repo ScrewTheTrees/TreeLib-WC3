@@ -44,9 +44,8 @@ export class Pathfinder<T extends Node = Node> {
     public findPathByNodes(startNode: T, endNode: T, maxIterateNodes: number = math.maxinteger, asyncMax: number = -1): PathfindResult<T> {
         // print(os.clock(), "Start/Setup.", " - Index Length:", this.emptyIndexes.length);
 
-        //let pathFindIndex = this.emptyIndexes.pop() || ++this.nextIndex;
         let pathFindIndex = this.nextIndex++;
-        if (this.nextIndex >= 500) this.nextIndex = 0;
+        if (this.nextIndex >= 65_536) this.nextIndex = 0;
 
         let isAsync = true;
         if (asyncMax <= 0) isAsync = false;

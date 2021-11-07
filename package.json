@@ -18,6 +18,7 @@
     "lib": "lib"
   },
   "main": "index.d.ts",
+  "types": "index.d.ts",
   "devDependencies": {
     "fs-extra": "^9.0.1",
     "lua-types": "2.6.1",

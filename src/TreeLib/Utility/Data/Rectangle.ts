@@ -4,6 +4,7 @@ import {Vector2} from "./Vector2";
 import {Cube} from "./Cube";
 import {Vector3} from "./Vector3";
 import {TreeMath} from "../TreeMath";
+import {Circle} from "./Circle";
 
 export class Rectangle implements Recyclable {
     public xMin!: number;
@@ -37,6 +38,20 @@ export class Rectangle implements Recyclable {
     }
     public static fromVectors(v1: Vector2, v2: Vector2): Rectangle {
         return this.new(v1.x, v1.y, v2.x, v2.y);
+    }
+
+    //Generic
+    public get width() {
+        return this.xMax - this.xMin;
+    }
+    public get height() {
+        return this.yMax - this.yMin;
+    }
+    public get shortestSide() {
+        return math.min(this.width, this.height);
+    }
+    public get longestSide() {
+        return math.max(this.width, this.height);
     }
 
     //Madness
@@ -80,6 +95,21 @@ export class Rectangle implements Recyclable {
             && this.xMin <= second.xMax
             && this.yMax >= second.yMin
             && this.yMin <= second.yMax;
+    }
+    public intersectCircle(other: Circle) {
+        let circleDistanceX = math.abs(other.center.x - this.xMin);
+        let circleDistanceY = math.abs(other.center.y - this.yMin);
+
+        if (circleDistanceX > (this.width/2 + other.radius)) return false;
+        if (circleDistanceY > (this.height/2 + other.radius)) return false;
+
+        if (circleDistanceX <= (this.width/2 + other.radius)) return true;
+        if (circleDistanceY <= (this.height/2 + other.radius)) return true;
+
+        let cornerDistance_sq = (circleDistanceX - this.width/2)^2 +
+            (circleDistanceY - this.height/2)^2;
+
+        return (cornerDistance_sq <= (other.radius^2));
     }
 
     //WC3 API
