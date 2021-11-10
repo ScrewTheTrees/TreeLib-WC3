@@ -1,4 +1,4 @@
-import {RGB} from "../../Utility/RGB";
+import {RGB} from "wc3-treelib/src/TreeLib/Utility/Data/RGB";
 import {StepEffect} from "./StepEffect";
 
 export class ColorFadeEffect extends StepEffect {
@@ -7,7 +7,7 @@ export class ColorFadeEffect extends StepEffect {
     public endColor: RGB;
     public gfx: effect;
 
-    constructor(eff: effect, time: number, color: RGB, endColor: RGB = new RGB(0, 0, 0)) {
+    constructor(eff: effect, time: number, color: RGB, endColor: RGB = RGB.new(0, 0, 0)) {
         super(time);
         this.gfx = eff;
         this.color = color;

@@ -77,10 +77,10 @@ export class RectangleNode extends Node {
         return this.boundary.intersectsVector2(point);
     }
     public getClosestPoint(point: Vector2) {
-        return this.boundary.closestPointInside(this.boundary.closestPointInside(point));
+        return this.boundary.closestPointInside(point);
     }
     public getClosestPointWithBoundary(point: Vector2, boundary: number) {
-        return this.boundary.closestPointInsideWithBoundary(this.boundary.closestPointInsideWithBoundary(point, boundary), boundary);
+        return this.boundary.closestPointInsideWithBoundary(point, boundary);
     }
 
     public distanceToNode(node: this): number {

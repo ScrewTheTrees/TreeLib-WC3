@@ -1,7 +1,7 @@
 /**
  * A simple stringbuilder that concats strings in the most efficent way possible.
  */
-import {RGB, RGBTextString} from "./RGB";
+import {RGB} from "wc3-treelib/src/TreeLib/Utility/Data/RGB";
 
 export class StringBuilder {
     public contentArray: string[] = [];
@@ -19,7 +19,7 @@ export class StringBuilder {
     }
 
     public appendColored(input: any, color: RGB): this {
-        this.contentArray.push(RGBTextString(color, tostring(input)));
+        this.contentArray.push(RGB.textString(color, tostring(input)));
         return this;
     }
 
@@ -32,7 +32,7 @@ export class StringBuilder {
     }
 
     public appendColoredLine(input: any, color: RGB): this {
-        this.contentArray.push(RGBTextString(color, tostring(input)));
+        this.contentArray.push(RGB.textString(color, tostring(input)));
         this.contentArray.push(this.newLine);
         return this;
     }

@@ -22,8 +22,7 @@ export class UnitRespawner implements Spawner {
     }
 
     set respawnLocation(value: Vector2) {
-        this._respawnLocation.recycle();
-        this._respawnLocation = value;
+        this._respawnLocation.updateTo(value.x, value.y);
     }
 
     /**

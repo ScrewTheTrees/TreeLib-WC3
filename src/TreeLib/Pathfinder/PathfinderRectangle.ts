@@ -60,9 +60,9 @@ export class PathfinderRectangle extends Pathfinder<RectangleNode> {
                 for (let x = startX; x < endX; x += stepSize) {
                     if (this.getGridElementByCoordinate(x, y) != null) continue; //Already Occupied.
 
-                    let pos = Vector2.new(x + halfStep, y + halfStep);
-                    if (excludeNonWalkable && (!walk.checkTerrainIsWalkableXY(pos.x, pos.y))) {
-                        pos.recycle();
+                    let xx = x + halfStep
+                    let yy = y + halfStep
+                    if (excludeNonWalkable && (!walk.checkTerrainIsWalkableXY(xx, yy))) {
                         sr++;
                         continue; //Not walkable.
                     }
@@ -99,41 +99,42 @@ export class PathfinderRectangle extends Pathfinder<RectangleNode> {
         this.grid[x][y] = element;
     }
     public getNodeClosestTo(point: Vector2): RectangleNode {
-        let p = point.copy();
+        let xx = point.x;
+        let yy = point.y;
+
         //p.x -= 4;
         //p.y -= 4;
-        p.x = math.floor(p.x / this.stepSize) * this.stepSize;
-        p.y = math.floor(p.y / this.stepSize) * this.stepSize;
-        if (p.x <= this.startX) p.x = this.startX + this.stepSize;
-        if (p.x >= this.endX) p.x = this.endX - this.stepSize;
-        if (p.y <= this.startY) p.y = this.startY + this.stepSize;
-        if (p.y >= this.endY) p.y = this.endY - this.stepSize;
-        let g = this.getGridElementByCoordinate(p.x, p.y);
+        xx = math.floor(xx / this.stepSize) * this.stepSize;
+        yy = math.floor(yy / this.stepSize) * this.stepSize;
+        if (xx <= this.startX) xx = this.startX + this.stepSize;
+        if (xx >= this.endX) xx = this.endX - this.stepSize;
+        if (yy <= this.startY) yy = this.startY + this.stepSize;
+        if (yy >= this.endY) yy = this.endY - this.stepSize;
+        let g = this.getGridElementByCoordinate(xx, yy);
         if (g == null) {
             let offset = this.stepSize;
             while (g == null) {
                 for (let i = -this.stepSize; i <= offset; i += this.stepSize) {
-                    let val = this.getGridElementByCoordinate(p.x + i, p.y - offset);
+                    let val = this.getGridElementByCoordinate(xx + i, yy - offset);
                     if (val != null) return val;
                 }
                 for (let i = -this.stepSize; i <= offset; i += this.stepSize) {
-                    let val = this.getGridElementByCoordinate(p.x + i, p.y + offset);
+                    let val = this.getGridElementByCoordinate(xx + i, yy + offset);
                     if (val != null) return val;
                 }
 
                 for (let i = -this.stepSize; i <= offset; i += this.stepSize) {
-                    let val = this.getGridElementByCoordinate(p.x + offset, p.y + i);
+                    let val = this.getGridElementByCoordinate(xx + offset, yy + i);
                     if (val != null) return val;
                 }
                 for (let i = -this.stepSize; i <= offset; i += this.stepSize) {
-                    let val = this.getGridElementByCoordinate(p.x - offset, p.y + i);
+                    let val = this.getGridElementByCoordinate(xx - offset, yy + i);
                     if (val != null) return val;
                 }
 
                 offset += this.stepSize;
             }
         }
-        p.recycle();
         return g;
     }
     private generateRectangleNode(startX: number, startY: number, maxOps: number = -1): RectangleNode {

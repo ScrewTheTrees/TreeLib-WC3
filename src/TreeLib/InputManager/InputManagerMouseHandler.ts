@@ -68,11 +68,11 @@ export class InputManagerMouseHandler {
     private onMouseMoveAction() {
         let x = BlzGetTriggerPlayerMouseX();
         let y = BlzGetTriggerPlayerMouseY();
-        if (this.lastPosition[GetPlayerId(GetTriggerPlayer())]) this.lastPosition[GetPlayerId(GetTriggerPlayer())].recycle();
-        this.lastPosition[GetPlayerId(GetTriggerPlayer())] = Vector2.new(x, y);
+        if (!this.lastPosition[GetPlayerId(GetTriggerPlayer())]) this.lastPosition[GetPlayerId(GetTriggerPlayer())] = Vector2.new(x,y);
+        this.lastPosition[GetPlayerId(GetTriggerPlayer())].updateTo(x,y)
         if (x != 0 && y != 0) {
-            if (this.lastCoordinate[GetPlayerId(GetTriggerPlayer())]) this.lastCoordinate[GetPlayerId(GetTriggerPlayer())].recycle();
-            this.lastCoordinate[GetPlayerId(GetTriggerPlayer())] = Vector2.new(x, y);
+            if (!this.lastCoordinate[GetPlayerId(GetTriggerPlayer())]) this.lastCoordinate[GetPlayerId(GetTriggerPlayer())] = Vector2.new(x,y);
+            this.lastCoordinate[GetPlayerId(GetTriggerPlayer())].updateTo(x,y)
         }
     }
 

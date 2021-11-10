@@ -49,14 +49,14 @@ export class PathfinderGrid extends Pathfinder {
                         this.grid[i] = [];
                     }
                     for (let j = startY; j < endY; j += stepSize) {
-                        let pos = Vector2.new(i + (stepSize / 2), j + (stepSize / 2));
-                        if (excludeNonWalkable && (!walk.checkTerrainIsWalkableXY(pos.x, pos.y))) {
-                            pos.recycle();
+                        let xx = i + (stepSize / 2);
+                        let yy = j + (stepSize / 2);
+                        if (excludeNonWalkable && (!walk.checkTerrainIsWalkableXY(xx, yy))) {
                             sr++;
                             continue; //Not walkable.
                         }
 
-                        let node = new Node(pos);
+                        let node = new Node(Vector2.new(xx, yy));
                         this.grid[i][j] = node;
                         this.addNode(node);
 
@@ -135,8 +135,9 @@ export class PathfinderGrid extends Pathfinder {
             if (downRight && down && right) previousNode.addNeighborTwoWay(downRight);
         }
     }
+    private _nodeClosestTo = Vector2.new(0,0);
     public getNodeClosestTo(point: Vector2): Node {
-        let p = point.copy();
+        let p = this._nodeClosestTo;
         //p.x -= 4;
         //p.y -= 4;
         p.x = math.floor(p.x / this.stepSize) * this.stepSize;
@@ -170,7 +171,6 @@ export class PathfinderGrid extends Pathfinder {
                 offset += this.stepSize;
             }
         }
-        p.recycle();
         return g;
     }
 }

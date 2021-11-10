@@ -25,44 +25,42 @@ export class PointWalkableChecker {
         }
     }
 
+    private _terrainCheckPointXY = Vector2.new(0, 0);
     public checkTerrainIsWalkableXY(x: number, y: number): boolean {
-        const p = Vector2.new(x, y);
-        const result = this.checkTerrainIsWalkable(p)
-        p.recycle();
-        return result;
+        const p = this._terrainCheckPointXY.updateTo(x, y);
+        return this.checkTerrainIsWalkable(p);
     }
 
+    private _terrainCheckCircle = Vector2.new(0, 0);
     public checkTerrainIsWalkableCircleXY(x: number, y: number, radius: number, precision: number = 8): boolean {
-        const p = Vector2.new(x, y);
+        const p = this._terrainCheckCircle.updateTo(x, y);
         let result = this.checkTerrainIsWalkable(p);
         if (!result) {
-            let checkPoint = p.copy();
             let angle = 0;
             let anglePerStep = 360 / precision;
             for (let i = 0; i < precision; i++) {
-                checkPoint.updateToPoint(p);
-                result = this.checkTerrainIsWalkable(checkPoint.polarProject(radius, angle));
+                p.updateToPoint(p);
+                result = this.checkTerrainIsWalkable(p.polarProject(radius, angle));
                 if (!result) break;
                 angle += anglePerStep;
             }
-            checkPoint.recycle();
         }
-        p.recycle();
         return result;
     }
+
+    private _terrainCheckPoint = Vector2.new(0, 0);
     private checkTerrainIsWalkable(p: Vector2): boolean {
         if (IsTerrainPathable(p.x, p.y, PATHING_TYPE_WALKABILITY)) return false; //Cant walk here
 
         MoveRectTo(this.checkRect, p.x, p.y);
         EnumItemsInRect(this.checkRect, null, () => this.hideItem(GetEnumItem()));
         SetItemPosition(this.checkItem, p.x, p.y);
-        const actualPos = Vector2.fromWidget(this.checkItem);
+        const actualPos = this._terrainCheckPoint.updateToWidget(this.checkItem);
         SetItemVisible(this.checkItem, false);
         for (let i of this.hiddenItems) {
             SetItemVisible(i, true);
         }
         const dist = p.distanceToSquared(actualPos);
-        actualPos.recycle();
         return dist < this.maxRange * this.maxRange;
     }
 }

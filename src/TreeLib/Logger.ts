@@ -3,7 +3,7 @@
  * Generally you would want Debug turned on for DEV but disabled for release.
  * And verbose on in worst case erroring.
  */
-import {RGB, RGBTextString} from "./Utility/RGB";
+import {RGB} from "wc3-treelib/src/TreeLib/Utility/Data/RGB";
 
 /** @noSelf **/
 export class Logger {
@@ -12,32 +12,32 @@ export class Logger {
     public static doLogWarning = true;
     public static doLogCritical = true;
 
-    public static COLOR_VERBOSE = new RGB(128, 128, 128);
-    public static COLOR_DEBUG = new RGB(255, 255, 255);
-    public static COLOR_WARNING = new RGB(255, 255, 0);
-    public static COLOR_CRITICAL = new RGB(255, 0, 0);
+    public static COLOR_VERBOSE = RGB.new(128, 128, 128);
+    public static COLOR_DEBUG = RGB.new(255, 255, 255);
+    public static COLOR_WARNING = RGB.new(255, 255, 0);
+    public static COLOR_CRITICAL = RGB.new(255, 0, 0);
 
     public static LogVerbose(...params: any[]) {
         if (Logger.doLogVerbose) {
-            print(RGBTextString(Logger.COLOR_VERBOSE, "Verbose: ", ...params));
+            print(RGB.textString(Logger.COLOR_VERBOSE, "Verbose: ", ...params));
         }
     }
 
     public static LogDebug(...params: any[]) {
         if (Logger.doLogDebug) {
-            print(RGBTextString(Logger.COLOR_DEBUG, "Debug: ", ...params));
+            print(RGB.textString(Logger.COLOR_DEBUG, "Debug: ", ...params));
         }
     }
 
     public static LogWarning(...params: any[]) {
         if (Logger.doLogWarning) {
-            print(RGBTextString(Logger.COLOR_WARNING, "Warning: ", ...params));
+            print(RGB.textString(Logger.COLOR_WARNING, "Warning: ", ...params));
         }
     }
 
     public static LogCritical(...params: any[]) {
         if (Logger.doLogCritical) {
-            print(RGBTextString(Logger.COLOR_CRITICAL, "Critical: ", ...params));
+            print(RGB.textString(Logger.COLOR_CRITICAL, "Critical: ", ...params));
         }
     }
 
