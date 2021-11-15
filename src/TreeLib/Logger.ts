@@ -3,7 +3,9 @@
  * Generally you would want Debug turned on for DEV but disabled for release.
  * And verbose on in worst case erroring.
  */
-import {RGB} from "wc3-treelib/src/TreeLib/Utility/Data/RGB";
+
+
+import {RGB} from "./Utility/Data/RGB";
 
 /** @noSelf **/
 export class Logger {

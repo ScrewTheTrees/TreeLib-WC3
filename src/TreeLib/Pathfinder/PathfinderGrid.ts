@@ -137,7 +137,7 @@ export class PathfinderGrid extends Pathfinder {
     }
     private _nodeClosestTo = Vector2.new(0,0);
     public getNodeClosestTo(point: Vector2): Node {
-        let p = this._nodeClosestTo;
+        let p = this._nodeClosestTo.updateToPoint(point);
         //p.x -= 4;
         //p.y -= 4;
         p.x = math.floor(p.x / this.stepSize) * this.stepSize;

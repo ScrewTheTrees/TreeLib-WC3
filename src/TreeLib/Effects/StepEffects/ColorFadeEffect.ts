@@ -1,5 +1,5 @@
-import {RGB} from "wc3-treelib/src/TreeLib/Utility/Data/RGB";
 import {StepEffect} from "./StepEffect";
+import {RGB} from "../../Utility/Data/RGB";
 
 export class ColorFadeEffect extends StepEffect {
     public color: RGB;

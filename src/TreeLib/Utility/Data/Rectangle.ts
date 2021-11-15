@@ -60,6 +60,11 @@ export class Rectangle implements Recyclable {
         let yy = TreeMath.Clamp(other.y, this.yMin, this.yMax)
         return Vector2.new(xx, yy);
     }
+    public distanceToVector2(other: Vector2): number {
+        let xx = TreeMath.Clamp(other.x, this.xMin, this.xMax)
+        let yy = TreeMath.Clamp(other.y, this.yMin, this.yMax)
+        return other.distanceToXY(xx, yy);
+    }
     public closestPointInsideWithBoundary(other: Vector2, boundary: number = 1): Vector2 {
         let xDiff = (this.xMax - this.xMin) / 2; //32
         let yDiff = (this.yMax - this.yMin) / 2; //32
@@ -100,16 +105,16 @@ export class Rectangle implements Recyclable {
         let circleDistanceX = math.abs(other.center.x - this.xMin);
         let circleDistanceY = math.abs(other.center.y - this.yMin);
 
-        if (circleDistanceX > (this.width/2 + other.radius)) return false;
-        if (circleDistanceY > (this.height/2 + other.radius)) return false;
+        if (circleDistanceX > (this.width / 2 + other.radius)) return false;
+        if (circleDistanceY > (this.height / 2 + other.radius)) return false;
 
-        if (circleDistanceX <= (this.width/2 + other.radius)) return true;
-        if (circleDistanceY <= (this.height/2 + other.radius)) return true;
+        if (circleDistanceX <= (this.width / 2 + other.radius)) return true;
+        if (circleDistanceY <= (this.height / 2 + other.radius)) return true;
 
-        let cornerDistance_sq = (circleDistanceX - this.width/2)^2 +
-            (circleDistanceY - this.height/2)^2;
+        let cornerDistance_sq = (circleDistanceX - this.width / 2) ^ 2 +
+            (circleDistanceY - this.height / 2) ^ 2;
 
-        return (cornerDistance_sq <= (other.radius^2));
+        return (cornerDistance_sq <= (other.radius ^ 2));
     }
 
     //WC3 API

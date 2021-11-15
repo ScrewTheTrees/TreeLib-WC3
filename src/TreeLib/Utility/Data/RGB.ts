@@ -1,6 +1,7 @@
-import {TreeMath} from "wc3-treelib/src/TreeLib/Utility/TreeMath";
-import {Recyclable} from "wc3-treelib/src/TreeLib/Utility/Data/Recyclable";
-import {Quick} from "wc3-treelib/src/TreeLib/Quick";
+import {Recyclable} from "./Recyclable";
+import {Quick} from "../../Quick";
+import {TreeMath} from "../TreeMath";
+
 
 export class RGB implements Recyclable {
     private _red: number = 0;

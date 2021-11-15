@@ -1,7 +1,8 @@
 /**
  * A simple stringbuilder that concats strings in the most efficent way possible.
  */
-import {RGB} from "wc3-treelib/src/TreeLib/Utility/Data/RGB";
+import {RGB} from "./Data/RGB";
+
 
 export class StringBuilder {
     public contentArray: string[] = [];

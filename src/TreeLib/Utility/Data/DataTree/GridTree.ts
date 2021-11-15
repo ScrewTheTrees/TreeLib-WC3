@@ -1,12 +1,14 @@
-import {Vector2} from "./Vector2";
-import {Quick} from "../../Quick";
-import {Circle} from "./Circle";
+import {Vector2} from "../Vector2";
+import {Quick} from "../../../Quick";
+import {Circle} from "../Circle";
+import {DataTreeFilter} from "./DataTreeFilter";
+import {DataTreePositionEvaluation} from "./DataTreePositionEvaluation";
 
 export class GridTree<T> {
     private gridNegative: number;
     private grid: T[][][] = [];
     private readonly gridSize: number;
-    public positionEvaluation: (val: T) => Vector2;
+    public positionEvaluation: DataTreePositionEvaluation<T>;
 
     /**
      *
@@ -14,7 +16,7 @@ export class GridTree<T> {
      * @param gridNegative Mostly intended for negative coordinates, this is to allow more performance by using 1..n index tables.
      * @param gridSize Size of grid squares.
      */
-    constructor(positionEvaluation: (val: T) => Vector2, gridNegative: number = 32_768, gridSize: number = 64) {
+    constructor(positionEvaluation: DataTreePositionEvaluation<T>, gridNegative: number = 32_768, gridSize: number = 64) {
         this.positionEvaluation = positionEvaluation;
         this.gridNegative = gridNegative;
         this.gridSize = gridSize;
@@ -52,36 +54,36 @@ export class GridTree<T> {
         Quick.Remove(startChunk, value);
         Quick.PushIfMissing(endChunk, value);
     }
-    public fetchInCircle(circle: Circle, filter?: (filterUnit: T) => boolean, checkArr?: []) {
+    public fetchInCircle(circle: Circle, filter?: DataTreeFilter<T>, checkArr?: []) {
         return this.fetchInCircleR(circle.center, circle.radius, filter, checkArr);
     }
-    public fetchInCircleR(center: Vector2, radius: number, filter?: (filterUnit: T) => boolean, checkArr?: T[]) {
+    public fetchInCircleR(center: Vector2, radius: number, filter?: DataTreeFilter<T>, checkArr?: T[]) {
         checkArr = checkArr || [];
         let xs = math.floor((center.x + this.gridNegative) / this.gridSize);
         let ys = math.floor((center.y + this.gridNegative) / this.gridSize);
         let maxDist = math.ceil(radius / this.gridSize);
         let finalRound = false;
 
-        checkArr.push(...this.getAtIndex(xs, ys));
+        this.IfFilterDoPush(this.getAtIndex(xs, ys), checkArr, filter);
 
         for (let d = 1; d <= maxDist; d++) {
             for (let i = 0; i < d + 1; i++) {
                 let x1 = xs - d + i;
                 let y1 = ys - i;
-                checkArr.push(...this.getAtIndex(x1, y1));
+                this.IfFilterDoPush(this.getAtIndex(x1, y1), checkArr, filter);
 
                 let x2 = xs + d - i;
                 let y2 = ys + i;
-                checkArr.push(...this.getAtIndex(x2, y2));
+                this.IfFilterDoPush(this.getAtIndex(x2, y2), checkArr, filter);
             }
             for (let i = 1; i < d; i++) {
                 let x1 = xs - i;
                 let y1 = ys + d - i;
-                checkArr.push(...this.getAtIndex(x1, y1));
+                this.IfFilterDoPush(this.getAtIndex(x1, y1), checkArr, filter);
 
                 let x2 = xs + i;
                 let y2 = ys - d + i;
-                checkArr.push(...this.getAtIndex(x2, y2));
+                this.IfFilterDoPush(this.getAtIndex(x2, y2), checkArr, filter);
             }
             if (checkArr.length > 0) {
                 if (finalRound) break;
@@ -90,13 +92,13 @@ export class GridTree<T> {
         }
         for (let i = checkArr.length - 1; i >= 0; i--) {
             let value = checkArr[i];
-            if (this.positionEvaluation(value).distanceTo(center) > radius) {
+            if (this.positionEvaluation.evaluate(value).distanceTo(center) > radius) {
                 Quick.Slice(checkArr, i);
             }
         }
         return checkArr;
     }
-    public fetchClosest(center: Vector2, maxDist: number, filter?: (filterUnit: T) => boolean) {
+    public fetchClosest(center: Vector2, maxDist: number, filter?: DataTreeFilter<T>) {
         maxDist = math.ceil(maxDist / this.gridSize);
 
         let checkArr = this.checkArr;
@@ -106,26 +108,26 @@ export class GridTree<T> {
         let ys = math.floor((center.y + this.gridNegative) / this.gridSize);
         let finalRound = false;
 
-        checkArr.push(...this.getAtIndex(xs, ys));
+        this.IfFilterDoPush(this.getAtIndex(xs, ys), checkArr, filter);
 
         for (let d = 1; d <= maxDist; d++) {
             for (let i = 0; i < d + 1; i++) {
                 let x1 = xs - d + i;
                 let y1 = ys - i;
-                checkArr.push(...this.getAtIndex(x1, y1));
+                this.IfFilterDoPush(this.getAtIndex(x1, y1), checkArr, filter);
 
                 let x2 = xs + d - i;
                 let y2 = ys + i;
-                checkArr.push(...this.getAtIndex(x2, y2));
+                this.IfFilterDoPush(this.getAtIndex(x2, y2), checkArr, filter);
             }
             for (let i = 1; i < d; i++) {
                 let x1 = xs - i;
                 let y1 = ys + d - i;
-                checkArr.push(...this.getAtIndex(x1, y1));
+                this.IfFilterDoPush(this.getAtIndex(x1, y1), checkArr, filter);
 
                 let x2 = xs + i;
                 let y2 = ys - d + i;
-                checkArr.push(...this.getAtIndex(x2, y2));
+                this.IfFilterDoPush(this.getAtIndex(x2, y2), checkArr, filter);
             }
             if (checkArr.length > 0) {
                 if (finalRound) break;
@@ -133,16 +135,23 @@ export class GridTree<T> {
             }
         }
         for (let value of checkArr) {
-            if (!filter || filter(value)) {
-                let pos = this.positionEvaluation(value);
-                let dist = pos.distanceTo(center);
-                if (dist <= targetDist) {
-                    target = value;
-                    targetDist = dist;
-                }
+            let pos = this.positionEvaluation.evaluate(value);
+            let dist = pos.distanceTo(center);
+            if (dist <= targetDist) {
+                target = value;
+                targetDist = dist;
             }
         }
         return target;
+    }
+
+    public IfFilterDoPush(sourceArr: T[], targetArr: T[], filter?: DataTreeFilter<T>) {
+        for (let e of sourceArr) {
+            if (!filter || filter.evaluate(e)) {
+                Quick.Push(targetArr, e);
+            }
+        }
+        return targetArr;
     }
 
 
