@@ -2,15 +2,15 @@ import {PriorityQueue} from "../src/TreeLib/Utility/Data/PriorityQueue";
 
 type ShitType = { data: string };
 
-let queue = new PriorityQueue<ShitType>();
-let queue2 = new PriorityQueue<ShitType>();
+let queue = PriorityQueue.new();
+let queue2 = PriorityQueue.new();
 
 for (let i = 0; i < 1000; i++) {
     queue.recycle();
     queue2.recycle();
     if (i % 50 === 1) {
-        queue = new PriorityQueue<ShitType>();
-        queue2 = new PriorityQueue<ShitType>();
+        queue = PriorityQueue.new();
+        queue2 = PriorityQueue.new();
     }
     for (let i = 0; i < 1000; i++) {
         let num = Math.round(Math.random() * 11000) - 1000;

@@ -50,7 +50,7 @@ export abstract class Entity {
 
     public static getDebugInfo() {
         const data: string[] = [];
-        this.containers.forEach((container) => {
+        for (let container of this.containers.values()) {
             let str = `Container: ${container.identifier},  Entities: ${container.count()},  Disabled: ${container.isDisabled()}`;
             if (!container.isEmpty()) {
                 str += ",  Names(T5): ";
@@ -63,7 +63,7 @@ export abstract class Entity {
                 }
             }
             Quick.Push(data, str);
-        });
+        }
         return data;
     }
 }

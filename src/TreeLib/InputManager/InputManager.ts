@@ -28,7 +28,7 @@ export class InputManager {
      * @param callback The function to call when the button is pressed
      * @param metaKeys Optional MetaKeys like having to hold shift or ctrl, by default its [MetaKeys.ALL] which works for any key combination.
      */
-    public static addKeyboardPressCallback(key: oskeytype, callback: (this: any, key: KeyCallback) => void, metaKeys?: MetaKey[]) {
+    public static addKeyboardPressCallback(key: oskeytype, callback: (this: void, key: KeyCallback) => void, metaKeys?: MetaKey[]) {
         return InputManager.getInstance().keyboardHandler.addKeyboardPressCallback(key, callback, metaKeys);
     }
 
@@ -38,7 +38,7 @@ export class InputManager {
      * @param callback The function to call when the button is released
      * @param metaKeys Optional MetaKeys like having to hold shift or ctrl, by default its [MetaKeys.ALL] which works for any key combination.
      */
-    public static addKeyboardReleaseCallback(key: oskeytype, callback: (this: any, key: KeyCallback) => void, metaKeys?: MetaKey[]) {
+    public static addKeyboardReleaseCallback(key: oskeytype, callback: (this: void, key: KeyCallback) => void, metaKeys?: MetaKey[]) {
         return InputManager.getInstance().keyboardHandler.addKeyboardReleaseCallback(key, callback, metaKeys);
     }
 
