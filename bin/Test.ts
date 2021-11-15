@@ -6,8 +6,8 @@ let queue = new PriorityQueue<ShitType>();
 let queue2 = new PriorityQueue<ShitType>();
 
 for (let i = 0; i < 1000; i++) {
-    queue.clear();
-    queue2.clear();
+    queue.recycle();
+    queue2.recycle();
     if (i % 50 === 1) {
         queue = new PriorityQueue<ShitType>();
         queue2 = new PriorityQueue<ShitType>();

@@ -1,5 +1,5 @@
-import {Logger} from "./Logger";
 import {Quick} from "./Quick";
+import {Logger} from "./Logger";
 
 /**
  * Entities are great for when you need logic executed continuously.
@@ -78,9 +78,7 @@ class EntityContainer {
         this.identifier = timeBetween;
         TriggerRegisterTimerEvent(this.loop, timeBetween, true);
         TriggerAddAction(this.loop, () => {
-            if (!Entity.pauseExecution) {
-                this.step();
-            }
+            this.step();
         });
     }
 
@@ -105,10 +103,14 @@ class EntityContainer {
         return e;
     }
     private step() {
-        xpcall(() => {
-            for (let entity of this.entities) {
-                entity.step();
+        if (!Entity.pauseExecution) {
+            try {
+                for (let entity of this.entities) {
+                    entity.step();
+                }
+            } catch (e) {
+                Logger.critical(e);
             }
-        }, Logger.LogCritical);
+        }
     }
 }

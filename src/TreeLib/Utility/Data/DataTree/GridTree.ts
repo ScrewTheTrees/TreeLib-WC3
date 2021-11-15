@@ -65,6 +65,9 @@ export class GridTree<T> {
         let finalRound = false;
 
         this.IfFilterDoPush(this.getAtIndex(xs, ys), checkArr, filter);
+        if (checkArr.length > 0) {
+            finalRound = true;
+        }
 
         for (let d = 1; d <= maxDist; d++) {
             for (let i = 0; i < d + 1; i++) {
@@ -109,6 +112,9 @@ export class GridTree<T> {
         let finalRound = false;
 
         this.IfFilterDoPush(this.getAtIndex(xs, ys), checkArr, filter);
+        if (checkArr.length > 0) {
+            finalRound = true;
+        }
 
         for (let d = 1; d <= maxDist; d++) {
             for (let i = 0; i < d + 1; i++) {
@@ -136,7 +142,7 @@ export class GridTree<T> {
         }
         for (let value of checkArr) {
             let pos = this.positionEvaluation.evaluate(value);
-            let dist = pos.distanceTo(center);
+            let dist = pos.distanceToSquared(center);
             if (dist <= targetDist) {
                 target = value;
                 targetDist = dist;

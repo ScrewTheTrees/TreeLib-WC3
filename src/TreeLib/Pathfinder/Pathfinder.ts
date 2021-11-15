@@ -9,6 +9,10 @@ import {TreePromise} from "../Utility/TreePromise";
 export class Pathfinder<T extends Node = Node> {
     public nodes: T[] = [];
     public nextIndex = 0;
+    public maxIndex = 256; //Use a higher number if you plan to use a lot of async path finding.
+
+    private nodesInOrder: T[][] = [];
+    private compileNodes: T[][] = [];
 
     public findPathAsync(from: Vector2,
                          to: Vector2,
@@ -45,13 +49,17 @@ export class Pathfinder<T extends Node = Node> {
         // print(os.clock(), "Start/Setup.", " - Index Length:", this.emptyIndexes.length);
 
         let pathFindIndex = this.nextIndex++;
-        if (this.nextIndex >= 65_536) this.nextIndex = 0;
+        if (this.nextIndex >= this.maxIndex) this.nextIndex = 0;
 
         let isAsync = true;
         if (asyncMax <= 0) isAsync = false;
 
-        const frontier = new PriorityQueue<T>();
-        const nodesInOrder: T[] = [];
+        const frontier: PriorityQueue<T> = PriorityQueue.new();
+        let nodesInOrder: T[] = this.nodesInOrder[pathFindIndex];
+        if (nodesInOrder == null) {
+            nodesInOrder = [];
+            this.nodesInOrder[pathFindIndex] = nodesInOrder;
+        }
 
         Quick.Push(nodesInOrder, startNode);
         Quick.Push(nodesInOrder, endNode);
@@ -79,12 +87,12 @@ export class Pathfinder<T extends Node = Node> {
             let current = frontier.popLowestPriority();
             if (current != null) {
                 Quick.Push(nodesInOrder, current);
-                for (let i = 0; i < current.neighbors.length; i++) {
-                    let target = current.neighbors[i];
-
+                for (let target of current.neighbors) {
                     if (!target.disabled && this.isNodeBadCompared(pathFindIndex, current, target)) {
                         if (!target.getCameFrom(pathFindIndex)) Quick.Push(nodesInOrder, target);
-                        target.setCameFrom(pathFindIndex, current, this.getNodePriority(pathFindIndex, current, target));
+                        if (target.getCameFrom(pathFindIndex) != current) {
+                            target.setCameFrom(pathFindIndex, current, this.getNodePriority(pathFindIndex, current, target));
+                        }
 
                         let dist = this.distanceBetweenNodes(target, endNode) * target.cost;
                         frontier.insertWithPriority(target, current.getCostSoFar(pathFindIndex) + dist);
@@ -121,7 +129,12 @@ export class Pathfinder<T extends Node = Node> {
 
         // print(os.clock(), "Backtrack.", " - Index:", pathFindIndex);
         // Backtrack to get path
-        let compileNodes: T[] = [];
+        let compileNodes: T[] = this.compileNodes[pathFindIndex];
+        if (compileNodes == null) {
+            compileNodes = [];
+            this.compileNodes[pathFindIndex] = nodesInOrder;
+        }
+
         let iterateNode: T | undefined = finalNode;
         iterateNodes = 0;
         startNode.clearIndex(pathFindIndex);
@@ -150,20 +163,16 @@ export class Pathfinder<T extends Node = Node> {
         // print(os.clock(), "Done?", points.length, " - Index:", pathFindIndex);
 
         //Clear
-        TreeThread.RunUntilDone(
-            () => {
-                // print(os.clock(), "Start cleaning.", " - Index:", pathFindIndex);
-                for (let node of nodesInOrder) {
-                    node.clearIndex(pathFindIndex);
+        // print(os.clock(), "Start cleaning.", " - Index:", pathFindIndex);
+        for (let node of nodesInOrder) {
+            node.clearIndex(pathFindIndex);
+            iterateNodes++;
+        }
+        frontier.recycle();
 
-                    iterateNodes++;
-                    if (isAsync && iterateNodes % 1024 == 0) {
-                        coroutine.yield();
-                    }
-                }
-                frontier.clear(true);
-                // print(os.clock(), "Finished Cleaning.", " - Index:", pathFindIndex);
-            });
+        Quick.Clear(nodesInOrder);
+        Quick.Clear(compileNodes);
+        // print(os.clock(), "Finished Cleaning.", " - Index:", pathFindIndex);
 
 
         return pathfindResult.finalise();

@@ -104,7 +104,7 @@ export class PriorityQueue<T> {
     public entries: PriorityBucket<T>[] = [];
     public bucketSize: number;
 
-    constructor(bucketSize: number = 128) {
+    private constructor(bucketSize: number = 128) {
         if (bucketSize < 8) bucketSize = 8; //Safety
         this.bucketSize = bucketSize;
         this.entries[0] = PriorityBucket.new(0);
@@ -183,16 +183,28 @@ export class PriorityQueue<T> {
         return value;
     }
 
-    public clear(async: boolean = false) {
-        let iterations = 0;
-        let entry = this.entries.pop();
+    private static stash: PriorityQueue<any>[] = [];
+    public static new(bucketSize?: number): PriorityQueue<any> {
+        if (this.stash.length > 0) return this.stash.pop()!.updateTo(bucketSize);
+        else return new PriorityQueue(bucketSize)
+    }
+    public static recycle(p: PriorityQueue<any>) {
+        let entry = p.entries.pop();
         while (entry != null) {
             entry.recycle();
-            entry = this.entries.pop();
-            iterations++;
-            if (async && iterations % 8 == 0) coroutine.yield();
+            entry = p.entries.pop();
         }
-        //Quick.Push(this.entries, PriorityBucket.new(0));
+        if (!Quick.Contains(this.stash, p))
+            Quick.Push(this.stash, p);
+    }
+    public recycle() {
+        PriorityQueue.recycle(this);
+        return this;
+    }
+    public updateTo(bucketSize?: number) {
+        if (bucketSize) this.bucketSize = bucketSize;
+        Quick.Push(this.entries, PriorityBucket.new(0));
+        return this;
     }
     public popAtIndex(index: number): PriorityBucket<T> | undefined {
         let value = this.entries[index];

@@ -16,10 +16,11 @@ export class PathfinderRectangle extends Pathfinder<RectangleNode> {
     private endY: number;
     public isFinishGenerating: boolean = false;
 
+    private walkChecker = PointWalkableChecker.getInstance();
+
     constructor(startX: number, startY: number, endX: number, endY: number, stepSize: number,
                 allowDiagonal: boolean = true, excludeNonWalkable: boolean = false, generateAsync: boolean = false) {
         super();
-        let walk = PointWalkableChecker.getInstance();
         let halfStep = stepSize / 2;
         let xx = math.max(startX, endX);
         let yy = math.max(startY, endY);
@@ -41,15 +42,15 @@ export class PathfinderRectangle extends Pathfinder<RectangleNode> {
 
         if (generateAsync) {
             TreeThread.RunUntilDone(() => {
-                this.generateMesh(startX, startY, endY, stepSize, endX, halfStep, excludeNonWalkable, walk, generateAsync);
+                this.generateMesh(startX, startY, endY, stepSize, endX, halfStep, excludeNonWalkable, generateAsync);
                 this.isFinishGenerating = true;
             });
         } else {
-            this.generateMesh(startX, startY, endY, stepSize, endX, halfStep, excludeNonWalkable, walk, generateAsync);
+            this.generateMesh(startX, startY, endY, stepSize, endX, halfStep, excludeNonWalkable, generateAsync);
             this.isFinishGenerating  = true;
         }
     }
-    private generateMesh(startX: number, startY: number, endY: number, stepSize: number, endX: number, halfStep: number, excludeNonWalkable: boolean, walk: PointWalkableChecker, generateAsync: boolean) {
+    private generateMesh(startX: number, startY: number, endY: number, stepSize: number, endX: number, halfStep: number, excludeNonWalkable: boolean, generateAsync: boolean) {
         xpcall(() => {
             let sr = 0;
             let previousNode: Node | undefined;
@@ -62,7 +63,7 @@ export class PathfinderRectangle extends Pathfinder<RectangleNode> {
 
                     let xx = x + halfStep
                     let yy = y + halfStep
-                    if (excludeNonWalkable && (!walk.checkTerrainIsWalkableXY(xx, yy))) {
+                    if (excludeNonWalkable && (!this.walkChecker.checkTerrainIsWalkableXY(xx, yy))) {
                         sr++;
                         continue; //Not walkable.
                     }
