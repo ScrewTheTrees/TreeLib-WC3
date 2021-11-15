@@ -1,11 +1,11 @@
 /**
  * Coroutine that can be reset, tracks "isFinished", has special Yield.
  */
-import {Entity} from "../Entity";
 import {Logger} from "../Logger";
+import {DynamicEntity} from "../DynamicEntity";
 
 
-export abstract class TreeThread extends Entity {
+export abstract class TreeThread extends DynamicEntity {
     private routine: LuaThread | undefined;
     private _isManual: boolean = false;
     public isFinished: boolean = false;
