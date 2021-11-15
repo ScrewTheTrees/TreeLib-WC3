@@ -7,6 +7,24 @@ export abstract class DynamicEntity {
     protected _timer: timer = CreateTimer();
     public lastStepSize: number;
 
+    public timerLoop: (this: void) => void;
+    public timerLoopYield: (this: void) => void;
+
+    public constructor(timerDelay: number = 0.01) {
+        this._timerDelay = Math.round(timerDelay * 1_000) / 1_000;
+        this.lastStepSize = this.timerDelay;
+
+        this.timerLoop = () => {
+            this.step();
+        }
+        this.timerLoopYield = () => {
+            this.add();
+            this.step();
+        }
+
+        this.add();
+    }
+
     get timerDelay(): number {
         return this._timerDelay;
     }
@@ -18,22 +36,10 @@ export abstract class DynamicEntity {
     }
     public timerYield(time: number) {
         this.resetTimer();
-        TimerStart(this._timer, time, false, () => {
-            this.lastStepSize = time;
-            this.resetTimer();
-            TimerStart(this._timer, this.timerDelay, true, () => {
-                this.lastStepSize = this.timerDelay;
-                this.step();
-            });
-            this.step();
-        });
+        TimerStart(this._timer, time, false, this.timerLoopYield);
+        this.lastStepSize = time;
     }
 
-    public constructor(timerDelay: number = 0.01) {
-        this._timerDelay = Math.round(timerDelay * 1_000) / 1_000;
-        this.lastStepSize = this.timerDelay;
-        this.add();
-    }
     //Logic to execute when the logic beat hits.
     abstract step(): void;
 
@@ -42,13 +48,15 @@ export abstract class DynamicEntity {
      **/
     public remove() {
         this.removeTimer();
+        // @ts-ignore
+        this.timerLoop = null;
+        // @ts-ignore
+        this.timerLoopYield = null;
     }
     public add() {
         this.resetTimer();
-        TimerStart(this._timer, this.timerDelay, true, () => {
-            this.lastStepSize = this.timerDelay;
-            this.step();
-        });
+        TimerStart(this._timer, this.timerDelay, true, this.timerLoop);
+        this.lastStepSize = this.timerDelay;
     }
     private removeTimer() {
         PauseTimer(this._timer);

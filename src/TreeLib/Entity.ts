@@ -72,10 +72,17 @@ class EntityContainer {
     public readonly entities: Entity[] = [];
     public readonly loop: trigger;
     public readonly identifier: number;
+    public readonly stepCode: (this: void) => void;
 
     public constructor(timeBetween: number) {
         this.loop = CreateTrigger();
         this.identifier = timeBetween;
+        this.stepCode = () => {
+            for (let entity of this.entities) {
+                entity.step();
+            }
+        }
+
         TriggerRegisterTimerEvent(this.loop, timeBetween, true);
         TriggerAddAction(this.loop, () => {
             this.step();
@@ -104,13 +111,7 @@ class EntityContainer {
     }
     private step() {
         if (!Entity.pauseExecution) {
-            try {
-                for (let entity of this.entities) {
-                    entity.step();
-                }
-            } catch (e) {
-                Logger.critical(e);
-            }
+            xpcall(this.stepCode, Logger.critical);
         }
     }
 }

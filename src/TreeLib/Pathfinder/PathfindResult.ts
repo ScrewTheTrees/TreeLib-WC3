@@ -1,4 +1,5 @@
 import {Node} from "./Node";
+import {Quick} from "../Quick";
 
 export class PathfindResult<T extends Node = Node> {
     public path: T[];
@@ -6,7 +7,6 @@ export class PathfindResult<T extends Node = Node> {
     public startNode: Node;
     public endNode: Node;
     public finalNode: Node;
-    public optimisedPath: boolean = false;
     public finishedGenerating: boolean = false;
 
     constructor(points: T[], reachedTheEnd: boolean, startNode: Node, endNode: Node, finalNode: Node) {
@@ -26,26 +26,17 @@ export class PathfindResult<T extends Node = Node> {
         return this.path[index];
     }
 
-    /**
-     * Removes redundant nodes to make path less complex, this might not be the best idea if you need precision.
-     * (Need a lot of fixing).
-     */
-    /*optimisePath(recycle: boolean = false): Vector2[] {
-        if (!this.optimisedPath) {
-            for (let i = this.path.length - 2; i > 0; i--) {
-                let node = this.path[i];
-                let previous = this.path[i - 1];
-                let next = this.path[i + 1];
-
-                if (Math.round(previous.directionTo(node) * 10) == Math.round(node.directionTo(next) * 10)) {//0.1 is good enough for comparison in this context.
-                    Quick.Slice(this.path, i);
-                    if (recycle) node.recycle();
-                }
-            }
-            this.optimisedPath = true;
-        }
-        return this.path;
-    }*/
+    public destroy() {
+        Quick.Clear(this.path);
+        // @ts-ignore
+        this.path = null;
+        // @ts-ignore
+        this.startNode = null;
+        // @ts-ignore
+        this.endNode = null;
+        // @ts-ignore
+        this.finalNode = null;
+    }
 
     copy(): PathfindResult<T> {
         let newPath: T[] = [];

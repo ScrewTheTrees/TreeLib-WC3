@@ -17,26 +17,28 @@ export class Pathfinder<T extends Node = Node> {
     public findPathAsync(from: Vector2,
                          to: Vector2,
                          maxIterateNodes: number = math.maxinteger,
-                         asyncMax: number = 256): TreePromise<PathfindResult<T>, TreeThread> {
+                         asyncMax: number = 256,
+                         overrideReturnArray?: T[]): TreePromise<PathfindResult<T>, TreeThread> {
         let startNode = this.getNodeClosestTo(from);
         let endNode = this.getNodeClosestTo(to);
-        return this.findPathByNodesAsync(startNode, endNode, maxIterateNodes, asyncMax);
+        return this.findPathByNodesAsync(startNode, endNode, maxIterateNodes, asyncMax, overrideReturnArray);
     }
 
-    public findPath(from: Vector2, to: Vector2, maxDist?: number) {
+    public findPath(from: Vector2, to: Vector2, maxDist?: number, overrideReturnArray?: T[]) {
         let startNode = this.getNodeClosestTo(from);
         let endNode = this.getNodeClosestTo(to);
-        return this.findPathByNodes(startNode, endNode, maxDist);
+        return this.findPathByNodes(startNode, endNode, maxDist, undefined, overrideReturnArray);
     }
 
     public findPathByNodesAsync(startNode: T,
                                 endNode: T,
                                 maxIterateNodes: number = math.maxinteger,
-                                asyncMax: number = 128): TreePromise<PathfindResult<T>, TreeThread> {
+                                asyncMax: number = 128,
+                                overrideReturnArray?: T[]): TreePromise<PathfindResult<T>, TreeThread> {
         let promise = new TreePromise<PathfindResult<T>, TreeThread>();
         promise.handler = TreeThread.RunUntilDone(() => {
             xpcall(() => {
-                let result = this.findPathByNodes(startNode, endNode, maxIterateNodes, asyncMax)
+                let result = this.findPathByNodes(startNode, endNode, maxIterateNodes, asyncMax, overrideReturnArray)
                 promise.apply(result)
             }, (error) => {
                 promise.fail(error);
@@ -45,7 +47,7 @@ export class Pathfinder<T extends Node = Node> {
         return promise;
     }
 
-    public findPathByNodes(startNode: T, endNode: T, maxIterateNodes: number = math.maxinteger, asyncMax: number = -1): PathfindResult<T> {
+    public findPathByNodes(startNode: T, endNode: T, maxIterateNodes: number = math.maxinteger, asyncMax: number = -1, overrideReturnArray?: T[]): PathfindResult<T> {
         // print(os.clock(), "Start/Setup.", " - Index Length:", this.emptyIndexes.length);
 
         let pathFindIndex = this.nextIndex++;
@@ -140,9 +142,8 @@ export class Pathfinder<T extends Node = Node> {
         startNode.clearIndex(pathFindIndex);
         while (iterateNode != null) {
             Quick.Push(compileNodes, iterateNode);
-            let temp: T | undefined = iterateNode.getCameFrom(pathFindIndex);
-            //iterateNode.clearIndex(pathFindIndex);
-            iterateNode = temp;
+
+            iterateNode = iterateNode.getCameFrom(pathFindIndex);
             iterateNodes++;
             if (isAsync && iterateNodes % asyncMax == 0) {
                 coroutine.yield();
@@ -152,13 +153,11 @@ export class Pathfinder<T extends Node = Node> {
         // print(os.clock(), "Reverse Path and convert to points.", " - Index:", pathFindIndex);
 
         //Reverse Path and convert to points.
-        let points: T[] = [];
+        let points: T[] = overrideReturnArray || [];
         for (let i = compileNodes.length - 1; i >= 0; i--) {
             let node = compileNodes[i];
             points.push(node);
         }
-
-        let pathfindResult = new PathfindResult(points, finalNode == endNode, startNode, endNode, finalNode);
 
         // print(os.clock(), "Done?", points.length, " - Index:", pathFindIndex);
 
@@ -175,7 +174,7 @@ export class Pathfinder<T extends Node = Node> {
         // print(os.clock(), "Finished Cleaning.", " - Index:", pathFindIndex);
 
 
-        return pathfindResult.finalise();
+        return new PathfindResult(points, finalNode == endNode, startNode, endNode, finalNode).finalise();
     }
 
     public getNodePriority(pathFindIndex: number, current: T, target: T) {
@@ -211,11 +210,11 @@ export class Pathfinder<T extends Node = Node> {
     public getNodeClosestTo(point: Vector2): T {
         let closest = this.nodes[0];
         if (this.nodes.length > 0) {
-            let distance = point.distanceTo(closest.point);
+            let distance = point.distanceToSquared(closest.point);
             for (let index = 0; index < this.nodes.length; index++) {
                 let value = this.nodes[index];
                 if (!value.disabled) {
-                    let tempDist = point.distanceTo(value.point);
+                    let tempDist = point.distanceToSquared(value.point);
                     if (tempDist < distance) {
                         closest = value;
                         distance = tempDist;
@@ -228,14 +227,14 @@ export class Pathfinder<T extends Node = Node> {
 
     public getClosestWithCameFrom(pathFindIndex: number, nodesInOrder: T[], point: Vector2, asyncNumber: number = -1): T {
         let closest = this.findFirstWithCameFrom(nodesInOrder);
-        let distance = point.distanceTo(closest.point);
+        let distance = point.distanceToSquared(closest.point);
         let iterate = 0;
 
         for (let value of nodesInOrder) {
             if (!value.disabled && value.getCameFrom(pathFindIndex) != undefined) {
-                if (point.distanceTo(value.point) < distance) {
+                if (point.distanceToSquared(value.point) < distance) {
                     closest = value;
-                    distance = point.distanceTo(value.point);
+                    distance = point.distanceToSquared(value.point);
                     iterate++;
                     if (asyncNumber > 0 && iterate % asyncNumber == 0) {
                         coroutine.yield();

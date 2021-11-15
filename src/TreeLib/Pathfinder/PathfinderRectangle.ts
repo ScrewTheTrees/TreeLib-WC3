@@ -75,7 +75,7 @@ export class PathfinderRectangle extends Pathfinder<RectangleNode> {
                     previousY = y;
 
                     sr++;
-                    if (sr >= 8) {
+                    if (generateAsync && sr >= 8) {
                         sr = 0;
                         coroutine.yield();
                     }

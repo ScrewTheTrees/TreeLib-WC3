@@ -16,6 +16,7 @@ export class PriorityEntry<T> implements Recyclable {
         else return new PriorityEntry(value, priority)
     }
     public static recycle(p: PriorityEntry<any>) {
+        p.value = null;
         if (!Quick.Contains(this.stash, p))
             Quick.Push(this.stash, p);
     }
@@ -119,7 +120,6 @@ export class PriorityQueue<T> {
     }
 
     public getBucketByPriority(priority: number): PriorityBucket<T> {
-        if (this.entries.length == 0) Quick.Push(this.entries, PriorityBucket.new(Math.min(0, priority)));
         let currentBucket = this.entries[this.entries.length - 1];
         let index = 0;
 

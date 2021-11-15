@@ -2,6 +2,7 @@
   "compilerOptions": {
     "allowJs": true,
     "strict": true,
+    "noImplicitThis": true,
     "sourceMap": false,
 
     "target": "ESNext",
