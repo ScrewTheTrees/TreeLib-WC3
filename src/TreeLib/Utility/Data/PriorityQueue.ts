@@ -62,8 +62,9 @@ export class PriorityBucket<T extends Object> implements Recyclable {
     public pop(): T | undefined {
         let data = this.entries.pop();
         if (data) {
+            let value = data.value;
             data.recycle();
-            return data.value;
+            return value;
         }
         return undefined;
     }
@@ -108,7 +109,7 @@ export class PriorityQueue<T> {
     private constructor(bucketSize: number = 128) {
         if (bucketSize < 8) bucketSize = 8; //Safety
         this.bucketSize = bucketSize;
-        this.entries[0] = PriorityBucket.new(0);
+        Quick.Push(this.entries, PriorityBucket.new(0));
     }
 
     public size() {

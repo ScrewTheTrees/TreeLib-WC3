@@ -59,6 +59,7 @@ export abstract class DynamicEntity {
         this.lastStepSize = this.timerDelay;
     }
     private removeTimer() {
+        if (this._timer == undefined) return;
         PauseTimer(this._timer);
         DestroyTimer(this._timer);
     }

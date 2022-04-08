@@ -244,6 +244,30 @@ export class Vector2 implements Recyclable {
         sumY = sumY / arr.length;
         return Vector2.new(sumX, sumY);
     }
+    public static getClosestOfPoints(to: Vector2, arr: Vector2[]) {
+        let check = arr[0];
+        let dist = math.maxinteger;
+        for (let vec of arr) {
+            let d = vec.distanceToSquared(to);
+            if (d <= dist) {
+                dist = d;
+                check = vec;
+            }
+        }
+        return check;
+    }
+    public static getFurthestOfPoints(to: Vector2, arr: Vector2[]) {
+        let check = arr[0];
+        let dist = -1;
+        for (let vec of arr) {
+            let d = vec.distanceToSquared(to);
+            if (d >= dist) {
+                dist = d;
+                check = vec;
+            }
+        }
+        return check;
+    }
 
     public static fromLocation(inputLoc: location) {
         return Vector2.new(GetLocationX(inputLoc), GetLocationY(inputLoc));

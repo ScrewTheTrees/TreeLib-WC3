@@ -68,7 +68,7 @@ export class PathfinderRectangle extends Pathfinder<RectangleNode> {
                         continue; //Not walkable.
                     }
 
-                    let node = this.generateRectangleNode(x, y, generateAsync ? 1024 : -1);
+                    let node = this.generateRectangleNode(x, y, 1024, generateAsync);
 
                     previousNode = node;
                     previousX = x;
@@ -138,7 +138,7 @@ export class PathfinderRectangle extends Pathfinder<RectangleNode> {
         }
         return g;
     }
-    private generateRectangleNode(startX: number, startY: number, maxOps: number = -1): RectangleNode {
+    private generateRectangleNode(startX: number, startY: number, maxOps: number = 1024, generateAsync: boolean = true): RectangleNode {
         let halfStep = this.stepSize / 2;
         let node = new RectangleNode(Vector2.new(startX + halfStep, startY + halfStep), Rectangle.new(startX, startY, startX + this.stepSize, startY + this.stepSize));
         let checker = PointWalkableChecker.getInstance();
@@ -174,13 +174,13 @@ export class PathfinderRectangle extends Pathfinder<RectangleNode> {
                         Quick.Push(xExpandCandidates, Vector2.new(x, nextY)); //Add to frontier
                     }
                     operations++;
-                    if (maxOps > 0 && operations % maxOps == 0) coroutine.yield();
+                    if (generateAsync && (maxOps > 0 && operations % maxOps == 0)) coroutine.yield();
                 }
                 for (let candice of xExpandCandidates) {
                     if (!hitTop) this.setGridElementByCoordinate(candice.x, candice.y, node);
                     candice.recycle();
                     operations++;
-                    if (maxOps > 0 && operations % maxOps == 0) coroutine.yield();
+                    if (generateAsync && (maxOps > 0 && operations % maxOps == 0)) coroutine.yield();
                 }
                 Quick.Clear(xExpandCandidates);
             }
@@ -205,14 +205,14 @@ export class PathfinderRectangle extends Pathfinder<RectangleNode> {
                         Quick.Push(yExpandCandidates, Vector2.new(nextX, y)); //Add to frontier
                     }
                     operations++;
-                    if (maxOps > 0 && operations % maxOps == 0) coroutine.yield();
+                    if (generateAsync && (maxOps > 0 && operations % maxOps == 0)) coroutine.yield();
                 }
             }
             for (let candice of yExpandCandidates) {
                 if (!hitRight) this.setGridElementByCoordinate(candice.x, candice.y, node);
                 candice.recycle();
                 operations++;
-                if (maxOps > 0 && operations % maxOps == 0) coroutine.yield();
+                if (generateAsync && (maxOps > 0 && operations % maxOps == 0)) coroutine.yield();
             }
             Quick.Clear(yExpandCandidates);
             if (!hitRight) {
