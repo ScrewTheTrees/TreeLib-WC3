@@ -32,9 +32,7 @@ export namespace Quick {
     }
 
     export function Clear<T>(arr: T[]) {
-        while (arr.pop() != undefined) {
-
-        }
+        while (arr.pop() != undefined) { }
     }
 
     export function Contains<T>(arr: T[], data: T) {

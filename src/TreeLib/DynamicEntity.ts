@@ -10,7 +10,7 @@ export abstract class DynamicEntity {
     public timerLoop: (this: void) => void;
     public timerLoopYield: (this: void) => void;
 
-    public constructor(timerDelay: number = 0.01) {
+    protected constructor(timerDelay: number = 0.01) {
         this._timerDelay = Math.round(timerDelay * 1_000) / 1_000;
         this.lastStepSize = this.timerDelay;
 
@@ -34,10 +34,17 @@ export abstract class DynamicEntity {
         this._timerDelay = value;
         this.add();
     }
+
     public timerYield(time: number) {
         this.resetTimer();
         TimerStart(this._timer, time, false, this.timerLoopYield);
         this.lastStepSize = time;
+    }
+    public isActive() {
+        return !(this.isInactive());
+    }
+    public isInactive() {
+        return this.timerLoop == null && this.timerLoopYield == null;
     }
 
     //Logic to execute when the logic beat hits.
