@@ -1,6 +1,6 @@
 import {Logger} from "../TreeLib/Logger";
-import {InputManager} from "../TreeLib/InputManager/InputManager";
-import {MetaKey} from "../TreeLib/InputManager/MetaKey";
+import {InputManager} from "../TreeLib/Services/InputManager/InputManager";
+import {MetaKey} from "../TreeLib/Services/InputManager/MetaKey";
 import {Entity} from "../TreeLib/Entity";
 
 export class InputManagerTest extends Entity {

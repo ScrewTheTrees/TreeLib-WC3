@@ -2,11 +2,12 @@ import {UnitEventContainer} from "./UnitEventContainer";
 import {UnitEventTypes} from "./UnitEventTypes";
 
 export class EventContainerList {
-    constructor(public eventType: UnitEventTypes) {
-
-    }
-
+    public eventType: UnitEventTypes;
     public events: UnitEventContainer[] = [];
+
+    public constructor(eventType: UnitEventTypes) {
+        this.eventType = eventType;
+    }
 
     public add(container: UnitEventContainer) {
         this.events.push(container);

@@ -49,8 +49,32 @@ export namespace Hooks {
             return value;
         }
     }
+
+    export const mainHooks: (() => void)[] = [];
+    export function addMainHook(hookFunc: () => void) {
+        mainHooks.push(hookFunc);
+    }
+
+    export const configHooks: (() => void)[] = [];
+    export function addConfigHook(hookFunc: () => void) {
+        mainHooks.push(hookFunc);
+    }
 }
 
+// @ts-ignore
+_G.main = Hooks.hookArgumentsBefore(_G.main, () => xpcall(() => {
+        for (let i = 0; i < Hooks.mainHooks.length; i++) {
+            Hooks.mainHooks[i]();
+        }
+    }, Logger.critical)
+)
+// @ts-ignore
+_G.config = Hooks.hookArgumentsBefore(_G.config, () => xpcall(() => {
+        for (let i = 0; i < Hooks.configHooks.length; i++) {
+            Hooks.configHooks[i]();
+        }
+    }, Logger.critical)
+)
 /*
 What is das hooks?
 So, lua garbage collection removes stuff that falls out of scope, however,

@@ -1,6 +1,6 @@
 import {Entity} from "../TreeLib/Entity";
 import {Logger} from "../TreeLib/Logger";
-import {InputManager} from "../TreeLib/InputManager/InputManager";
+import {InputManager} from "../TreeLib/Services/InputManager/InputManager";
 
 export class EntityTests extends Entity {
     constructor() {

@@ -6,8 +6,8 @@ import {PathfindingTests} from "./tests/PathfindingTests";
 import {RespawnTests} from "./tests/RespawnTests";
 import {QueueRespawnIntegrationTests} from "./tests/QueueRespawnIntegrationTests";
 import {InputManagerTest} from "./tests/InputManagerTest";
-import {UnitEventTracker} from "./TreeLib/UnitEventTracker/UnitEventTracker";
-import {UnitEventTypes} from "./TreeLib/UnitEventTracker/UnitEventTypes";
+import {UnitEventTracker} from "./TreeLib/Services/UnitEventTracker/UnitEventTracker";
+import {UnitEventTypes} from "./TreeLib/Services/UnitEventTracker/UnitEventTypes";
 import {EntityTests} from "./tests/EntityTests";
 import {Cube} from "./TreeLib/Utility/Data/Cube";
 import {Vector2} from "./TreeLib/Utility/Data/Vector2";
@@ -29,7 +29,7 @@ export class Game {
             new InputManagerTest().run();
             new EntityTests().run();
             PathfindingTests.getInstance();
-            UnitEventTracker.getInstance().registerAction(UnitEventTypes.CREATED_ANY, (u) => {
+            UnitEventTracker.registerAction(UnitEventTypes.CREATED_ANY, (u) => {
             });
 
             Vector2.new(0, 0);

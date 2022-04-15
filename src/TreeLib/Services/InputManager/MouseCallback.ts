@@ -1,5 +1,5 @@
 import {PressType} from "./PressType";
-import {Vector2} from "../Utility/Data/Vector2";
+import {Vector2} from "../../Utility/Data/Vector2";
 
 export class MouseCallback {
     public callback: (key: MouseCallback) => void;

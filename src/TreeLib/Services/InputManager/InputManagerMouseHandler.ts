@@ -1,13 +1,17 @@
 import {MouseInputContainer} from "./MouseInputContainer";
-import {Vector2} from "../Utility/Data/Vector2";
+import {Vector2} from "../../Utility/Data/Vector2";
 import {PressType} from "./PressType";
 import {MouseCallback} from "./MouseCallback";
-import {Logger} from "../Logger";
-import {Quick} from "../Quick";
+import {Logger} from "../../Logger";
+import {Quick} from "../../Quick";
+import {Hooks} from "../../Hooks";
 
+Hooks.addMainHook(() => {
+    InputManagerMouseHandler.Init();
+});
 export class InputManagerMouseHandler {
-
-    constructor() {
+    private constructor() {}
+    static Init() {
         TriggerAddAction(this.mouseInputPressTrigger, () => this.onMousePressAction());
         TriggerAddAction(this.mouseInputReleaseTrigger, () => this.onMouseReleaseAction());
         for (let i = 0; i < PLAYER_NEUTRAL_AGGRESSIVE; i++) {
@@ -18,14 +22,14 @@ export class InputManagerMouseHandler {
         TriggerAddAction(this.mouseMoveTrigger, () => this.onMouseMoveAction());
     }
 
-    private mouseInputPressTrigger: trigger = CreateTrigger();
-    private mouseInputReleaseTrigger: trigger = CreateTrigger();
-    private mouseMoveTrigger: trigger = CreateTrigger();
-    public registeredMouseEvents: MouseInputContainer[] = [];
-    public lastPosition: Vector2[] = [];
-    public lastCoordinate: Vector2[] = [];
+    private static mouseInputPressTrigger: trigger = CreateTrigger();
+    private static mouseInputReleaseTrigger: trigger = CreateTrigger();
+    private static mouseMoveTrigger: trigger = CreateTrigger();
+    public static registeredMouseEvents: MouseInputContainer[] = [];
+    public static lastPosition: Vector2[] = [];
+    public static lastCoordinate: Vector2[] = [];
 
-    private onMousePressAction() {
+    private static onMousePressAction() {
         let mouseButton = BlzGetTriggerPlayerMouseButton();
         let x = BlzGetTriggerPlayerMouseX();
         let y = BlzGetTriggerPlayerMouseY();
@@ -46,7 +50,7 @@ export class InputManagerMouseHandler {
         }
     }
 
-    private onMouseReleaseAction() {
+    private static onMouseReleaseAction() {
         let mouseButton = BlzGetTriggerPlayerMouseButton();
         let x = BlzGetTriggerPlayerMouseX();
         let y = BlzGetTriggerPlayerMouseY();
@@ -65,7 +69,7 @@ export class InputManagerMouseHandler {
         }
     }
 
-    private onMouseMoveAction() {
+    private static onMouseMoveAction() {
         let x = BlzGetTriggerPlayerMouseX();
         let y = BlzGetTriggerPlayerMouseY();
         if (!this.lastPosition[GetPlayerId(GetTriggerPlayer())]) this.lastPosition[GetPlayerId(GetTriggerPlayer())] = Vector2.new(x,y);
@@ -76,14 +80,14 @@ export class InputManagerMouseHandler {
         }
     }
 
-    public removeMouseCallback(mouseCallback: MouseCallback) {
+    public static removeMouseCallback(mouseCallback: MouseCallback) {
         let container = this.getMouseContainer(mouseCallback.button);
         if (container.callbacks.indexOf(mouseCallback) >= 0) {
             Quick.Slice(container.callbacks, container.callbacks.indexOf(mouseCallback));
         }
     }
 
-    public getMouseContainer(mouse: mousebuttontype) {
+    public static getMouseContainer(mouse: mousebuttontype) {
         let handleId = GetHandleId(mouse);
         if (this.registeredMouseEvents[handleId] == null) {
             let newKey = new MouseInputContainer(mouse);
@@ -94,29 +98,29 @@ export class InputManagerMouseHandler {
         }
     }
 
-    public isMouseButtonHeld(button: mousebuttontype) {
+    public static isMouseButtonHeld(button: mousebuttontype) {
         return this.getMouseContainer(button).isDown;
     }
 
-    public addMousePressCallback(mouse: mousebuttontype, callback: (this: any, key: MouseCallback) => void) {
+    public static addMousePressCallback(mouse: mousebuttontype, callback: (this: any, key: MouseCallback) => void) {
         let container = this.getMouseContainer(mouse);
         let input = new MouseCallback(mouse, callback, PressType.PRESS);
         container.callbacks.push(input);
         return input;
     }
 
-    public addMouseReleaseCallback(mouse: mousebuttontype, callback: (this: any, key: MouseCallback) => void) {
+    public static addMouseReleaseCallback(mouse: mousebuttontype, callback: (this: any, key: MouseCallback) => void) {
         let container = this.getMouseContainer(mouse);
         let input = new MouseCallback(mouse, callback, PressType.RELEASE);
         container.callbacks.push(input);
         return input;
     }
 
-    public getLastMousePosition(triggerPlayer: player) {
+    public static getLastMousePosition(triggerPlayer: player) {
         return this.lastPosition[GetPlayerId(triggerPlayer)] || Vector2.new(0, 0);
     }
 
-    public getLastMouseCoordinate(triggerPlayer: player) {
+    public static getLastMouseCoordinate(triggerPlayer: player) {
         return this.lastCoordinate[GetPlayerId(triggerPlayer)] || Vector2.new(0, 0);
     }
 }

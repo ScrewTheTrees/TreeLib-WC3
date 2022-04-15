@@ -1,6 +1,6 @@
 import {Hooks} from "../TreeLib/Hooks";
 import {Pathfinder} from "../TreeLib/Pathfinder/Pathfinder";
-import {InputManager} from "../TreeLib/InputManager/InputManager";
+import {InputManager} from "../TreeLib/Services/InputManager/InputManager";
 import {Vector2} from "../TreeLib/Utility/Data/Vector2";
 import {Logger} from "../TreeLib/Logger";
 import {UnitActionWaypoint} from "../TreeLib/ActionQueue/Actions/UnitActionWaypoint";

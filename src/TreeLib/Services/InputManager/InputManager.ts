@@ -1,27 +1,13 @@
-import {Hooks} from "../Hooks";
 import {MetaKey} from "./MetaKey";
 import {KeyCallback} from "./KeyCallback";
 import {MouseCallback} from "./MouseCallback";
 import {InputManagerKeyboardHandler} from "./InputManagerKeyboardHandler";
 import {InputManagerMouseHandler} from "./InputManagerMouseHandler";
 
+/**
+ * Helper class to access the Keyboard and Mouse handlers
+ */
 export class InputManager {
-    private static instance: InputManager;
-
-    public static getInstance() {
-        if (this.instance == null) {
-            this.instance = new InputManager();
-            Hooks.set(this.name, this.instance);
-        }
-        return this.instance;
-    }
-
-    public keyboardHandler: InputManagerKeyboardHandler = new InputManagerKeyboardHandler();
-    public mouseHandler: InputManagerMouseHandler = new InputManagerMouseHandler();
-
-    /*
-    STATIC API
-    */
     /**
      * Registers a keyboard callback to call when pressed.
      * @param key The key to trigger the press.
@@ -29,7 +15,7 @@ export class InputManager {
      * @param metaKeys Optional MetaKeys like having to hold shift or ctrl, by default its [MetaKeys.ALL] which works for any key combination.
      */
     public static addKeyboardPressCallback(key: oskeytype, callback: (this: void, key: KeyCallback) => void, metaKeys?: MetaKey[]) {
-        return InputManager.getInstance().keyboardHandler.addKeyboardPressCallback(key, callback, metaKeys);
+        return InputManagerKeyboardHandler.addKeyboardPressCallback(key, callback, metaKeys);
     }
 
     /**
@@ -39,7 +25,7 @@ export class InputManager {
      * @param metaKeys Optional MetaKeys like having to hold shift or ctrl, by default its [MetaKeys.ALL] which works for any key combination.
      */
     public static addKeyboardReleaseCallback(key: oskeytype, callback: (this: void, key: KeyCallback) => void, metaKeys?: MetaKey[]) {
-        return InputManager.getInstance().keyboardHandler.addKeyboardReleaseCallback(key, callback, metaKeys);
+        return InputManagerKeyboardHandler.addKeyboardReleaseCallback(key, callback, metaKeys);
     }
 
     /**
@@ -47,22 +33,23 @@ export class InputManager {
      * @param keyCallback the callback to remove
      */
     public static removeKeyCallback(keyCallback: KeyCallback) {
-        return InputManager.getInstance().keyboardHandler.removeKeyCallback(keyCallback);
+        return InputManagerKeyboardHandler.removeKeyCallback(keyCallback);
     }
 
     /**
      * Used internally for fetching data related to keyboard buttons.
      */
     public static getKeyContainer(key: oskeytype) {
-        return InputManager.getInstance().keyboardHandler.getKeyContainer(key);
+        return InputManagerKeyboardHandler.getKeyContainer(key);
     }
 
     /**
      *  Checks if a button is held down, entirely disregards metakeys.
      * @param key the button to press
+     * @param triggeringPlayer the player holding the key.
      */
     public static isKeyButtonHeld(key: oskeytype, triggeringPlayer: player) {
-        return InputManager.getInstance().keyboardHandler.isKeyButtonHeld(key, triggeringPlayer);
+        return InputManagerKeyboardHandler.isKeyButtonHeld(key, triggeringPlayer);
     }
 
     // MOUSE
@@ -72,7 +59,7 @@ export class InputManager {
      * @param callback the function to call when button is pressed.
      */
     public static addMousePressCallback(button: mousebuttontype, callback: (this: any, key: MouseCallback) => void) {
-        return InputManager.getInstance().mouseHandler.addMousePressCallback(button, callback);
+        return InputManagerMouseHandler.addMousePressCallback(button, callback);
     }
 
     /**
@@ -81,7 +68,7 @@ export class InputManager {
      * @param callback the function to call when button is released.
      */
     public static addMouseReleaseCallback(button: mousebuttontype, callback: (this: any, key: MouseCallback) => void) {
-        return InputManager.getInstance().mouseHandler.addMouseReleaseCallback(button, callback);
+        return InputManagerMouseHandler.addMouseReleaseCallback(button, callback);
     }
 
 
@@ -90,14 +77,14 @@ export class InputManager {
      * @param mouseCallback the callback to remove
      */
     public static removeMouseCallback(mouseCallback: MouseCallback) {
-        return InputManager.getInstance().mouseHandler.removeMouseCallback(mouseCallback);
+        return InputManagerMouseHandler.removeMouseCallback(mouseCallback);
     }
 
     /**
      * Used internally for fetching data related to mouse buttons.
      */
     public static getMouseContainer(button: mousebuttontype) {
-        return InputManager.getInstance().mouseHandler.getMouseContainer(button);
+        return InputManagerMouseHandler.getMouseContainer(button);
     }
 
     /**
@@ -105,7 +92,7 @@ export class InputManager {
      * @param button the button
      */
     public static isMouseButtonHeld(button: mousebuttontype) {
-        return InputManager.getInstance().mouseHandler.isMouseButtonHeld(button);
+        return InputManagerMouseHandler.isMouseButtonHeld(button);
     }
 
     /**
@@ -113,7 +100,7 @@ export class InputManager {
      * @param triggeringPlayer the player to get it from.
      */
     public static getLastMousePosition(triggeringPlayer: player) {
-        return InputManager.getInstance().mouseHandler.getLastMousePosition(triggeringPlayer);
+        return InputManagerMouseHandler.getLastMousePosition(triggeringPlayer);
     }
 
     /**
@@ -121,6 +108,6 @@ export class InputManager {
      * @param triggeringPlayer the player to get it from.
      */
     public static getLastMouseCoordinate(triggeringPlayer: player) {
-        return InputManager.getInstance().mouseHandler.getLastMouseCoordinate(triggeringPlayer);
+        return InputManagerMouseHandler.getLastMouseCoordinate(triggeringPlayer);
     }
 }
