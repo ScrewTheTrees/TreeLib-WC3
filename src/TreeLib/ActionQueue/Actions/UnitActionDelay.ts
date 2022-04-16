@@ -1,10 +1,10 @@
-import {UnitAction} from "./UnitAction";
+import {IUnitAction} from "./IUnitAction";
 import {UnitQueue} from "../Queues/UnitQueue";
 
 /**
  * Basic delay, wait for x amount of seconds and then get on your way.
  */
-export class UnitActionDelay implements UnitAction {
+export class UnitActionDelay implements IUnitAction {
     isFinished: boolean = false;
     private timer: number = 0;
     public delay: number;

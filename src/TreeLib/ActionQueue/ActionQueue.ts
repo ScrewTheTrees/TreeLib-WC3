@@ -1,8 +1,8 @@
 import {Hooks} from "../Hooks";
 import {Entity} from "../Entity";
-import {Queue} from "./Queues/Queue";
+import {IQueue} from "./Queues/IQueue";
 import {UnitQueue} from "./Queues/UnitQueue";
-import {UnitAction} from "./Actions/UnitAction";
+import {IUnitAction} from "./Actions/IUnitAction";
 import {Logger} from "../Logger";
 import {Vector2} from "../Utility/Data/Vector2";
 import {UnitActionWaypoint} from "./Actions/UnitActionWaypoint";
@@ -12,7 +12,7 @@ import {UnitActionWaitWhileDead} from "./Actions/UnitActionWaitWhileDead";
 import {UnitActionDelay} from "./Actions/UnitActionDelay";
 import {Quick} from "../Quick";
 import {UnitGroupQueue} from "./Queues/UnitGroupQueue";
-import {UnitGroupAction} from "./Actions/UnitGroupAction";
+import {IUnitGroupAction} from "./Actions/IUnitGroupAction";
 import {UnitGroupActionWaypoint} from "./Actions/UnitGroupActionWaypoint";
 import {UnitGroupActionDelay} from "./Actions/UnitGroupActionDelay";
 import {UnitGroupActionGoToAction} from "./Actions/UnitGroupActionGoToAction";
@@ -33,27 +33,27 @@ export class ActionQueue extends Entity {
         return this.instance;
     }
 
-    private allQueues: Queue[] = [];
+    private allQueues: IQueue[] = [];
 
     constructor() {
         super(1);
     }
 
-    public createUnitQueue(target: unit, ...actions: UnitAction[]): UnitQueue {
+    public createUnitQueue(target: unit, ...actions: IUnitAction[]): UnitQueue {
         let unitQueue = new UnitQueue(target, ...actions);
         this.enableQueue(unitQueue);
         Logger.verbose("Created UnitQueue, total: ", this.allQueues.length);
         return unitQueue;
     }
 
-    public createUnitGroupQueue(targets: unit[], ...actions: UnitGroupAction[]): UnitGroupQueue {
+    public createUnitGroupQueue(targets: unit[], ...actions: IUnitGroupAction[]): UnitGroupQueue {
         let unitQueue = new UnitGroupQueue(targets, ...actions);
         this.enableQueue(unitQueue);
         Logger.verbose("Created UnitQueue, total: ", this.allQueues.length);
         return unitQueue;
     }
 
-    public enableQueue(queue: Queue) {
+    public enableQueue(queue: IQueue) {
         if (this.allQueues.indexOf(queue) < 0) {
             Logger.LogVerbose("Queue is missing, adding");
             Quick.Push(this.allQueues, queue);
@@ -81,7 +81,7 @@ export class ActionQueue extends Entity {
      * @param target The unit that should be handled.
      * @param actions Initial actions, more can be added with a function in the returned object.
      */
-    public static createUnitQueue(target: unit, ...actions: UnitAction[]): UnitQueue {
+    public static createUnitQueue(target: unit, ...actions: IUnitAction[]): UnitQueue {
         return this.getInstance().createUnitQueue(target, ...actions);
     }
 
@@ -90,7 +90,7 @@ export class ActionQueue extends Entity {
      * Wont add a queue already present.
      * @param queue the queue to enable,
      */
-    public static enableQueue(queue: Queue) {
+    public static enableQueue(queue: IQueue) {
         return this.getInstance().enableQueue(queue);
     }
 
@@ -98,7 +98,7 @@ export class ActionQueue extends Entity {
      * Great if a queue has lost its purpose or needs replacing.
      * @param queue the queue to disable,
      */
-    public static disableQueue(queue: Queue) {
+    public static disableQueue(queue: IQueue) {
         return this.getInstance().disableQueue(queue);
     }
 
@@ -146,7 +146,7 @@ export class ActionQueue extends Entity {
             new UnitGroupActionGoToAction(0));
     }
 
-    public disableQueue(queue: Queue) {
+    public disableQueue(queue: IQueue) {
         let index = this.allQueues.indexOf(queue);
         queue.isFinished = true;
         if (index >= 0) {

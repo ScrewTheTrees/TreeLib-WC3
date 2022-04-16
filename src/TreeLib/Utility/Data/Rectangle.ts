@@ -1,12 +1,12 @@
 import {Quick} from "../../Quick";
-import {Recyclable} from "./Recyclable";
+import {IRecyclable} from "./IRecyclable";
 import {Vector2} from "./Vector2";
 import {Cube} from "./Cube";
 import {Vector3} from "./Vector3";
 import {TreeMath} from "../TreeMath";
 import {Circle} from "./Circle";
 
-export class Rectangle implements Recyclable {
+export class Rectangle implements IRecyclable {
     public xMin!: number;
     public yMin!: number;
     public xMax!: number;

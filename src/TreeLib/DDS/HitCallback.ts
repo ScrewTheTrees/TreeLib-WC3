@@ -1,20 +1,20 @@
-import {DDSFilter} from "./Filters/DDSFilter";
+import {IDDSFilter} from "./Filters/IDDSFilter";
 import {DamageHitContainer} from "./DamageHitContainer";
 import {Quick} from "../Quick";
 
 export class HitCallback {
-    public readonly filters: DDSFilter[] = [];
+    public readonly filters: IDDSFilter[] = [];
 
     constructor(public callback: (hitObject: DamageHitContainer) => void) {
 
 
     }
 
-    public addFilter(filter: DDSFilter) {
+    public addFilter(filter: IDDSFilter) {
         Quick.Push(this.filters, filter);
     }
 
-    public addFilters(filters: DDSFilter[]) {
+    public addFilters(filters: IDDSFilter[]) {
         for (let filter of filters) {
             this.addFilter(filter);
         }

@@ -1,10 +1,10 @@
-import {UnitAction} from "./UnitAction";
+import {IUnitAction} from "./IUnitAction";
 import {UnitQueue} from "../Queues/UnitQueue";
 
 /**
  * Try to kill a unit until it is dead, or the time runs out
  */
-export class UnitActionWaitWhileDead implements UnitAction {
+export class UnitActionWaitWhileDead implements IUnitAction {
     isFinished: boolean = false;
 
     constructor() {

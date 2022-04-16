@@ -1,4 +1,4 @@
-import {DDSFilter} from "./DDSFilter";
+import {IDDSFilter} from "./IDDSFilter";
 import {DamageHitContainer} from "../DamageHitContainer";
 import {Players} from "../../Structs/Players";
 
@@ -6,7 +6,7 @@ import {Players} from "../../Structs/Players";
  * Checks if the target unit is owned by any of these players.
  * There are a few helper functions for getting a singular player quickly.
  */
-export class DDSFilterTargetUnitPlayers implements DDSFilter {
+export class DDSFilterTargetUnitPlayers implements IDDSFilter {
     private readonly attackedPlayers: player[];
 
     constructor(...attackedPlayers: player[]) {

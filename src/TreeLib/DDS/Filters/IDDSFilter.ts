@@ -1,5 +1,5 @@
 import {DamageHitContainer} from "../DamageHitContainer";
 
-export interface DDSFilter {
+export interface IDDSFilter {
     runFilter(hitObject: DamageHitContainer): boolean;
 }

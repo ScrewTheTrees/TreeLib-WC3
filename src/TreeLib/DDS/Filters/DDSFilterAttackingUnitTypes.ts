@@ -1,7 +1,7 @@
-import {DDSFilter} from "./DDSFilter";
+import {IDDSFilter} from "./IDDSFilter";
 import {DamageHitContainer} from "../DamageHitContainer";
 
-export class DDSFilterAttackingUnitTypes implements DDSFilter {
+export class DDSFilterAttackingUnitTypes implements IDDSFilter {
     private readonly unitTypes: number[];
 
     constructor(...unitTypes: number[]) {

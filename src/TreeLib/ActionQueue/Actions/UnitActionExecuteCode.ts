@@ -1,11 +1,11 @@
-import {UnitAction} from "./UnitAction";
+import {IUnitAction} from "./IUnitAction";
 import {UnitQueue} from "../Queues/UnitQueue";
 
 /**
  * Executes code
  *
  */
-export class UnitActionExecuteCode implements UnitAction {
+export class UnitActionExecuteCode implements IUnitAction {
     isFinished: boolean = false;
     public readonly code: ((target: unit, timeStep: number, queue: UnitQueue) => void);
 

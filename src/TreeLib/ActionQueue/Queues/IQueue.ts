@@ -1,4 +1,4 @@
-export interface Queue {
+export interface IQueue {
     isFinished: boolean;
     isPaused: boolean;
 

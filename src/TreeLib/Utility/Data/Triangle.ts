@@ -3,10 +3,10 @@
  * In particular it provides functions that automatically cleans up the locations automatically.
  */
 import {Quick} from "../../Quick";
-import {Recyclable} from "./Recyclable";
+import {IRecyclable} from "./IRecyclable";
 import {Vector2} from "./Vector2";
 
-export class Triangle implements Recyclable {
+export class Triangle implements IRecyclable {
     public x1: number;
     public y1: number;
     public x2: number;

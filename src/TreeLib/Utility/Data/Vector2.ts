@@ -4,12 +4,12 @@
  */
 import {Delay} from "../Delay";
 import {Quick} from "../../Quick";
-import {Recyclable} from "./Recyclable";
+import {IRecyclable} from "./IRecyclable";
 import {Rectangle} from "./Rectangle";
 import {Cube} from "./Cube";
 import {Vector3} from "./Vector3";
 
-export class Vector2 implements Recyclable {
+export class Vector2 implements IRecyclable {
     public x: number;
     public y: number;
 

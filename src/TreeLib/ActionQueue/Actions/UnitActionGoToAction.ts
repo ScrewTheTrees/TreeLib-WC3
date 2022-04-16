@@ -1,4 +1,4 @@
-import {UnitAction} from "./UnitAction";
+import {IUnitAction} from "./IUnitAction";
 import {UnitQueue} from "../Queues/UnitQueue";
 import {Delay} from "../../Utility/Delay";
 
@@ -6,7 +6,7 @@ import {Delay} from "../../Utility/Delay";
  * Sets the current action index in queue to another action, also resets all actions.
  * Allows for adding an expression which will evaluate, returning true if it should go to the action or false if not.
  */
-export class UnitActionGoToAction implements UnitAction {
+export class UnitActionGoToAction implements IUnitAction {
     isFinished: boolean = false;
     public readonly expression: (target: unit, timeStep: number, queue: UnitQueue) => boolean;
 

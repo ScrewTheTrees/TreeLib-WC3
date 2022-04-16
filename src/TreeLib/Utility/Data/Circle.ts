@@ -3,11 +3,11 @@
  * In particular it provides functions that automatically cleans up the locations automatically.
  */
 import {Quick} from "../../Quick";
-import {Recyclable} from "./Recyclable";
+import {IRecyclable} from "./IRecyclable";
 import {Vector2} from "./Vector2";
 import {Rectangle} from "./Rectangle";
 
-export class Circle implements Recyclable {
+export class Circle implements IRecyclable {
     public center: Vector2
     public radius: number;
 

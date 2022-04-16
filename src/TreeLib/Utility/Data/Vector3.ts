@@ -1,10 +1,10 @@
 import {Quick} from "../../Quick";
-import {Recyclable} from "./Recyclable";
+import {IRecyclable} from "./IRecyclable";
 import {Vector2} from "./Vector2";
 import {Cube} from "./Cube";
 import {Rectangle} from "./Rectangle";
 
-export class Vector3 implements Recyclable {
+export class Vector3 implements IRecyclable {
     public x: number;
     public y: number;
     public z: number;

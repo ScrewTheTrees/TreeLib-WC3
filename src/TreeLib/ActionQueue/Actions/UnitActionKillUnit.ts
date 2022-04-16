@@ -1,4 +1,4 @@
-import {UnitAction} from "./UnitAction";
+import {IUnitAction} from "./IUnitAction";
 import {Logger} from "../../Logger";
 import {IsValidUnit} from "../../Misc";
 import {WeaponIndex} from "../../Structs/WeaponIndex";
@@ -7,7 +7,7 @@ import {UnitQueue} from "../Queues/UnitQueue";
 /**
  * Try to kill a unit until it is dead, or the time runs out
  */
-export class UnitActionKillUnit implements UnitAction {
+export class UnitActionKillUnit implements IUnitAction {
     isFinished: boolean = false;
     private readonly killUnit: unit;
     private readonly maxTime: number;

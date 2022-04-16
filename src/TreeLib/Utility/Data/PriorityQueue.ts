@@ -1,7 +1,7 @@
 import {Quick} from "../../Quick";
-import {Recyclable} from "./Recyclable";
+import {IRecyclable} from "./IRecyclable";
 
-export class PriorityEntry<T> implements Recyclable {
+export class PriorityEntry<T> implements IRecyclable {
     public value: T;
     public priority: number;
 
@@ -31,7 +31,7 @@ export class PriorityEntry<T> implements Recyclable {
     }
 }
 
-export class PriorityBucket<T extends Object> implements Recyclable {
+export class PriorityBucket<T extends Object> implements IRecyclable {
     public entries: PriorityEntry<T>[] = [];
     public priority: number = 0;
 

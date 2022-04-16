@@ -1,21 +1,21 @@
-import {Queue} from "./Queue";
+import {IQueue} from "./IQueue";
 import {Logger} from "../../Logger";
 import {Quick} from "../../Quick";
-import {UnitGroupAction} from "../Actions/UnitGroupAction";
+import {IUnitGroupAction} from "../Actions/IUnitGroupAction";
 import {IsValidUnit} from "../../Misc";
 import {Entity} from "../../Entity";
 
 /**
  * A unit queue is a queue for a several unit operating together. (Most actions are capped at 12 units)
  */
-export class UnitGroupQueue extends Entity implements Queue {
+export class UnitGroupQueue extends Entity implements IQueue {
     isFinished: boolean = false;
     isPaused: boolean = false;
     public targets: unit[];
-    public allActions: UnitGroupAction[] = [];
+    public allActions: IUnitGroupAction[] = [];
     public currentActionIndex = 0;
 
-    constructor(targets: unit[], ...unitActions: UnitGroupAction[]) {
+    constructor(targets: unit[], ...unitActions: IUnitGroupAction[]) {
         super(0.25);
         this.targets = targets;
         this.allActions.push(...unitActions);
@@ -67,7 +67,7 @@ export class UnitGroupQueue extends Entity implements Queue {
         this.isFinished = true;
     }
 
-    public addAction(action: UnitGroupAction): UnitGroupQueue {
+    public addAction(action: IUnitGroupAction): UnitGroupQueue {
         Quick.Push(this.allActions, action);
         return this;
     }

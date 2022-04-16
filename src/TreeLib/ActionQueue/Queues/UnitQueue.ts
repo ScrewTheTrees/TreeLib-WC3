@@ -1,5 +1,5 @@
-import {Queue} from "./Queue";
-import {UnitAction} from "../Actions/UnitAction";
+import {IQueue} from "./IQueue";
+import {IUnitAction} from "../Actions/IUnitAction";
 import {Logger} from "../../Logger";
 import {Quick} from "../../Quick";
 import {Entity} from "../../Entity";
@@ -8,14 +8,14 @@ import {IsValidUnit} from "../../Misc";
 /**
  * A unit queue is a queue for a singular unit operating on its own.
  */
-export class UnitQueue extends Entity implements Queue {
+export class UnitQueue extends Entity implements IQueue {
     isFinished: boolean = false;
     isPaused: boolean = false;
     public target: unit;
-    public allActions: UnitAction[] = [];
+    public allActions: IUnitAction[] = [];
     public currentActionIndex = 0;
 
-    constructor(target: unit, ...unitActions: UnitAction[]) {
+    constructor(target: unit, ...unitActions: IUnitAction[]) {
         super(0.25);
         this.target = target;
         this.allActions.push(...unitActions);
@@ -60,7 +60,7 @@ export class UnitQueue extends Entity implements Queue {
         this.isFinished = true;
     }
 
-    public addAction(action: UnitAction): UnitQueue {
+    public addAction(action: IUnitAction): UnitQueue {
         Quick.Push(this.allActions, action);
         return this;
     }

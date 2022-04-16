@@ -1,4 +1,4 @@
-import {UnitAction} from "./UnitAction";
+import {IUnitAction} from "./IUnitAction";
 import {Vector2} from "../../Utility/Data/Vector2";
 import {UnitQueue} from "../Queues/UnitQueue";
 import {ImmediateOrders} from "./ImmediateOrders";
@@ -6,7 +6,7 @@ import {ImmediateOrders} from "./ImmediateOrders";
 /**
  * Basic immediate action, stop, hold position.
  */
-export class UnitActionImmediate implements UnitAction {
+export class UnitActionImmediate implements IUnitAction {
     isFinished: boolean = false;
     private readonly toPoint: Vector2;
     private readonly order: ImmediateOrders;

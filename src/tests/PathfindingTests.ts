@@ -8,7 +8,7 @@ import {WaypointOrders} from "../TreeLib/ActionQueue/Actions/WaypointOrders";
 import {ActionQueue} from "../TreeLib/ActionQueue/ActionQueue";
 import {UnitActionDeath} from "../TreeLib/ActionQueue/Actions/UnitActionDeath";
 import {PathfinderGrid} from "../TreeLib/Frameworks/Pathfinder/PathfinderGrid";
-import {UnitAction} from "../TreeLib/ActionQueue/Actions/UnitAction";
+import {IUnitAction} from "../TreeLib/ActionQueue/Actions/IUnitAction";
 
 export class PathfindingTests {
     private static instance: PathfindingTests;
@@ -39,7 +39,7 @@ export class PathfindingTests {
         InputManager.addKeyboardPressCallback(OSKEY_P, () => xpcall(() => {
             let coord = InputManager.getLastMouseCoordinate(Player(0));
             let path = this.pathfinder.findPath(Vector2.new(0, 0), coord);
-            let actions: UnitAction[] = [];
+            let actions: IUnitAction[] = [];
             let newPath = path.path;
             print("newPath: ", path.path.length, " -> ", newPath.length);
             let u = CreateUnit(Player(0), FourCC("hfoo"), 0, 0, 0);

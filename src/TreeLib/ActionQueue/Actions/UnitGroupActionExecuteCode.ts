@@ -1,11 +1,11 @@
 import {UnitGroupQueue} from "../Queues/UnitGroupQueue";
-import {UnitGroupAction} from "./UnitGroupAction";
+import {IUnitGroupAction} from "./IUnitGroupAction";
 
 /**
  * Executes code
  *
  */
-export class UnitGroupActionExecuteCode implements UnitGroupAction {
+export class UnitGroupActionExecuteCode implements IUnitGroupAction {
     isFinished: boolean = false;
     public readonly code: ((targets: unit[], timeStep: number, queue: UnitGroupQueue) => void);
 

@@ -1,10 +1,10 @@
-import {UnitAction} from "./UnitAction";
+import {IUnitAction} from "./IUnitAction";
 import {UnitQueue} from "../Queues/UnitQueue";
 
 /**
  * An action that causes a unit to die and optionally be removed.
  */
-export class UnitActionDeath implements UnitAction {
+export class UnitActionDeath implements IUnitAction {
     private readonly remove: boolean;
     isFinished: boolean = false;
 

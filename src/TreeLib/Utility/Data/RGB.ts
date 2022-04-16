@@ -1,9 +1,9 @@
-import {Recyclable} from "./Recyclable";
+import {IRecyclable} from "./IRecyclable";
 import {Quick} from "../../Quick";
 import {TreeMath} from "../TreeMath";
 
 
-export class RGB implements Recyclable {
+export class RGB implements IRecyclable {
     private _red: number = 0;
     private _green: number = 0;
     private _blue: number = 0;

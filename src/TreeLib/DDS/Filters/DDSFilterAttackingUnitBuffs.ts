@@ -1,11 +1,11 @@
-import {DDSFilter} from "./DDSFilter";
+import {IDDSFilter} from "./IDDSFilter";
 import {DamageHitContainer} from "../DamageHitContainer";
 
 /**
  * A filter that checks if the attacking unit thas any of he defined buffs.
  * If you want to check if a unit has ALL the buffs you just need to add this filter multiple times.
  */
-export class DDSFilterAttackingUnitBuffs implements DDSFilter {
+export class DDSFilterAttackingUnitBuffs implements IDDSFilter {
     private readonly buffTypes: number[];
 
     constructor(...buffTypes: number[]) {

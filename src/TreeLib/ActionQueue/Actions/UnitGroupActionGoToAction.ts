@@ -1,12 +1,12 @@
 import {Delay} from "../../Utility/Delay";
-import {UnitGroupAction} from "./UnitGroupAction";
+import {IUnitGroupAction} from "./IUnitGroupAction";
 import {UnitGroupQueue} from "../Queues/UnitGroupQueue";
 
 /**
  * Sets the current action index in queue to another action, also resets all actions.
  * Allows for adding an expression which will evaluate, returning true if it should go to the action or false if not.
  */
-export class UnitGroupActionGoToAction implements UnitGroupAction {
+export class UnitGroupActionGoToAction implements IUnitGroupAction {
     isFinished: boolean = false;
     public readonly expression: (targets: unit[], timeStep: number, queue: UnitGroupQueue) => boolean;
 

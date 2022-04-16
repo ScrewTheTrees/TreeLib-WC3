@@ -1,14 +1,14 @@
 import {Vector2} from "../../Utility/Data/Vector2";
 import {WaypointOrders} from "./WaypointOrders";
 import {Logger} from "../../Logger";
-import {UnitGroupAction} from "./UnitGroupAction";
+import {IUnitGroupAction} from "./IUnitGroupAction";
 import {Quick} from "../../Quick";
 import {UnitGroupQueue} from "../Queues/UnitGroupQueue";
 
 /**
  * Basic waypoint action, move, attack move, or smart your way over to a Point.
  */
-export class UnitGroupActionWaypoint implements UnitGroupAction {
+export class UnitGroupActionWaypoint implements IUnitGroupAction {
     isFinished: boolean = false;
     public readonly toPoint: Vector2;
     public readonly acceptableDistance: number;

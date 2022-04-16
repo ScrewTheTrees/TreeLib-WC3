@@ -1,4 +1,4 @@
-import {UnitAction} from "./UnitAction";
+import {IUnitAction} from "./IUnitAction";
 import {Vector2} from "../../Utility/Data/Vector2";
 import {WaypointOrders} from "./WaypointOrders";
 import {Logger} from "../../Logger";
@@ -7,7 +7,7 @@ import {UnitQueue} from "../Queues/UnitQueue";
 /**
  * Basic waypoint action, move, attack move, or smart your way over to a Point.
  */
-export class UnitActionWaypoint implements UnitAction {
+export class UnitActionWaypoint implements IUnitAction {
     isFinished: boolean = false;
     public readonly toPoint: Vector2;
     public readonly acceptableDistance: number;
