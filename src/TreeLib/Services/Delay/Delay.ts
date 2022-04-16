@@ -6,7 +6,7 @@ import {Quick} from "../../Quick";
 /**
  * The Delay Executes the sent function after a defined delay. Can also be repeated X amount of times.
  */
-Hooks.addMainHook(() => Delay.Init());
+Hooks.addBeforeMainHook(() => Delay.Init());
 export class Delay extends Entity {
     private static instance: Delay;
     private constructor() {

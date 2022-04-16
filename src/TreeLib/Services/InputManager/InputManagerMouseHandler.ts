@@ -6,7 +6,7 @@ import {Logger} from "../../Logger";
 import {Quick} from "../../Quick";
 import {Hooks} from "../../Hooks";
 
-Hooks.addMainHook(() => InputManagerMouseHandler.Init());
+Hooks.addBeforeMainHook(() => InputManagerMouseHandler.Init());
 export class InputManagerMouseHandler {
     private constructor() {}
     static Init() {

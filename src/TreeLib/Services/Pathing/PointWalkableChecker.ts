@@ -1,7 +1,7 @@
 import {Vector2} from "../../Utility/Data/Vector2";
 import {Hooks} from "../../Hooks";
 
-Hooks.addMainHook(() => PointWalkableChecker.Init());
+Hooks.addBeforeMainHook(() => PointWalkableChecker.Init());
 export class PointWalkableChecker {
     private constructor() {}
     static Init() {

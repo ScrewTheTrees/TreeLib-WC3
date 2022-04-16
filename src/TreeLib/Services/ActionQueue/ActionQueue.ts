@@ -17,7 +17,7 @@ import {UnitGroupActionWaypoint} from "./Actions/UnitGroupActionWaypoint";
 import {UnitGroupActionDelay} from "./Actions/UnitGroupActionDelay";
 import {UnitGroupActionGoToAction} from "./Actions/UnitGroupActionGoToAction";
 
-Hooks.addMainHook(() => ActionQueue.Init());
+Hooks.addBeforeMainHook(() => ActionQueue.Init());
 /**
  * ActionQueue is a system that allows you to create waypoints and a string of orders, like if a player would
  * hold shift and click in the game, not only that but it allows for special actions like killing and removing the unit too.

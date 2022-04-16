@@ -5,7 +5,7 @@ import {UnitRespawner} from "./UnitRespawner";
 import {UnitCampRespawner} from "./UnitCampRespawner";
 import {Quick} from "../../Quick";
 
-Hooks.addMainHook(() => Respawner.Init());
+Hooks.addBeforeMainHook(() => Respawner.Init());
 
 export class Respawner extends Entity {
     private static instance: Respawner;

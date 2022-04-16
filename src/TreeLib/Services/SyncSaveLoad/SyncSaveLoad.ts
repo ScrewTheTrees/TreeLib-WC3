@@ -4,7 +4,7 @@ import {EncodingBase64} from "../../Utility/Encodings/EncodingBase64";
 import {EncodingHex} from "../../Utility/Encodings/EncodingHex";
 import {FilePromise} from "./FilePromise";
 
-Hooks.addMainHook(() => SyncSaveLoad.Init());
+Hooks.addBeforeMainHook(() => SyncSaveLoad.Init());
 export class SyncSaveLoad {
     private constructor() {}
     static Init() {

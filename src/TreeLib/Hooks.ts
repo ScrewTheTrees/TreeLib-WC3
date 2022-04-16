@@ -50,28 +50,50 @@ export namespace Hooks {
         }
     }
 
-    export const mainHooks: (() => void)[] = [];
-    export function addMainHook(hookFunc: () => void) {
-        mainHooks.push(hookFunc);
+    export const beforeMainHooks: (() => void)[] = [];
+    export function addBeforeMainHook(hookFunc: () => void) {
+        beforeMainHooks.push(hookFunc);
+    }
+    export const afterMainHooks: (() => void)[] = [];
+    export function addAfterMainHook(hookFunc: () => void) {
+        afterMainHooks.push(hookFunc);
     }
 
-    export const configHooks: (() => void)[] = [];
-    export function addConfigHook(hookFunc: () => void) {
-        mainHooks.push(hookFunc);
+    export const beforeConfigHooks: (() => void)[] = [];
+    export function addBeforeConfigHook(hookFunc: () => void) {
+        beforeConfigHooks.push(hookFunc);
+    }
+    export const afterConfigHooks: (() => void)[] = [];
+    export function addAfterConfigHook(hookFunc: () => void) {
+        afterConfigHooks.push(hookFunc);
     }
 }
 
 // @ts-ignore
 _G.main = Hooks.hookArgumentsBefore(_G.main, () => xpcall(() => {
-        for (let i = 0; i < Hooks.mainHooks.length; i++) {
-            Hooks.mainHooks[i]();
+        for (let i = 0; i < Hooks.beforeMainHooks.length; i++) {
+            Hooks.beforeMainHooks[i]();
+        }
+    }, Logger.critical)
+)
+// @ts-ignore
+_G.main = Hooks.hookArguments(_G.main, () => xpcall(() => {
+        for (let i = 0; i < Hooks.afterMainHooks.length; i++) {
+            Hooks.afterMainHooks[i]();
         }
     }, Logger.critical)
 )
 // @ts-ignore
 _G.config = Hooks.hookArgumentsBefore(_G.config, () => xpcall(() => {
-        for (let i = 0; i < Hooks.configHooks.length; i++) {
-            Hooks.configHooks[i]();
+        for (let i = 0; i < Hooks.beforeConfigHooks.length; i++) {
+            Hooks.beforeConfigHooks[i]();
+        }
+    }, Logger.critical)
+)
+// @ts-ignore
+_G.config = Hooks.hookArguments(_G.config, () => xpcall(() => {
+        for (let i = 0; i < Hooks.afterConfigHooks.length; i++) {
+            Hooks.afterConfigHooks[i]();
         }
     }, Logger.critical)
 )
