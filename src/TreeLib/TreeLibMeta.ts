@@ -9,7 +9,7 @@ export class TreeLibMeta {
 
     public static getMapVersion(): MapVersion {
         // @ts-ignore
-        if (mapVersion) return mapVersion; //Supplied by operation.ts and build.json, only work the the TreeLib/Tree Template
+        if (mapVersion) return mapVersion; //Supplied by operation.ts and build.json, only works with my Template currently.
         else return new MapVersion();
     }
 }
