@@ -6,7 +6,7 @@ import {Vector2} from "../TreeLib/Utility/Data/Vector2";
 import {WaypointOrders} from "../TreeLib/ActionQueue/Actions/WaypointOrders";
 import {UnitActionDeath} from "../TreeLib/ActionQueue/Actions/UnitActionDeath";
 import {Delay} from "../TreeLib/Utility/Delay";
-import {Respawner} from "../TreeLib/Respawner/Respawner";
+import {Respawner} from "../TreeLib/Services/Respawner/Respawner";
 import {UnitActionGoToAction} from "../TreeLib/ActionQueue/Actions/UnitActionGoToAction";
 import {UnitActionWaitWhileDead} from "../TreeLib/ActionQueue/Actions/UnitActionWaitWhileDead";
 
@@ -30,7 +30,7 @@ export class QueueRespawnIntegrationTests {
                     queue.target = newUnit.target;
                     ActionQueue.enableQueue(queue);
                 };
-            }, 2.5, 5);
+            }, 2.5, 4);
 
 
         }, (...args) => Logger.LogCritical(...args));

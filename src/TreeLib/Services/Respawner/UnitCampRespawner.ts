@@ -1,9 +1,9 @@
-import {Spawner} from "./Spawner";
-import {IsValidUnit} from "../Misc";
+import {IRespawner} from "./IRespawner";
+import {IsValidUnit} from "../../Misc";
 import {UnitRespawner} from "./UnitRespawner";
-import {Quick} from "../Quick";
+import {Quick} from "../../Quick";
 
-export class UnitCampRespawner implements Spawner {
+export class UnitCampRespawner implements IRespawner {
     public targets: UnitRespawner[] = [];
     public delay: number;
     public counter: number = 0;

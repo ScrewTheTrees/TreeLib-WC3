@@ -1,7 +1,7 @@
 import {Node} from "./Node";
 import {Vector2} from "../../Utility/Data/Vector2";
 import {Pathfinder} from "./Pathfinder";
-import {PointWalkableChecker} from "../../Pathing/PointWalkableChecker";
+import {PointWalkableChecker} from "../../Services/Pathing/PointWalkableChecker";
 import {Delay} from "../../Utility/Delay";
 import {DelayDto} from "../../Utility/DelayDto";
 import {Logger} from "../../Logger";
@@ -17,7 +17,6 @@ export class PathfinderGrid extends Pathfinder {
     constructor(startX: number, startY: number, endX: number, endY: number, stepSize: number,
                 allowDiagonal: boolean = true, excludeNonWalkable: boolean = false, generateAsync: boolean = false) {
         super();
-        let walk = PointWalkableChecker.getInstance();
         let done = false;
         let xx = math.max(startX, endX);
         let yy = math.max(startY, endY);
@@ -51,7 +50,7 @@ export class PathfinderGrid extends Pathfinder {
                     for (let j = startY; j < endY; j += stepSize) {
                         let xx = i + (stepSize / 2);
                         let yy = j + (stepSize / 2);
-                        if (excludeNonWalkable && (!walk.checkTerrainIsWalkableXY(xx, yy))) {
+                        if (excludeNonWalkable && (!PointWalkableChecker.checkTerrainIsWalkableXY(xx, yy))) {
                             sr++;
                             continue; //Not walkable.
                         }

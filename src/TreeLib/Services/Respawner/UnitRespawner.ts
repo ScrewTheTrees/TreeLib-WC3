@@ -1,8 +1,8 @@
-import {Spawner} from "./Spawner";
-import {IsValidUnit} from "../Misc";
-import {Vector2} from "../Utility/Data/Vector2";
+import {IRespawner} from "./IRespawner";
+import {IsValidUnit} from "../../Misc";
+import {Vector2} from "../../Utility/Data/Vector2";
 
-export class UnitRespawner implements Spawner {
+export class UnitRespawner implements IRespawner {
     public target: unit;
     public owner: player;
     public unitType: number;

@@ -14,7 +14,6 @@ Hooks.addMainHook(() => {
 export class InputManagerKeyboardHandler {
     private constructor() {}
     public static Init() {
-        print(this.name);
         TriggerAddAction(this.keyInputTrigger, () => this.onKeyAction());
     }
 

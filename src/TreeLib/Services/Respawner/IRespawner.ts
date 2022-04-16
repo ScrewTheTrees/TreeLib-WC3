@@ -1,4 +1,4 @@
-export interface Spawner {
+export interface IRespawner {
     update(timeStep: number): void;
 
     delay: number;

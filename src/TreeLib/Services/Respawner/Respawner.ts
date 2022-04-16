@@ -1,47 +1,44 @@
-import {Hooks} from "../Hooks";
-import {Entity} from "../Entity";
-import {Spawner} from "./Spawner";
+import {Hooks} from "../../Hooks";
+import {Entity} from "../../Entity";
+import {IRespawner} from "./IRespawner";
 import {UnitRespawner} from "./UnitRespawner";
 import {UnitCampRespawner} from "./UnitCampRespawner";
-import {Quick} from "../Quick";
+import {Quick} from "../../Quick";
+
+Hooks.addMainHook(() => {
+    Respawner.Init();
+});
 
 export class Respawner extends Entity {
     private static instance: Respawner;
-
-    public static getInstance() {
-        if (this.instance == null) {
-            this.instance = new Respawner();
-            Hooks.set(this.name, this.instance);
-        }
-        return this.instance;
+    static Init() {
+        this.instance = new Respawner(1);
     }
-
-    private spawners: Spawner[] = [];
+    private static spawners: IRespawner[] = [];
     /**
      * Pauses all timers for respawning units, very good if you go into a cinematic mode or similar and dont want them respawning.
      */
-    public paused = false;
-
-    constructor() {
-        super(1);
-    }
+    public static paused = false;
 
     step(): void {
-        if (!this.paused) {
-            for (let index = 0; index < this.spawners.length; index++) {
-                let spawner = this.spawners[index];
+        if (!Respawner.paused) {
+            for (let index = 0; index < Respawner.spawners.length; index++) {
+                let spawner = Respawner.spawners[index];
                 spawner.update(this.timerDelay);
                 if (spawner.respawns == 0) {
-                    Quick.Slice(this.spawners, index);
+                    Quick.Slice(Respawner.spawners, index);
                     index -= 1;
                 }
             }
         }
     }
 
-    /*
-    STATIC API
-     */
+
+    public static addSpawner<T extends IRespawner>(spawner: T): T {
+        Quick.Push(this.spawners, spawner);
+        return spawner;
+    }
+
     /**
      * Set up respawning for a unit, if the unit is removed this will be removed as well.
      * @param target The unit
@@ -51,7 +48,7 @@ export class Respawner extends Entity {
      * @param respawns how many times it will respawn, -1 is infinite.
      */
     public static createNewUnitRespawner(target: unit, delay: number, respawnAtOriginalLocation?: boolean, doEyeCandy?: boolean, respawns?: number) {
-        return this.getInstance().createNewUnitRespawner(target, delay, respawnAtOriginalLocation, doEyeCandy, respawns);
+        return this.addSpawner(new UnitRespawner(target, delay, respawnAtOriginalLocation, doEyeCandy, respawns));
     }
 
     /**
@@ -63,18 +60,6 @@ export class Respawner extends Entity {
      * @param respawns how many times it will respawn, -1 is infinite.
      */
     public static createNewUnitCampRespawner(targets: unit[], delay: number, respawnAtOriginalLocation?: boolean, doEyeCandy?: boolean, respawns?: number) {
-        return this.getInstance().createNewUnitCampRespawner(targets, delay, respawnAtOriginalLocation, doEyeCandy, respawns);
-    }
-
-    public createNewUnitRespawner(target: unit, delay: number, respawnAtOriginalLocation?: boolean, doEyeCandy?: boolean, respawns?: number) {
-        let spawner = new UnitRespawner(target, delay, respawnAtOriginalLocation, doEyeCandy, respawns);
-        Quick.Push(this.spawners, spawner);
-        return spawner;
-    }
-
-    public createNewUnitCampRespawner(targets: unit[], delay: number, respawnAtOriginalLocation?: boolean, doEyeCandy?: boolean, respawns?: number) {
-        let spawner = new UnitCampRespawner(targets, delay, respawnAtOriginalLocation, doEyeCandy, respawns);
-        Quick.Push(this.spawners, spawner);
-        return spawner;
+        return this.addSpawner(new UnitCampRespawner(targets, delay, respawnAtOriginalLocation, doEyeCandy, respawns));
     }
 }

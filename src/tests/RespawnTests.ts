@@ -1,5 +1,5 @@
 import {Players} from "../TreeLib/Structs/Players";
-import {Respawner} from "../TreeLib/Respawner/Respawner";
+import {Respawner} from "../TreeLib/Services/Respawner/Respawner";
 import {Logger} from "../TreeLib/Logger";
 
 export class RespawnTests {

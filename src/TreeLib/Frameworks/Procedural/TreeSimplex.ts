@@ -1,5 +1,5 @@
-import {Random} from "../Utility/Random";
-import {Vector2} from "../Utility/Data/Vector2";
+import {Random} from "../../Utility/Random";
+import {Vector2} from "../../Utility/Data/Vector2";
 
 /**
  * A Visually coherent noise algorithm similar to OpenSimplex.
