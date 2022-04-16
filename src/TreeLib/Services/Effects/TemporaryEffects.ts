@@ -3,9 +3,7 @@ import {Entity} from "../../Entity";
 import {StepEffect} from "./StepEffects/StepEffect";
 import {Hooks} from "../../Hooks";
 
-Hooks.addMainHook(() => {
-    TemporaryEffects.Init();
-});
+Hooks.addMainHook(() => TemporaryEffects.Init());
 export class TemporaryEffects extends Entity {
     private static instance: TemporaryEffects;
     private constructor() {

@@ -4,9 +4,7 @@ import {HitCallback} from "./HitCallback";
 import {Logger} from "../../Logger";
 import {Quick} from "../../Quick";
 
-Hooks.addMainHook(() => {
-    DamageDetectionSystem.Init();
-});
+Hooks.addMainHook(() => DamageDetectionSystem.Init());
 /**
  * Simple streamlined DDS system where you can register callbacks and optionally add filters for quickly handling when units take damage.
  * Callbacks will get a helpful Container where you can get, set and modify the DDS data.

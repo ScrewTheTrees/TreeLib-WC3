@@ -7,9 +7,7 @@ import {Quick} from "../../Quick";
 import {Hooks} from "../../Hooks";
 
 
-Hooks.addMainHook(() => {
-    InputManagerKeyboardHandler.Init();
-});
+Hooks.addMainHook(() => InputManagerKeyboardHandler.Init());
 
 export class InputManagerKeyboardHandler {
     private constructor() {}
