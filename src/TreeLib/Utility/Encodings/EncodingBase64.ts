@@ -1,14 +1,8 @@
-const PADCHAR = '=';
-const ALPHA = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
 export class EncodingBase64 {
-    private static getbyte64(s: string, i: number) {
-        let idx = ALPHA.indexOf(s.charAt(i));
-        if (idx === -1) {
-            throw "Cannot decode base64";
-        }
-        return idx;
-    }
+    public static PADCHAR: string = '=';
+    public static ALPHA: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+
 
     public static Decode(s: string) {
         let pads: number, i: number, b10: number;
@@ -22,9 +16,9 @@ export class EncodingBase64 {
         }
 
         pads = 0;
-        if (s.charAt(imax - 1) === PADCHAR) {
+        if (s.charAt(imax - 1) === this.PADCHAR) {
             pads = 1;
-            if (s.charAt(imax - 2) === PADCHAR) {
+            if (s.charAt(imax - 2) === this.PADCHAR) {
                 pads = 2;
             }
             // either way, we want to ignore this last block
@@ -48,15 +42,7 @@ export class EncodingBase64 {
                 x.push(string.char(b10 >>> 16));
                 break;
         }
-        return x.join('');
-    }
-
-    private static getbyte(s: string, i: number) {
-        let x = s.charCodeAt(i);
-        if (x > 255) {
-            throw "INVALID_CHARACTER_ERR: DOM Exception 5";
-        }
-        return x;
+        return table.concat(x);
     }
 
     public static Encode(s: string) {
@@ -71,23 +57,39 @@ export class EncodingBase64 {
         }
         for (i = 0; i < imax; i += 3) {
             b10 = (this.getbyte(s, i) << 16) | (this.getbyte(s, i + 1) << 8) | this.getbyte(s, i + 2);
-            x.push(ALPHA.charAt(b10 >>> 18));
-            x.push(ALPHA.charAt((b10 >>> 12) & 0x3F));
-            x.push(ALPHA.charAt((b10 >>> 6) & 0x3f));
-            x.push(ALPHA.charAt(b10 & 0x3f));
+            x.push(this.ALPHA.charAt(b10 >>> 18));
+            x.push(this.ALPHA.charAt((b10 >>> 12) & 0x3F));
+            x.push(this.ALPHA.charAt((b10 >>> 6) & 0x3f));
+            x.push(this.ALPHA.charAt(b10 & 0x3f));
         }
         switch (s.length - imax) {
             case 1:
                 b10 = this.getbyte(s, i) << 16;
-                x.push(ALPHA.charAt(b10 >>> 18) + ALPHA.charAt((b10 >>> 12) & 0x3F) +
-                    PADCHAR + PADCHAR);
+                x.push(this.ALPHA.charAt(b10 >>> 18) + this.ALPHA.charAt((b10 >>> 12) & 0x3F) +
+                    this.PADCHAR + this.PADCHAR);
                 break;
             case 2:
                 b10 = (this.getbyte(s, i) << 16) | (this.getbyte(s, i + 1) << 8);
-                x.push(ALPHA.charAt(b10 >>> 18) + ALPHA.charAt((b10 >>> 12) & 0x3F) +
-                    ALPHA.charAt((b10 >>> 6) & 0x3f) + PADCHAR);
+                x.push(this.ALPHA.charAt(b10 >>> 18) + this.ALPHA.charAt((b10 >>> 12) & 0x3F) +
+                    this.ALPHA.charAt((b10 >>> 6) & 0x3f) + this.PADCHAR);
                 break;
         }
-        return x.join('');
+        return table.concat(x);
+    }
+
+    private static getbyte64(s: string, i: number) {
+        let idx = this.ALPHA.indexOf(s.charAt(i));
+        if (idx === -1) {
+            throw "Cannot decode base64";
+        }
+        return idx;
+    }
+
+    private static getbyte(s: string, i: number) {
+        let x = s.charCodeAt(i);
+        if (x > 255) {
+            throw "INVALID_CHARACTER_ERR: DOM Exception 5";
+        }
+        return x;
     }
 }

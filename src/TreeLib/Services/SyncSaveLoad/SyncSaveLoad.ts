@@ -1,26 +1,15 @@
-import {Hooks} from "../Hooks";
-import {StringBuilder} from "../Utility/StringBuilder";
-import {Logger} from "../Logger";
-import {EncodingBase64} from "../Utility/Encodings/EncodingBase64";
-import {EncodingHex} from "../Utility/Encodings/EncodingHex";
+import {Hooks} from "../../Hooks";
+import {Logger} from "../../Logger";
+import {EncodingBase64} from "../../Utility/Encodings/EncodingBase64";
+import {EncodingHex} from "../../Utility/Encodings/EncodingHex";
+import {FilePromise} from "./FilePromise";
 
+Hooks.addMainHook(() => {
+    SyncSaveLoad.Init();
+});
 export class SyncSaveLoad {
-    private static instance: SyncSaveLoad;
-
-    public static getInstance() {
-        if (this.instance == null) {
-            this.instance = new SyncSaveLoad();
-            Hooks.set(this.name, this.instance);
-        }
-        return this.instance;
-    }
-
-    public syncPrefix = "S_TIO";
-    public syncPrefixFinish = "S_TIOF";
-    public syncEvent: trigger = CreateTrigger();
-    private allPromises: (FilePromise | undefined)[] = [];
-
-    constructor() {
+    private constructor() {}
+    static Init() {
         for (let i = 0; i < GetBJMaxPlayers(); i++) {
             BlzTriggerRegisterPlayerSyncEvent(this.syncEvent, Player(i), this.syncPrefix, false);
             BlzTriggerRegisterPlayerSyncEvent(this.syncEvent, Player(i), this.syncPrefixFinish, false);
@@ -28,12 +17,17 @@ export class SyncSaveLoad {
         TriggerAddAction(this.syncEvent, () => this.onSync());
     }
 
+    public static syncPrefix = "S_TIO";
+    public static syncPrefixFinish = "S_TIOF";
+    public static syncEvent: trigger = CreateTrigger();
+    private static allPromises: (FilePromise | undefined)[] = [];
 
-    public writeFile(filename: string, ...data: string[]) {
+
+    public static writeFile(filename: string, ...data: string[]) {
         PreloadGenClear();
         PreloadGenStart();
 
-        let rawData = new StringBuilder(...data).toString();
+        let rawData = table.concat(data);
         let toCompile = EncodingBase64.Encode(rawData);
         let chunkSize = 180;
         let assemble = "";
@@ -60,11 +54,11 @@ export class SyncSaveLoad {
         PreloadGenEnd(filename);
     }
 
-    public isPlayerAllowedToRead(reader: player) {
+    public static isPlayerAllowedToRead(reader: player) {
         return (this.allPromises[GetPlayerId(reader)] == null);
     }
 
-    public read(filename: string, reader: player, onFinish?: (promise: FilePromise) => void): FilePromise {
+    public static read(filename: string, reader: player, onFinish?: (promise: FilePromise) => void): FilePromise {
         if (this.allPromises[GetPlayerId(reader)] == null) {
             this.allPromises[GetPlayerId(reader)] = new FilePromise(reader, onFinish);
             if (GetLocalPlayer() == reader) {
@@ -75,12 +69,12 @@ export class SyncSaveLoad {
                 BlzSendSyncData(this.syncPrefixFinish, "");
             }
         } else {
-            Logger.warning("Trying to read file when file read is already busy.");
+            Logger.warning("Trying to read file when file reader is already busy, please wait until finished.");
         }
         return <FilePromise>this.allPromises[GetPlayerId(reader)];
     }
 
-    private onSync() {
+    private static onSync() {
         xpcall(() => {
 
             const readData = BlzGetTriggerSyncData();
@@ -103,28 +97,5 @@ export class SyncSaveLoad {
                 Logger.warning(`Syncronised data in ${SyncSaveLoad.name} when there is no promise present for player: ${GetPlayerName(GetTriggerPlayer())}`);
             }
         }, Logger.critical);
-    }
-}
-
-
-export class FilePromise {
-    constructor(public syncOwner: player, public onFinish?: (promise: FilePromise) => void) {
-    }
-
-    public hasLoaded: boolean = false;
-    public buffer: string[] = [];
-    public finalString: string = "";
-
-    public finish() {
-        this.hasLoaded = true;
-        let loadString = new StringBuilder(...this.buffer).toString();
-        this.finalString = EncodingBase64.Decode(loadString);
-
-        Logger.verbose("loadString.length", loadString.length);
-        Logger.verbose("this.onFinish", this.onFinish);
-        Logger.verbose("Finished: ");
-        Logger.verbose("finalString.length: ", this.finalString.length);
-
-        if (this.onFinish != null) this.onFinish(this);
     }
 }
