@@ -1,11 +1,11 @@
 import {Node, RectangleNode} from "./Node";
-import {Vector2} from "../Utility/Data/Vector2";
+import {Vector2} from "../../Utility/Data/Vector2";
 import {Pathfinder} from "./Pathfinder";
-import {PointWalkableChecker} from "../Pathing/PointWalkableChecker";
-import {Logger} from "../Logger";
-import {Rectangle} from "../Utility/Data/Rectangle";
-import {Quick} from "../Quick";
-import {TreeThread} from "../Utility/TreeThread";
+import {PointWalkableChecker} from "../../Pathing/PointWalkableChecker";
+import {Logger} from "../../Logger";
+import {Rectangle} from "../../Utility/Data/Rectangle";
+import {Quick} from "../../Quick";
+import {TreeThread} from "../../Utility/TreeThread";
 
 export class PathfinderRectangle extends Pathfinder<RectangleNode> {
     private grid: RectangleNode[][] = [];

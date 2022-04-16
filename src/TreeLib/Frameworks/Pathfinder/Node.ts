@@ -1,6 +1,6 @@
-import {Vector2} from "../Utility/Data/Vector2";
-import {Quick} from "../Quick";
-import {Rectangle} from "../Utility/Data/Rectangle";
+import {Vector2} from "../../Utility/Data/Vector2";
+import {Quick} from "../../Quick";
+import {Rectangle} from "../../Utility/Data/Rectangle";
 
 export class Node {
     public point: Vector2;

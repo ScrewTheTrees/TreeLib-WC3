@@ -1,10 +1,10 @@
 import {Node} from "./Node";
-import {Vector2} from "../Utility/Data/Vector2";
-import {PriorityQueue} from "../Utility/Data/PriorityQueue";
+import {Vector2} from "../../Utility/Data/Vector2";
+import {PriorityQueue} from "../../Utility/Data/PriorityQueue";
 import {PathfindResult} from "./PathfindResult";
-import {Quick} from "../Quick";
-import {TreeThread} from "../Utility/TreeThread";
-import {TreePromise} from "../Utility/TreePromise";
+import {Quick} from "../../Quick";
+import {TreeThread} from "../../Utility/TreeThread";
+import {TreePromise} from "../../Utility/TreePromise";
 
 export class Pathfinder<T extends Node = Node> {
     public nodes: T[] = [];

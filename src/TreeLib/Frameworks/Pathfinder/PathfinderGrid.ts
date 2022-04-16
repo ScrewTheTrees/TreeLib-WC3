@@ -1,10 +1,10 @@
 import {Node} from "./Node";
-import {Vector2} from "../Utility/Data/Vector2";
+import {Vector2} from "../../Utility/Data/Vector2";
 import {Pathfinder} from "./Pathfinder";
-import {PointWalkableChecker} from "../Pathing/PointWalkableChecker";
-import {Delay} from "../Utility/Delay";
-import {DelayDto} from "../Utility/DelayDto";
-import {Logger} from "../Logger";
+import {PointWalkableChecker} from "../../Pathing/PointWalkableChecker";
+import {Delay} from "../../Utility/Delay";
+import {DelayDto} from "../../Utility/DelayDto";
+import {Logger} from "../../Logger";
 
 export class PathfinderGrid extends Pathfinder {
     private grid: Node[][] = [];

@@ -1,7 +1,7 @@
 import {Node} from "./Node";
 import {PathfindResult} from "./PathfindResult";
-import {LabelValue} from "../Utility/LabelValue";
-import {Quick} from "../Quick";
+import {LabelValue} from "../../Utility/LabelValue";
+import {Quick} from "../../Quick";
 
 //Unused until further notice.
 export class NodeTable<T extends Node = Node> {

@@ -1,5 +1,5 @@
 import {Node} from "./Node";
-import {Quick} from "../Quick";
+import {Quick} from "../../Quick";
 
 export class PathfindResult<T extends Node = Node> {
     public path: T[];

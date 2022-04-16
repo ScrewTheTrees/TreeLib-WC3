@@ -1,5 +1,5 @@
 import {Hooks} from "../TreeLib/Hooks";
-import {Pathfinder} from "../TreeLib/Pathfinder/Pathfinder";
+import {Pathfinder} from "../TreeLib/Frameworks/Pathfinder/Pathfinder";
 import {InputManager} from "../TreeLib/Services/InputManager/InputManager";
 import {Vector2} from "../TreeLib/Utility/Data/Vector2";
 import {Logger} from "../TreeLib/Logger";
@@ -7,7 +7,7 @@ import {UnitActionWaypoint} from "../TreeLib/ActionQueue/Actions/UnitActionWaypo
 import {WaypointOrders} from "../TreeLib/ActionQueue/Actions/WaypointOrders";
 import {ActionQueue} from "../TreeLib/ActionQueue/ActionQueue";
 import {UnitActionDeath} from "../TreeLib/ActionQueue/Actions/UnitActionDeath";
-import {PathfinderGrid} from "../TreeLib/Pathfinder/PathfinderGrid";
+import {PathfinderGrid} from "../TreeLib/Frameworks/Pathfinder/PathfinderGrid";
 import {UnitAction} from "../TreeLib/ActionQueue/Actions/UnitAction";
 
 export class PathfindingTests {
