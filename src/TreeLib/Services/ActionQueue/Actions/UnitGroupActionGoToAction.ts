@@ -1,4 +1,4 @@
-import {Delay} from "../../Services/Delay/Delay";
+import {Delay} from "../../Delay/Delay";
 import {IUnitGroupAction} from "./IUnitGroupAction";
 import {UnitGroupQueue} from "../Queues/UnitGroupQueue";
 

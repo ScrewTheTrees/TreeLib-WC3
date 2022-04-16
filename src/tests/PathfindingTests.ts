@@ -3,12 +3,12 @@ import {Pathfinder} from "../TreeLib/Frameworks/Pathfinder/Pathfinder";
 import {InputManager} from "../TreeLib/Services/InputManager/InputManager";
 import {Vector2} from "../TreeLib/Utility/Data/Vector2";
 import {Logger} from "../TreeLib/Logger";
-import {UnitActionWaypoint} from "../TreeLib/ActionQueue/Actions/UnitActionWaypoint";
-import {WaypointOrders} from "../TreeLib/ActionQueue/Actions/WaypointOrders";
-import {ActionQueue} from "../TreeLib/ActionQueue/ActionQueue";
-import {UnitActionDeath} from "../TreeLib/ActionQueue/Actions/UnitActionDeath";
+import {UnitActionWaypoint} from "../TreeLib/Services/ActionQueue/Actions/UnitActionWaypoint";
+import {WaypointOrders} from "../TreeLib/Services/ActionQueue/Actions/WaypointOrders";
+import {ActionQueue} from "../TreeLib/Services/ActionQueue/ActionQueue";
+import {UnitActionDeath} from "../TreeLib/Services/ActionQueue/Actions/UnitActionDeath";
 import {PathfinderGrid} from "../TreeLib/Frameworks/Pathfinder/PathfinderGrid";
-import {IUnitAction} from "../TreeLib/ActionQueue/Actions/IUnitAction";
+import {IUnitAction} from "../TreeLib/Services/ActionQueue/Actions/IUnitAction";
 
 export class PathfindingTests {
     private static instance: PathfindingTests;

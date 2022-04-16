@@ -1,6 +1,6 @@
 import {IUnitAction} from "./IUnitAction";
 import {UnitQueue} from "../Queues/UnitQueue";
-import {Delay} from "../../Services/Delay/Delay";
+import {Delay} from "../../Delay/Delay";
 
 /**
  * Sets the current action index in queue to another action, also resets all actions.

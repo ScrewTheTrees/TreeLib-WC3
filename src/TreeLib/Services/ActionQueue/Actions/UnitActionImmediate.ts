@@ -1,5 +1,5 @@
 import {IUnitAction} from "./IUnitAction";
-import {Vector2} from "../../Utility/Data/Vector2";
+import {Vector2} from "../../../Utility/Data/Vector2";
 import {UnitQueue} from "../Queues/UnitQueue";
 import {ImmediateOrders} from "./ImmediateOrders";
 

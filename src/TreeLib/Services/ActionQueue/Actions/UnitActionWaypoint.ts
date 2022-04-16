@@ -1,7 +1,7 @@
 import {IUnitAction} from "./IUnitAction";
-import {Vector2} from "../../Utility/Data/Vector2";
+import {Vector2} from "../../../Utility/Data/Vector2";
 import {WaypointOrders} from "./WaypointOrders";
-import {Logger} from "../../Logger";
+import {Logger} from "../../../Logger";
 import {UnitQueue} from "../Queues/UnitQueue";
 
 /**

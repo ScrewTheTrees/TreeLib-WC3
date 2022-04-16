@@ -1,19 +1,19 @@
 import {Logger} from "../TreeLib/Logger";
 import {Players} from "../TreeLib/Structs/Players";
-import {ActionQueue} from "../TreeLib/ActionQueue/ActionQueue";
-import {UnitActionWaypoint} from "../TreeLib/ActionQueue/Actions/UnitActionWaypoint";
+import {ActionQueue} from "../TreeLib/Services/ActionQueue/ActionQueue";
+import {UnitActionWaypoint} from "../TreeLib/Services/ActionQueue/Actions/UnitActionWaypoint";
 import {Vector2} from "../TreeLib/Utility/Data/Vector2";
-import {WaypointOrders} from "../TreeLib/ActionQueue/Actions/WaypointOrders";
-import {UnitActionKillUnit} from "../TreeLib/ActionQueue/Actions/UnitActionKillUnit";
-import {UnitActionDeath} from "../TreeLib/ActionQueue/Actions/UnitActionDeath";
+import {WaypointOrders} from "../TreeLib/Services/ActionQueue/Actions/WaypointOrders";
+import {UnitActionKillUnit} from "../TreeLib/Services/ActionQueue/Actions/UnitActionKillUnit";
+import {UnitActionDeath} from "../TreeLib/Services/ActionQueue/Actions/UnitActionDeath";
 import {Delay} from "../TreeLib/Services/Delay/Delay";
-import {UnitActionImmediate} from "../TreeLib/ActionQueue/Actions/UnitActionImmediate";
-import {ImmediateOrders} from "../TreeLib/ActionQueue/Actions/ImmediateOrders";
-import {UnitActionDelay} from "../TreeLib/ActionQueue/Actions/UnitActionDelay";
-import {UnitGroupQueue} from "../TreeLib/ActionQueue/Queues/UnitGroupQueue";
+import {UnitActionImmediate} from "../TreeLib/Services/ActionQueue/Actions/UnitActionImmediate";
+import {ImmediateOrders} from "../TreeLib/Services/ActionQueue/Actions/ImmediateOrders";
+import {UnitActionDelay} from "../TreeLib/Services/ActionQueue/Actions/UnitActionDelay";
+import {UnitGroupQueue} from "../TreeLib/Services/ActionQueue/Queues/UnitGroupQueue";
 import {Quick} from "../TreeLib/Quick";
-import {UnitGroupActionWaypoint} from "../TreeLib/ActionQueue/Actions/UnitGroupActionWaypoint";
-import {UnitGroupActionGoToAction} from "../TreeLib/ActionQueue/Actions/UnitGroupActionGoToAction";
+import {UnitGroupActionWaypoint} from "../TreeLib/Services/ActionQueue/Actions/UnitGroupActionWaypoint";
+import {UnitGroupActionGoToAction} from "../TreeLib/Services/ActionQueue/Actions/UnitGroupActionGoToAction";
 
 export class QueueTests {
     run() {
@@ -32,7 +32,7 @@ export class QueueTests {
                 new UnitGroupActionGoToAction(0),
             );
 
-            ActionQueue.enableQueue(walkAround);
+            ActionQueue.addQueue(walkAround);
 
             Delay.addDelay(() => {
                 let mortar = CreateUnit(Players.RED, FourCC("hmtm"), -1400, -3000, 0);

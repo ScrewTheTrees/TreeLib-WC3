@@ -1,8 +1,8 @@
-import {Vector2} from "../../Utility/Data/Vector2";
+import {Vector2} from "../../../Utility/Data/Vector2";
 import {WaypointOrders} from "./WaypointOrders";
-import {Logger} from "../../Logger";
+import {Logger} from "../../../Logger";
 import {IUnitGroupAction} from "./IUnitGroupAction";
-import {Quick} from "../../Quick";
+import {Quick} from "../../../Quick";
 import {UnitGroupQueue} from "../Queues/UnitGroupQueue";
 
 /**

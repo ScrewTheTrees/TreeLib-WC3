@@ -1,14 +1,14 @@
 import {Logger} from "../TreeLib/Logger";
 import {Players} from "../TreeLib/Structs/Players";
-import {ActionQueue} from "../TreeLib/ActionQueue/ActionQueue";
-import {UnitActionWaypoint} from "../TreeLib/ActionQueue/Actions/UnitActionWaypoint";
+import {ActionQueue} from "../TreeLib/Services/ActionQueue/ActionQueue";
+import {UnitActionWaypoint} from "../TreeLib/Services/ActionQueue/Actions/UnitActionWaypoint";
 import {Vector2} from "../TreeLib/Utility/Data/Vector2";
-import {WaypointOrders} from "../TreeLib/ActionQueue/Actions/WaypointOrders";
-import {UnitActionDeath} from "../TreeLib/ActionQueue/Actions/UnitActionDeath";
+import {WaypointOrders} from "../TreeLib/Services/ActionQueue/Actions/WaypointOrders";
+import {UnitActionDeath} from "../TreeLib/Services/ActionQueue/Actions/UnitActionDeath";
 import {Delay} from "../TreeLib/Services/Delay/Delay";
 import {Respawner} from "../TreeLib/Services/Respawner/Respawner";
-import {UnitActionGoToAction} from "../TreeLib/ActionQueue/Actions/UnitActionGoToAction";
-import {UnitActionWaitWhileDead} from "../TreeLib/ActionQueue/Actions/UnitActionWaitWhileDead";
+import {UnitActionGoToAction} from "../TreeLib/Services/ActionQueue/Actions/UnitActionGoToAction";
+import {UnitActionWaitWhileDead} from "../TreeLib/Services/ActionQueue/Actions/UnitActionWaitWhileDead";
 
 export class QueueRespawnIntegrationTests {
     run() {
@@ -28,7 +28,7 @@ export class QueueRespawnIntegrationTests {
                 let resp = Respawner.createNewUnitRespawner(foot, 5, false, undefined)
                 resp.onRespawn = (newUnit) => {
                     queue.target = newUnit.target;
-                    ActionQueue.enableQueue(queue);
+                    ActionQueue.addQueue(queue);
                 };
             }, 2.5, 4);
 
