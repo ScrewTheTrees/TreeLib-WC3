@@ -1,32 +1,20 @@
-import {Hooks} from "../Hooks";
+import {Hooks} from "../../Hooks";
 import {DamageHitContainer} from "./DamageHitContainer";
 import {HitCallback} from "./HitCallback";
-import {Logger} from "../Logger";
-import {Quick} from "../Quick";
+import {Logger} from "../../Logger";
+import {Quick} from "../../Quick";
 
+Hooks.addMainHook(() => {
+    DamageDetectionSystem.Init();
+});
 /**
  * Simple streamlined DDS system where you can register callbacks and optionally add filters for quickly handling when units take damage.
  * Callbacks will get a helpful Container where you can get, set and modify the DDS data.
  * Works with the DummyCaster system to provide the casting unit instead of the dummy unit in the Container.
  */
 export class DamageDetectionSystem {
-    private static instance: DamageDetectionSystem;
-
-    public static getInstance() {
-        if (this.instance == null) {
-            this.instance = new DamageDetectionSystem();
-            Hooks.set(this.name, this.instance);
-        }
-        return this.instance;
-    }
-
-    private readonly beforeHit: trigger;
-    private readonly afterHit: trigger;
-
-    private readonly beforeHitCallbacks: HitCallback[] = [];
-    private readonly afterHitCallbacks: HitCallback[] = [];
-
-    private constructor() {
+    private constructor() {}
+    static Init() {
         this.beforeHit = CreateTrigger();
         this.afterHit = CreateTrigger();
 
@@ -40,36 +28,28 @@ export class DamageDetectionSystem {
         TriggerAddAction(this.afterHit, () => this.onAfterHit());
     }
 
+    private static beforeHit: trigger;
+    private static afterHit: trigger;
 
-    public registerBeforeDamageCalculation(callback: (hitObject: DamageHitContainer) => void) {
-        let hitCall = new HitCallback(callback);
-        Quick.Push(this.beforeHitCallbacks, hitCall);
-        return hitCall;
-    }
-
-
-    public registerAfterDamageCalculation(callback: (hitObject: DamageHitContainer) => void) {
-        let hitCall = new HitCallback(callback);
-        Quick.Push(this.afterHitCallbacks, hitCall);
-        return hitCall;
-    }
+    private static beforeHitCallbacks: HitCallback[] = [];
+    private static afterHitCallbacks: HitCallback[] = [];
 
     /**
-     * Warning, Recursive DDS is an unsafe option for amateurs, it will allow the DDS system to create infinite loops
+     * Warning, Recursive DDS is an unsafe option, it will allow the DDS system to create infinite loops if used poorly.
      * If used wrongly, it also forces TreeLibs DDS to create a new DamageHitContainer every time instead of reusing the same one.
      * TreeLibs DDS system blocks infinite loops by locking the execution on hit, but it will still cause issues due to the event changes.
      * While some parts are unsolveable, i will work on something to allow execution of code after all the DDS passes.
      */
-    public allowRecursiveDDS = false;
-    private locked = false;
+    public static allowRecursiveDDS = false;
+    private static locked = false;
 
-    private isLocked() {
+    private static isLocked() {
         return (this.locked && !this.allowRecursiveDDS);
     }
 
-    private readonly hitContainer = new DamageHitContainer();
+    private static hitContainer = new DamageHitContainer();
 
-    private resolveHitContainer() {
+    private static resolveHitContainer() {
         if (this.allowRecursiveDDS) {
             return new DamageHitContainer();
         } else {
@@ -78,17 +58,17 @@ export class DamageDetectionSystem {
         }
     }
 
-    private onBeforeHit() {
+    private static onBeforeHit() {
         this.onHitExecute(this.beforeHitCallbacks);
         this.locked = false;
     }
 
-    private onAfterHit() {
+    private static onAfterHit() {
         this.onHitExecute(this.afterHitCallbacks);
         this.locked = false;
     }
 
-    private isPassingFilters(hitCall: HitCallback, hitContainer: DamageHitContainer) {
+    private static isPassingFilters(hitCall: HitCallback, hitContainer: DamageHitContainer) {
         for (let filter of hitCall.filters) {
             if (!filter.runFilter(hitContainer)) {
                 return false;
@@ -97,7 +77,7 @@ export class DamageDetectionSystem {
         return true;
     }
 
-    private onHitExecute(hitCallbacks: HitCallback[]) {
+    private static onHitExecute(hitCallbacks: HitCallback[]) {
         if (!this.isLocked()) {
             let hitContainer = this.resolveHitContainer();
             for (let hitCall of hitCallbacks) {
@@ -123,7 +103,9 @@ export class DamageDetectionSystem {
      * Includes damage, damagetypes, target, caster, aliasedCaster (if casted by dummy)
      */
     public static registerAfterDamageCalculation(callback: (hitObject: DamageHitContainer) => void) {
-        return this.getInstance().registerAfterDamageCalculation(callback);
+        let hitCall = new HitCallback(callback);
+        Quick.Push(this.afterHitCallbacks, hitCall);
+        return hitCall;
     }
 
     /**
@@ -131,6 +113,8 @@ export class DamageDetectionSystem {
      * Includes damage, damagetypes, target, caster, aliasedCaster (if casted by dummy)
      */
     public static registerBeforeDamageCalculation(callback: (hitObject: DamageHitContainer) => void) {
-        return this.getInstance().registerBeforeDamageCalculation(callback);
+        let hitCall = new HitCallback(callback);
+        Quick.Push(this.beforeHitCallbacks, hitCall);
+        return hitCall;
     }
 }

@@ -1,5 +1,5 @@
 import {StepEffect} from "./StepEffect";
-import {RGB} from "../../Utility/Data/RGB";
+import {RGB} from "../../../Utility/Data/RGB";
 
 export class ColorFadeEffect extends StepEffect {
     public color: RGB;

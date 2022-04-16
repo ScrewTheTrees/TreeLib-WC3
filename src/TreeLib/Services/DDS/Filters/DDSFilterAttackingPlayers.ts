@@ -1,6 +1,6 @@
 import {IDDSFilter} from "./IDDSFilter";
 import {DamageHitContainer} from "../DamageHitContainer";
-import {Players} from "../../Structs/Players";
+import {Players} from "../../../Structs/Players";
 
 /**
  * Checks if the attacking unit is owned by any of these players.

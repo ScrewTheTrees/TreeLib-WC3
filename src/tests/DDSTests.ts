@@ -1,9 +1,9 @@
-import {DamageDetectionSystem} from "../TreeLib/DDS/DamageDetectionSystem";
+import {DamageDetectionSystem} from "../TreeLib/Services/DDS/DamageDetectionSystem";
 import {Logger} from "../TreeLib/Logger";
-import {DDSFilterAttackingPlayers} from "../TreeLib/DDS/Filters/DDSFilterAttackingPlayers";
-import {DDSFilterAttackingUnitIsHero} from "../TreeLib/DDS/Filters/DDSFilterAttackingUnitIsHero";
-import {DDSFilterTargetUnitPlayers} from "../TreeLib/DDS/Filters/DDSFilterTargetUnitPlayers";
-import {DDSFilterTargetUnitIsNotHero} from "../TreeLib/DDS/Filters/DDSFilterTargetUnitIsNotHero";
+import {DDSFilterAttackingPlayers} from "../TreeLib/Services/DDS/Filters/DDSFilterAttackingPlayers";
+import {DDSFilterAttackingUnitIsHero} from "../TreeLib/Services/DDS/Filters/DDSFilterAttackingUnitIsHero";
+import {DDSFilterTargetUnitPlayers} from "../TreeLib/Services/DDS/Filters/DDSFilterTargetUnitPlayers";
+import {DDSFilterTargetUnitIsNotHero} from "../TreeLib/Services/DDS/Filters/DDSFilterTargetUnitIsNotHero";
 
 export class DDSTests {
     run() {

@@ -1,4 +1,4 @@
-import {StringBuilder} from "../Utility/StringBuilder";
+import {StringBuilder} from "../../Utility/StringBuilder";
 
 export class DamageHitContainer {
     public _rawAttackingUnit!: unit;
