@@ -1,4 +1,4 @@
-import {Delay} from "../../Utility/Delay";
+import {Delay} from "../../Services/Delay/Delay";
 import {IUnitGroupAction} from "./IUnitGroupAction";
 import {UnitGroupQueue} from "../Queues/UnitGroupQueue";
 
@@ -20,7 +20,7 @@ export class UnitGroupActionGoToAction implements IUnitGroupAction {
         if (this.expression(targets, timeStep, queue)) {
             queue.resetActions();
             queue.currentActionIndex = this.actionIndex;
-            Delay.getInstance().addDelay(() => {
+            Delay.addDelay(() => {
                 queue.allActions[this.actionIndex].init(queue.targets, queue);
             }, 0.02);
         } else {

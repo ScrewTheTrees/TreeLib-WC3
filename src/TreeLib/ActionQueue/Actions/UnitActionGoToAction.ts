@@ -1,6 +1,6 @@
 import {IUnitAction} from "./IUnitAction";
 import {UnitQueue} from "../Queues/UnitQueue";
-import {Delay} from "../../Utility/Delay";
+import {Delay} from "../../Services/Delay/Delay";
 
 /**
  * Sets the current action index in queue to another action, also resets all actions.
@@ -21,7 +21,7 @@ export class UnitActionGoToAction implements IUnitAction {
         if (this.expression(target, timeStep, queue)) {
             queue.resetActions();
             queue.currentActionIndex = this.actionIndex;
-            Delay.getInstance().addDelay(() => {
+            Delay.addDelay(() => {
                 queue.allActions[this.actionIndex].init(queue.target, queue);
             }, 0.02);
         } else {

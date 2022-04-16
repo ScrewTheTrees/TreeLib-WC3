@@ -2,8 +2,8 @@ import {Node} from "./Node";
 import {Vector2} from "../../Utility/Data/Vector2";
 import {Pathfinder} from "./Pathfinder";
 import {PointWalkableChecker} from "../../Services/Pathing/PointWalkableChecker";
-import {Delay} from "../../Utility/Delay";
-import {DelayDto} from "../../Utility/DelayDto";
+import {Delay} from "../../Services/Delay/Delay";
+import {DelayContainer} from "../../Services/Delay/DelayContainer";
 import {Logger} from "../../Logger";
 
 export class PathfinderGrid extends Pathfinder {
@@ -81,7 +81,7 @@ export class PathfinderGrid extends Pathfinder {
             done = true;
         });
         if (generateAsync) {
-            let del: DelayDto;
+            let del: DelayContainer;
             del = Delay.addDelay(() => {
                 if (!done) {
                     coroutine.resume(routine);

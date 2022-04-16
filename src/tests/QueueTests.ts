@@ -6,7 +6,7 @@ import {Vector2} from "../TreeLib/Utility/Data/Vector2";
 import {WaypointOrders} from "../TreeLib/ActionQueue/Actions/WaypointOrders";
 import {UnitActionKillUnit} from "../TreeLib/ActionQueue/Actions/UnitActionKillUnit";
 import {UnitActionDeath} from "../TreeLib/ActionQueue/Actions/UnitActionDeath";
-import {Delay} from "../TreeLib/Utility/Delay";
+import {Delay} from "../TreeLib/Services/Delay/Delay";
 import {UnitActionImmediate} from "../TreeLib/ActionQueue/Actions/UnitActionImmediate";
 import {ImmediateOrders} from "../TreeLib/ActionQueue/Actions/ImmediateOrders";
 import {UnitActionDelay} from "../TreeLib/ActionQueue/Actions/UnitActionDelay";

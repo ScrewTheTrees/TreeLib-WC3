@@ -11,8 +11,11 @@ Hooks.addMainHook(() => {
 
 export class Respawner extends Entity {
     private static instance: Respawner;
+    private constructor() {
+        super(1);
+    }
     static Init() {
-        this.instance = new Respawner(1);
+        this.instance = new Respawner();
     }
     private static spawners: IRespawner[] = [];
     /**

@@ -5,7 +5,7 @@ import {UnitActionWaypoint} from "../TreeLib/ActionQueue/Actions/UnitActionWaypo
 import {Vector2} from "../TreeLib/Utility/Data/Vector2";
 import {WaypointOrders} from "../TreeLib/ActionQueue/Actions/WaypointOrders";
 import {UnitActionDeath} from "../TreeLib/ActionQueue/Actions/UnitActionDeath";
-import {Delay} from "../TreeLib/Utility/Delay";
+import {Delay} from "../TreeLib/Services/Delay/Delay";
 import {Respawner} from "../TreeLib/Services/Respawner/Respawner";
 import {UnitActionGoToAction} from "../TreeLib/ActionQueue/Actions/UnitActionGoToAction";
 import {UnitActionWaitWhileDead} from "../TreeLib/ActionQueue/Actions/UnitActionWaitWhileDead";

@@ -2,7 +2,7 @@
  * My wrapper for Locations, contains some useful helper functions and wrappers from other functions.
  * In particular it provides functions that automatically cleans up the locations automatically.
  */
-import {Delay} from "../Delay";
+import {Delay} from "../../Services/Delay/Delay";
 import {Quick} from "../../Quick";
 import {IRecyclable} from "./IRecyclable";
 import {Rectangle} from "./Rectangle";
@@ -223,7 +223,7 @@ export class Vector2 implements IRecyclable {
      */
     public toLocationClean() {
         let loc = Location(this.x, this.y);
-        Delay.getInstance().addDelay(() => {
+        Delay.addDelay(() => {
             RemoveLocation(loc);
         }, 0.1);
         return loc;
