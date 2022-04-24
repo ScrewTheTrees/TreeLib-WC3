@@ -117,4 +117,9 @@ export class Vector3 implements IRecyclable {
         this.z /= v.z;
         return this;
     }
+
+
+    public toString(): string {
+        return "point {x:" + this.x + ", y:" + this.y + ", z:" + this.z + " }";
+    }
 }

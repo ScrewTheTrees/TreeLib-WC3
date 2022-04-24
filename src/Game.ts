@@ -13,6 +13,7 @@ import {Cube} from "./TreeLib/Utility/Data/Cube";
 import {Vector2} from "./TreeLib/Utility/Data/Vector2";
 import {Vector3} from "./TreeLib/Utility/Data/Vector3";
 import {Rectangle} from "./TreeLib/Utility/Data/Rectangle";
+import {BunkeringTests} from "./tests/BunkeringTests";
 
 export class Game {
 
@@ -28,6 +29,8 @@ export class Game {
             new QueueRespawnIntegrationTests().run();
             new InputManagerTest().run();
             new EntityTests().run();
+            new BunkeringTests().run();
+
             PathfindingTests.getInstance();
             UnitEventTracker.registerAction(UnitEventTypes.CREATED_ANY, (u) => {
             });
@@ -37,6 +40,21 @@ export class Game {
             Rectangle.new(0, 0, 0, 0);
             Cube.new(0, 0, 0, 0, 0, 0);
 
+
+            const camCommand = CreateTrigger();
+            TriggerRegisterPlayerChatEvent(camCommand, Player(0), "", false);
+            TriggerAddAction(camCommand, () => {
+                let chat = GetEventPlayerChatString().toLowerCase();
+
+                if (chat.startsWith("-cam")) {
+                    chat = chat.substring("-cam ".length, chat.length);
+                    let num = tonumber(chat) || 2000;
+                    if (GetTriggerPlayer() == GetLocalPlayer()) {
+                        SetCameraField(CAMERA_FIELD_TARGET_DISTANCE, num, 1);
+                        SetCameraField(CAMERA_FIELD_FARZ, 40000, 0);
+                    }
+                }
+            });
 
         }, Logger.critical);
     }

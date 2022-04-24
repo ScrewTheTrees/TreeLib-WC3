@@ -1,6 +1,7 @@
 /**
  * This is just very Miscellaneous functions used for mostly movement and rotation.
  */
+import {Logger} from "./Logger";
 
 export function ChooseOne<T>(...input: T[]): T {
     let random = GetRandomInt(0, input.length - 1);
@@ -26,4 +27,8 @@ export function IsOfAnyType(buildingType: number, ...targetUnitTypes: number[]):
         }
     }
     return false;
+}
+
+export function TriggerAddXPAction(whichTrigger: trigger, actionFunc: () => void) {
+    TriggerAddAction(whichTrigger, () => xpcall(() => actionFunc(), Logger.critical));
 }

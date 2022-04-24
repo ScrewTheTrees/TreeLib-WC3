@@ -80,3 +80,45 @@ STRING 16
 Pathing Blocker Vertical(Ground)
 }
 
+STRING 17
+// Units: h001 (18 NAKED COWBOYS), Name (Name)
+{
+18 NAKED COWBOYS
+}
+
+STRING 18
+// Units: h004 (DAMYUM), Name (Name)
+{
+DAMYUM
+}
+
+STRING 19
+// Units: h002 (SHIT TOWER), Name (Name)
+{
+SHIT TOWER
+}
+
+STRING 20
+// Units: h002 (SHIT TOWER), Tip (Tooltip - Basic)
+{
+SHIT TOWER
+}
+
+STRING 21
+// Units: h003 (UNIT_WEAPON_RF_ATTACK_RANGE), Name (Name)
+{
+UNIT_WEAPON_RF_ATTACK_RANGE
+}
+
+STRING 22
+// Units: h003 (UNIT_WEAPON_RF_ATTACK_RANGE), Tip (Tooltip - Basic)
+{
+UNIT_WEAPON_RF_ATTACK_RANGE
+}
+
+STRING 23
+// Units: h000 (HWAT), Name (Name)
+{
+HWAT
+}
+
