@@ -63,9 +63,9 @@ export class UnitTransfer {
 
     public static deepCopyUnit(from: unit): unit {
         let to = CreateUnit(GetOwningPlayer(from), GetUnitTypeId(from), 33_000, 33_000, GetUnitFacing(from));
+        this.transferAllUnitFields(from, to);
         SetUnitX(to, GetUnitX(from));
         SetUnitY(to, GetUnitY(from));
-        this.transferAllUnitFields(from, to);
         return to;
     }
 

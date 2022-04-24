@@ -83,7 +83,9 @@ export class Bunkering extends Entity {
     }
 
     public static addBunkerConfig(config: BunkerUnitTypeConfig) {
-        this.allBunkerConfigs.set(config.unitType, config);
+        for (let type of config.unitTypes) {
+            this.allBunkerConfigs.set(type, config);
+        }
     }
 
     public static removeUnitFromBunker(soldier: unit, bunkerUnit?: unit) {
@@ -143,12 +145,13 @@ export class Bunkering extends Entity {
                         SetUnitScale(toUpdate, bunker.typeConfig.unitScale, bunker.typeConfig.unitScale, bunker.typeConfig.unitScale);
                     }
 
-                    if (BlzGetUnitCollisionSize(u) == 32 && !BlzGetUnitBooleanField(bunker.bunkerUnit, UNIT_BF_IS_A_BUILDING)) {
+                    if (BlzGetUnitCollisionSize(u) == 32
+                        && !BlzGetUnitBooleanField(bunker.bunkerUnit, UNIT_BF_IS_A_BUILDING)) {
                         //I wish i could tell you why EXACTLY 32 OFFSETS a units center by 16,
                         //THis only matters when its a unit, FUk me
                         //ALL I KNOW IS THAT I WANT TO RIP MY HAIR OUR FINDING THAT IT DOES.
-                        point.x -= 16;
-                        point.y -= 16;
+                        //point.x -= 16;
+                        //point.y -= 16;
                     }
 
                     SetUnitX(toUpdate, math.floor(GetWidgetX(bunker.bunkerUnit) + point.x));

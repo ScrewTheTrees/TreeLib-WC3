@@ -48,11 +48,13 @@ export class BunkerUnitContainer implements IRecyclable {
             //BlzSetUnitRealField(bunkered, UNIT_RF_SPEED, 0);
 
             SetUnitUseFood(bunkered, false);
-            SetUnitPosition(bunkered, GetUnitX(this.bunkerUnit) + positionFor.x, GetUnitY(this.bunkerUnit) + positionFor.y);
 
             if (this.typeConfig.unitScale) {
                 SetUnitScale(bunkered, this.typeConfig.unitScale, this.typeConfig.unitScale, this.typeConfig.unitScale);
             }
+
+            SetUnitX(bunkered, GetUnitX(this.bunkerUnit) + positionFor.x);
+            SetUnitY(bunkered, GetUnitY(this.bunkerUnit) + positionFor.y);
 
             if (this.typeConfig.onDummyUnitSpawn) {
                 this.typeConfig.onDummyUnitSpawn(bunkered);

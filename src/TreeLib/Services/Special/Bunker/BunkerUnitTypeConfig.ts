@@ -1,11 +1,11 @@
 import {Vector3} from "../../../Utility/Data/Vector3";
 
 export class BunkerUnitTypeConfig {
-    public constructor(unitType: number) {
-        this.unitType = unitType;
+    public constructor(...unitTypes: number[]) {
+        this.unitTypes = unitTypes;
     }
 
-    public unitType: number;
+    public unitTypes: number[];
 
 
     public unitScale?: number;
