@@ -1,6 +1,8 @@
+udg_midi = nil
 gg_trg_Untitled_Trigger_001 = nil
 gg_unit_Hamg_0003 = nil
 gg_unit_hkni_0010 = nil
+gg_trg_Untitled_Trigger_002 = nil
 function InitGlobals()
 end
 
@@ -225,8 +227,19 @@ function InitTrig_Untitled_Trigger_001()
     TriggerAddAction(gg_trg_Untitled_Trigger_001, Trig_Untitled_Trigger_001_Actions)
 end
 
+function Trig_Untitled_Trigger_002_Actions()
+        PlayMusic("music\numb.mid")
+end
+
+function InitTrig_Untitled_Trigger_002()
+    gg_trg_Untitled_Trigger_002 = CreateTrigger()
+    TriggerRegisterTimerEventSingle(gg_trg_Untitled_Trigger_002, 5)
+    TriggerAddAction(gg_trg_Untitled_Trigger_002, Trig_Untitled_Trigger_002_Actions)
+end
+
 function InitCustomTriggers()
     InitTrig_Untitled_Trigger_001()
+    InitTrig_Untitled_Trigger_002()
 end
 
 function InitCustomPlayerSlots()

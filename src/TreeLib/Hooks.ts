@@ -50,21 +50,21 @@ export namespace Hooks {
         }
     }
 
-    export const beforeMainHooks: (() => void)[] = [];
-    export function addBeforeMainHook(hookFunc: () => void) {
+    export const beforeMainHooks: ((this: any) => void)[] = [];
+    export function addBeforeMainHook(hookFunc: (this: any) => void) {
         beforeMainHooks.push(hookFunc);
     }
     export const afterMainHooks: (() => void)[] = [];
-    export function addAfterMainHook(hookFunc: () => void) {
+    export function addAfterMainHook(hookFunc: (this: any) => void) {
         afterMainHooks.push(hookFunc);
     }
 
     export const beforeConfigHooks: (() => void)[] = [];
-    export function addBeforeConfigHook(hookFunc: () => void) {
+    export function addBeforeConfigHook(hookFunc: (this: any) => void) {
         beforeConfigHooks.push(hookFunc);
     }
     export const afterConfigHooks: (() => void)[] = [];
-    export function addAfterConfigHook(hookFunc: () => void) {
+    export function addAfterConfigHook(hookFunc: (this: any) => void) {
         afterConfigHooks.push(hookFunc);
     }
 }
@@ -97,10 +97,3 @@ _G.config = Hooks.hookArguments(_G.config, () => xpcall(() => {
         }
     }, Logger.critical)
 )
-/*
-What is das hooks?
-So, lua garbage collection removes stuff that falls out of scope, however,
-if you add it to a global object it wont fall out of scope.
-The reason being, using static objects does not bode well with ceres as things can fall out of scope,
-So they need to be hooked into the global scope to some degree.
- */

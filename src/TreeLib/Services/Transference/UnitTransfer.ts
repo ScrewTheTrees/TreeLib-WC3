@@ -55,10 +55,13 @@ export class UnitTransfer {
         this.transferAllUnitRealFields(from, to);
         this.transferAllUnitBooleanFields(from, to);
         this.transferAllUnitStringFields(from, to);
-        this.transferAllUnitWeaponIntegerFields(from, to);
-        this.transferAllUnitWeaponRealFields(from, to);
-        this.transferAllUnitWeaponBooleanFields(from, to);
-        this.transferAllUnitWeaponStringFields(from, to);
+
+        //These are all very wonky...
+
+        //this.transferAllUnitWeaponIntegerFields(from, to);
+        //this.transferAllUnitWeaponRealFields(from, to);
+        //this.transferAllUnitWeaponBooleanFields(from, to);
+        //this.transferAllUnitWeaponStringFields(from, to);
     }
 
     public static deepCopyUnit(from: unit): unit {

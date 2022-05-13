@@ -21,6 +21,14 @@ export namespace UnitArrays {
         return array;
     }
 
+    export function ArrayUnitsInRangeOfPlayer(x: number, y: number, radius: number, play: player, checkArr?: unit[]) {
+        const array = checkArr || [];
+        if (!_saveGroup) _saveGroup = CreateGroup();
+        GroupEnumUnitsInRange(_saveGroup, x, y, radius, null);
+        Quick.GroupInsertIntoArrayIfPlayer(_saveGroup, array, play);
+        GroupClear(_saveGroup);
+        return array;
+    }
     export function ArrayUnitsInRangeOfPlayers(x: number, y: number, radius: number, play: player[], checkArr?: unit[]) {
         const array = checkArr || [];
         if (!_saveGroup) _saveGroup = CreateGroup();

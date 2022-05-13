@@ -150,8 +150,8 @@ export class Bunkering extends Entity {
                         //I wish i could tell you why EXACTLY 32 OFFSETS a units center by 16,
                         //THis only matters when its a unit, FUk me
                         //ALL I KNOW IS THAT I WANT TO RIP MY HAIR OUR FINDING THAT IT DOES.
-                        //point.x -= 16;
-                        //point.y -= 16;
+                        point.x -= 16;
+                        point.y -= 16;
                     }
 
                     SetUnitX(toUpdate, math.floor(GetWidgetX(bunker.bunkerUnit) + point.x));

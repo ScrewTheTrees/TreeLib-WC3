@@ -7,8 +7,8 @@ export abstract class DynamicEntity {
     protected _timer: timer = CreateTimer();
     public lastStepSize: number;
 
-    public timerLoop: (this: void) => void;
-    public timerLoopYield: (this: void) => void;
+    public timerLoop: (this: void) => any;
+    public timerLoopYield: (this: void) => any;
 
     protected constructor(timerDelay: number = 0.01) {
         this._timerDelay = Math.round(timerDelay * 1_000) / 1_000;
@@ -55,10 +55,6 @@ export abstract class DynamicEntity {
      **/
     public remove() {
         this.removeTimer();
-        // @ts-ignore
-        this.timerLoop = null;
-        // @ts-ignore
-        this.timerLoopYield = null;
     }
     public add() {
         this.resetTimer();

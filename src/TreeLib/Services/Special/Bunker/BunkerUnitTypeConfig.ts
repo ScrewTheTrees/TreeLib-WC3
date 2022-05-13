@@ -22,6 +22,7 @@ export class BunkerUnitTypeConfig {
         return this.offsetPositions[index] || this.defaultPosition;
     }
 
+    // Set this to 0 if you want SC2 bunkers.
     public setUnitScale(unitScale?: number): this {
         this.unitScale = unitScale;
         return this;

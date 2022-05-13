@@ -38,8 +38,8 @@ export class UnitEventTracker {
 }
 
 {
-    // @ts-ignore
-    _G.main = Hooks.hookArgumentsBefore(_G.main, () => {
+
+    Hooks.addBeforeMainHook(() => {
         const triggerUnitDeath = CreateTrigger();
         TriggerRegisterAnyUnitEventBJ(triggerUnitDeath, EVENT_PLAYER_UNIT_DEATH);
         TriggerAddAction(triggerUnitDeath, () => {

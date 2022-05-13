@@ -70,6 +70,17 @@ export namespace Quick {
         return arr;
     }
 
+    export function GroupInsertIntoArrayIfPlayer(g: group, arr: unit[], play: player): unit[] {
+        let val = FirstOfGroup(g);
+        while (val != null) {
+            if (play == GetOwningPlayer(val)) {
+                Push(arr, val);
+            }
+            GroupRemoveUnit(g, val);
+            val = FirstOfGroup(g);
+        }
+        return arr;
+    }
     export function GroupInsertIntoArrayIfPlayers(g: group, arr: unit[], play: player[]): unit[] {
         let val = FirstOfGroup(g);
         while (val != null) {

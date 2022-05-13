@@ -59,7 +59,7 @@ export abstract class Entity {
                     str += ent.constructor.name + ", ";
                 }
                 if (container.entities.length > 5) {
-                    str += ", ...etc";
+                    str += " ...etc";
                 }
             }
             Quick.Push(data, str);
@@ -85,7 +85,9 @@ class EntityContainer {
 
         TriggerRegisterTimerEvent(this.loop, timeBetween, true);
         TriggerAddAction(this.loop, () => {
-            this.step();
+            if (!Entity.pauseExecution) {
+                xpcall(this.stepCode, Logger.critical);
+            }
         });
     }
 
@@ -107,11 +109,9 @@ class EntityContainer {
     }
     public remove(e: Entity) {
         Quick.Remove(this.entities, e);
-        return e;
-    }
-    private step() {
-        if (!Entity.pauseExecution) {
-            xpcall(this.stepCode, Logger.critical);
+        if (this.entities.length <= 0) {
+            DisableTrigger(this.loop);
         }
+        return e;
     }
 }

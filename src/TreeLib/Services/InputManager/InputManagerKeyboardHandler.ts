@@ -10,7 +10,6 @@ import {Hooks} from "../../Hooks";
 Hooks.addBeforeMainHook(() => InputManagerKeyboardHandler.Init());
 
 export class InputManagerKeyboardHandler {
-    private constructor() {}
     public static Init() {
         TriggerAddAction(this.keyInputTrigger, () => this.onKeyAction());
     }

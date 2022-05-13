@@ -44,8 +44,6 @@ export class BunkerUnitContainer implements IRecyclable {
             BlzSetUnitMaxMana(bunkered, 0);
             SetUnitFlyHeight(bunkered, positionFor.z, 0);
             SetUnitPropWindow(bunkered, 0);
-            //BlzSetUnitIntegerField(bunkered, UNIT_IF_MOVE_TYPE, 0);
-            //BlzSetUnitRealField(bunkered, UNIT_RF_SPEED, 0);
 
             SetUnitUseFood(bunkered, false);
 
