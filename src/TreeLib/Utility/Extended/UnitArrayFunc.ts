@@ -1,5 +1,8 @@
 import {Quick} from "../../Quick";
 
+/**
+ * Honestly, this is just the warcraft 3 GroupEnum functions in array format.
+ */
 export namespace UnitArrays {
     let _saveGroup: group;
 

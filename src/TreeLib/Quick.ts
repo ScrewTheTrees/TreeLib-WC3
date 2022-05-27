@@ -1,5 +1,9 @@
 //!!!!! KEEP 0 DEPENDENCIES
 
+/**
+ * Quick is generally operators that are "optimized" for speed.
+ * At the cost of things like flexibility and sorting.
+ */
 export namespace Quick {
 
     export function Slice<T>(arr: T[], index: number) {

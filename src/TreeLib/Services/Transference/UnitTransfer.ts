@@ -1,3 +1,7 @@
+/**
+ * This was made to make "deep" copies of units.
+ * As of writing it's not entirely finished due to unforseen consequences.
+ */
 export class UnitTransfer {
 
     public static transferAllUnitIntegerFields(from: unit, to: unit) {

@@ -1,6 +1,12 @@
 import {Quick} from "../Quick";
 import {StringFuncs} from "./Extended/StringFuncs";
 
+/**
+ * RelevancyChecker is a string relevancy framework for checking a string against a collection of strings
+ * and finding the most relevant string (returning it's value).
+ * 
+ * Personally i used this to provide dynamic tips for people asking for help in chat.
+ */
 export class RelevancyChecker<T> {
     public allRefs: RelevancyRef<T>[] = [];
 

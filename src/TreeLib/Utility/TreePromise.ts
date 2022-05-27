@@ -1,6 +1,10 @@
 import {Quick} from "../Quick";
 import {Logger} from "../Logger";
 
+/**
+ * A custom type of promise. I've had bad luck with the built in js/ts promises and async/await.
+ * So in the end i settled for making my own "promise" api.
+ */
 export class TreePromise<T, H = undefined> {
     public data: T | undefined;
     public handler?: H;
@@ -24,10 +28,14 @@ export class TreePromise<T, H = undefined> {
             for (let call of this.thenCallbacks) {
                 call(value);
             }
-            for (let final of this.finallyCallbacks) {
-                final();
-            }
         }, Logger.critical)
+
+        for (let final of this.finallyCallbacks) {
+            xpcall(() => {
+                final();
+            }, Logger.critical)
+        }
+
         return this;
     }
     public fail(error: any) {
@@ -36,13 +44,16 @@ export class TreePromise<T, H = undefined> {
         this.isError = true;
         this.isFinished = true;
         xpcall(() => {
-            for (let call of this.errorCallbacks) {
+            for (let call of this.thenCallbacks) {
                 call(error);
             }
-            for (let final of this.finallyCallbacks) {
-                final();
-            }
         }, Logger.critical)
+
+        for (let final of this.finallyCallbacks) {
+            xpcall(() => {
+                final();
+            }, Logger.critical)
+        }
         return this;
     }
     public then(callback: (data: T) => void) {

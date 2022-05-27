@@ -1,5 +1,7 @@
 /**
  * Dynamic entities are great in the way that you can yield and change the timerDelay with less overhead.
+ * While entity runs all timers of the same interval at the same time, DynamicEntities run their own timers.
+ * Thus they will execute at different times if created at different times.
  */
 export abstract class DynamicEntity {
     //TimerDelay API
@@ -7,8 +9,8 @@ export abstract class DynamicEntity {
     protected _timer: timer = CreateTimer();
     public lastStepSize: number;
 
-    public timerLoop: (this: void) => any;
-    public timerLoopYield: (this: void) => any;
+    public timerLoop: (this: any) => any;
+    public timerLoopYield: (this: any) => any;
 
     protected constructor(timerDelay: number = 0.01) {
         this._timerDelay = Math.round(timerDelay * 1_000) / 1_000;

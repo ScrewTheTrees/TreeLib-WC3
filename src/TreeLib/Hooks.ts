@@ -18,6 +18,18 @@ export namespace Hooks {
         Logger.LogDebug("Hooked: " + name)
     }
 
+    /**
+     * This is primarily to make sure they are included in the final build by TSTL.
+     * It will also run any static "Activate" method on it.
+     * @param actualClass
+     */
+    export function activate<T>(actualClass: { }) {
+        // @ts-ignore
+        if (actualClass.Activate) actualClass.Activate();
+        // @ts-ignore
+        if (actualClass.activate) actualClass.activate();
+    }
+
     /**  Hook a function with your own logic that will execute after the original function. */
     export function hookArguments<Args extends any[], T>(oldFunc: (...args: Args) => T, newFunc: (...args: Args) => void) {
         return (...args: Args) => {

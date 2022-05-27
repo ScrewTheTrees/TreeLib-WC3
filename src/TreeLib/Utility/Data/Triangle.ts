@@ -53,4 +53,6 @@ export class Triangle implements IRecyclable {
     public static fromVectors(v1: Vector2, v2: Vector2, v3: Vector2): Triangle {
         return this.new(v1.x, v1.y, v2.x, v2.y, v3.x, v3.y);
     }
+
+    //TODO: Triangle intersection with triangles/lines/etc
 }

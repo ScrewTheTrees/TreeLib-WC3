@@ -33,7 +33,10 @@ export class BunkerUnitContainer implements IRecyclable {
                 index++;
             }
             this.bunkeredIndexMapping[index] = u;
-            let positionFor = this.typeConfig.getPositionFor(index);
+            let positionFor = this.typeConfig.getPositionFor(index)
+
+            let skin = BlzGetUnitSkin(u)
+            BlzSetUnitSkin(bunkered, skin);
 
             UnitAddAbility(bunkered, FourCC("Aloc"));
             UnitAddAbility(bunkered, FourCC("Avul"));

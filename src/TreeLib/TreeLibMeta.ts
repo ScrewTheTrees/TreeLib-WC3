@@ -1,12 +1,7 @@
+/**
+ * This metadata is only present using my own build tools, It should be present in my WC3 TSTL template.
+ */
 export class TreeLibMeta {
-    public static version = "1.3.2";
-    public static creator = "ScrewTheTrees";
-    public static libName = "TreeLib";
-
-    public static getIntroductionString() {
-        return this.libName + " " + this.version + " - " + this.creator;
-    }
-
     public static getMapVersion(): MapVersion {
         // @ts-ignore
         if (mapVersion) return mapVersion; //Supplied by operation.ts and build.json, only works with my Template currently.

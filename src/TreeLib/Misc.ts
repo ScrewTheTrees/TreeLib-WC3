@@ -1,5 +1,5 @@
 /**
- * This is just very Miscellaneous functions used for mostly movement and rotation.
+ * This is just very Miscellaneous functions used for the oddest of purposes.
  */
 import {Logger} from "./Logger";
 

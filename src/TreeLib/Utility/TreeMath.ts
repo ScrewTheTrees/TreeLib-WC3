@@ -1,3 +1,6 @@
+/**
+ * Just a collection of random Math operators that were not present at the time of writing them.
+ */
 export namespace TreeMath {
     export function Clamp(value: number, min: number, max: number) {
         let x = Math.min(min, max)
@@ -9,10 +12,6 @@ export namespace TreeMath {
             value = min;
         }
         return value;
-    }
-
-    export function Lerp(a: number, b: number, t: number) {
-        return a + (b - a) * TreeMath.Clamp(t, 0, 1);
     }
 
     export function Round(value: number) {

@@ -1,3 +1,6 @@
+/**
+ * A collection of interpolations i've personally acquired over time to make things look smooth.
+ */
 export namespace Interpolation {
 
     export function Gradient2D(topLeft: number, topRight: number, bottomLeft: number, bottomRight: number, fractionalX: number, fractionalY: number) {

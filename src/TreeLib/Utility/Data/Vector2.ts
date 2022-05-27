@@ -1,7 +1,3 @@
-/**
- * My wrapper for Locations, contains some useful helper functions and wrappers from other functions.
- * In particular it provides functions that automatically cleans up the locations automatically.
- */
 import {Delay} from "../../Services/Delay/Delay";
 import {Quick} from "../../Quick";
 import {IRecyclable} from "./IRecyclable";
@@ -9,6 +5,13 @@ import {Rectangle} from "./Rectangle";
 import {Cube} from "./Cube";
 import {Vector3} from "./Vector3";
 
+/**
+ * My wrapper for Locations, contains some useful helper functions and wrappers from other functions.
+ * In particular it provides functions that automatically cleans up the locations automatically.
+ *
+ * God do i wish we had structs to store on the stack in lua.
+ * Would save me a lot of memory headache.
+ */
 export class Vector2 implements IRecyclable {
     public x: number;
     public y: number;
