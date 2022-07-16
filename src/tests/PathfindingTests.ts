@@ -48,7 +48,7 @@ export class PathfindingTests {
                 actions.push(new UnitActionWaypoint(value.point, WaypointOrders.attack, 96));
             }
             actions.push(new UnitActionDeath(true));
-            ActionQueue.createUnitQueue(u, ...actions);
+            ActionQueue.getInstance().createUnitQueue(u, ...actions);
         }, (...args) => Logger.critical(...args)));
     }
 

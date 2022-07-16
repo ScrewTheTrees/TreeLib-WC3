@@ -50,7 +50,7 @@ export class PathfinderGrid extends Pathfinder {
                     for (let j = startY; j < endY; j += stepSize) {
                         let xx = i + (stepSize / 2);
                         let yy = j + (stepSize / 2);
-                        if (excludeNonWalkable && (!PointWalkableChecker.checkTerrainIsWalkableXY(xx, yy))) {
+                        if (excludeNonWalkable && (!PointWalkableChecker.getInstance().checkTerrainIsWalkableXY(xx, yy))) {
                             sr++;
                             continue; //Not walkable.
                         }
@@ -82,7 +82,7 @@ export class PathfinderGrid extends Pathfinder {
         });
         if (generateAsync) {
             let del: DelayContainer;
-            del = Delay.addDelay(() => {
+            del = Delay.getInstance().addDelay(() => {
                 if (!done) {
                     coroutine.resume(routine);
                     del.repeatCounter = 0;

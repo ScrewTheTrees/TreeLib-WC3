@@ -1,3 +1,4 @@
+export * from "src/TreeLib/CallbackEntity"
 export * from "src/TreeLib/DynamicEntity"
 export * from "src/TreeLib/Entity"
 export * from "src/TreeLib/Frameworks/Pathfinder/Node"

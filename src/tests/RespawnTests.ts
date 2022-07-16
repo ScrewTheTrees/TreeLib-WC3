@@ -14,10 +14,10 @@ export class RespawnTests {
             let foo2_1 = CreateUnit(Players.NEUTRAL_HOSTILE, FourCC("hfoo"), 4000, 4000, 0);
             let foo3_1 = CreateUnit(Players.NEUTRAL_HOSTILE, FourCC("hfoo"), 4000, 4000, 0);
 
-            Respawner.createNewUnitRespawner(foo1, 5, true);
-            Respawner.createNewUnitRespawner(foo2, 5, true, undefined, 1);
-            Respawner.createNewUnitRespawner(foo3, 5, true, undefined, 3);
-            Respawner.createNewUnitCampRespawner([foo1_1, foo2_1, foo3_1], 5, false, undefined, 2);
+            Respawner.getInstance().createNewUnitRespawner(foo1, 5, true);
+            Respawner.getInstance().createNewUnitRespawner(foo2, 5, true, undefined, 1);
+            Respawner.getInstance().createNewUnitRespawner(foo3, 5, true, undefined, 3);
+            Respawner.getInstance().createNewUnitCampRespawner([foo1_1, foo2_1, foo3_1], 5, false, undefined, 2);
         }, (...args) => Logger.LogCritical(...args))
     }
 }

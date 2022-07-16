@@ -20,7 +20,7 @@ export class UnitGroupActionGoToAction implements IUnitGroupAction {
         if (this.expression(targets, timeStep, queue)) {
             queue.resetActions();
             queue.currentActionIndex = this.actionIndex;
-            Delay.addDelay(() => {
+            Delay.getInstance().addDelay(() => {
                 queue.allActions[this.actionIndex].init(queue.targets, queue);
             }, 0.02);
         } else {

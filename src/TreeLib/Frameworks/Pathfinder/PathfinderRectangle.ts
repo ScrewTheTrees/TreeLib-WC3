@@ -46,6 +46,7 @@ export class PathfinderRectangle extends Pathfinder<RectangleNode> {
         } else {
             this.generateMesh(startX, startY, endY, stepSize, endX, halfStep, excludeNonWalkable, generateAsync);
             this.isFinishGenerating  = true;
+            Logger.LogDebug("Finished generating Rectangle navmesh.")
         }
     }
     private generateMesh(startX: number, startY: number, endY: number, stepSize: number, endX: number, halfStep: number, excludeNonWalkable: boolean, generateAsync: boolean) {
@@ -61,7 +62,7 @@ export class PathfinderRectangle extends Pathfinder<RectangleNode> {
 
                     let xx = x + halfStep
                     let yy = y + halfStep
-                    if (excludeNonWalkable && (!PointWalkableChecker.checkTerrainIsWalkableXY(xx, yy))) {
+                    if (excludeNonWalkable && (!PointWalkableChecker.getInstance().checkTerrainIsWalkableXY(xx, yy))) {
                         sr++;
                         continue; //Not walkable.
                     }
@@ -150,7 +151,7 @@ export class PathfinderRectangle extends Pathfinder<RectangleNode> {
         let hitTop = false;
         let hitRight = false;
         let iterations = 64;
-        let extras = 2 + ((startX % (this.stepSize * 3)) / this.stepSize); //0, 64, 128
+        let extras = 5 + ((startX % (this.stepSize * 5)) / this.stepSize); //0, 64, 128
         let operations = 0;
 
         //Main loop.
@@ -163,7 +164,7 @@ export class PathfinderRectangle extends Pathfinder<RectangleNode> {
                 for (let x = startX; x <= checkX; x += this.stepSize) { // Start at startX, iterate all nodes to the right (only 0 now)
                     let checkNode = this.getGridElementByCoordinate(x, nextY); //Get node at all the X coordinates above the highest Y (64)
                     if ((checkNode != null && checkNode != node) //If the node is not empty, or else if this node is not this.
-                        || !PointWalkableChecker.checkTerrainIsWalkableXY(x + halfStep, nextY + halfStep) //Or if the terrain here is not walkable
+                        || !PointWalkableChecker.getInstance().checkTerrainIsWalkableXY(x + halfStep, nextY + halfStep) //Or if the terrain here is not walkable
                     ) {
                         hitTop = true; //Top has been hit, end it here.
                         break;
@@ -194,7 +195,7 @@ export class PathfinderRectangle extends Pathfinder<RectangleNode> {
                 for (let y = startY; y <= checkY; y += this.stepSize) { //Start at StartY, iterate all nodes vertically, (Either 0 or also 64)
                     let checkNode = this.getGridElementByCoordinate(nextX, y); //Get node at all the Y coordinates, one step to the right of highest X (0, 64)
                     if ((checkNode != null && checkNode != node) //If the node is not empty, or else if this node is not this.
-                        || !PointWalkableChecker.checkTerrainIsWalkableXY(nextX + halfStep, y + halfStep) //Or if the terrain here is not walkable
+                        || !PointWalkableChecker.getInstance().checkTerrainIsWalkableXY(nextX + halfStep, y + halfStep) //Or if the terrain here is not walkable
                     ) {
                         hitRight = true; //Top has been hit, end it here.
                         break;

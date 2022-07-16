@@ -226,7 +226,7 @@ export class Vector2 implements IRecyclable {
      */
     public toLocationClean() {
         let loc = Location(this.x, this.y);
-        Delay.addDelay(() => {
+        Delay.getInstance().addDelay(() => {
             RemoveLocation(loc);
         }, 0.1);
         return loc;

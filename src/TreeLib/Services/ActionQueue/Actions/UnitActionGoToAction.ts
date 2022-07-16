@@ -21,7 +21,7 @@ export class UnitActionGoToAction implements IUnitAction {
         if (this.expression(target, timeStep, queue)) {
             queue.resetActions();
             queue.currentActionIndex = this.actionIndex;
-            Delay.addDelay(() => {
+            Delay.getInstance().addDelay(() => {
                 queue.allActions[this.actionIndex].init(queue.target, queue);
             }, 0.02);
         } else {

@@ -47,6 +47,10 @@ export class Node {
         return this.point.distanceTo(node.point);
     }
 
+    public distanceToPreviousNodeWithIndex(node: this, index: number): number {
+        return this.point.distanceTo(node.point);
+    }
+
     public addNeighborTwoWay(node: this) {
         if (node == this || node == null) return;
         this.addNeighbor(node);
@@ -76,6 +80,15 @@ export class RectangleNode extends Node {
     public isInsideNode(point: Vector2) {
         return this.boundary.intersectsVector2(point);
     }
+    public isInsideNodeWithBoundary(point: Vector2, boundary: number) {
+        let p = this.boundary.closestPointInsideWithBoundary(point, boundary);
+        if (p.equals(point)) {
+            p.recycle();
+            return true;
+        }
+        p.recycle();
+        return false;
+    }
     public getClosestPoint(point: Vector2) {
         return this.boundary.closestPointInside(point);
     }
@@ -83,14 +96,20 @@ export class RectangleNode extends Node {
         return this.boundary.closestPointInsideWithBoundary(point, boundary);
     }
 
-    public distanceToNode(node: this): number {
-        let start = this.getClosestPoint(node.point);
-        let end = node.getClosestPoint(this.point);
-        let dist = start.distanceTo(end);
+    /*public distanceToPreviousNodeWithIndex(previousNode: this, index: number): number {
+        let previousCameFrom = previousNode.getCameFrom(index);
+        let start: Vector2;
+        if (previousCameFrom) { //If a previous previous node exists, we can use it to evaluate the full distance accurately.
+            start = previousCameFrom.getClosestPoint(this.point)
+        } else { //Just start at the closest possible edge, why not?
+            start = previousNode.getClosestPoint(this.point);
+        }
+        let destination = this.getClosestPoint(start);
+        let dist = destination.distanceTo(start);
+        destination.recycle();
         start.recycle();
-        end.recycle();
         return dist;
-    }
+    }*/
     public distanceToNodeWithBoundary(node: this, boundary: number): number {
         let start = this.getClosestPointWithBoundary(node.point, boundary);
         let end = node.getClosestPointWithBoundary(this.point, boundary);

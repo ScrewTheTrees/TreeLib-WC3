@@ -66,8 +66,8 @@ export class Rectangle implements IRecyclable {
         return other.distanceToXY(xx, yy);
     }
     public closestPointInsideWithBoundary(other: Vector2, boundary: number = 1): Vector2 {
-        let xDiff = (this.xMax - this.xMin) / 2; //32
-        let yDiff = (this.yMax - this.yMin) / 2; //32
+        let xDiff = math.abs (this.xMax - this.xMin) / 2; //32
+        let yDiff = math.abs(this.yMax - this.yMin) / 2; //32
         if (boundary < xDiff) xDiff = boundary;
         if (boundary < yDiff) yDiff = boundary;
 

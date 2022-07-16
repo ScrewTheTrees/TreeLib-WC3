@@ -1,33 +1,33 @@
-import {Hooks} from "../../Hooks";
 import {Entity} from "../../Entity";
 import {IRespawner} from "./IRespawner";
 import {UnitRespawner} from "./UnitRespawner";
 import {UnitCampRespawner} from "./UnitCampRespawner";
 import {Quick} from "../../Quick";
 
-Hooks.addBeforeMainHook(() => Respawner.Init());
-
 export class Respawner extends Entity {
-    private static instance: Respawner;
+    private static _instance: Respawner;
+    public static getInstance() {
+        if (!this._instance) {
+            this._instance = new Respawner();
+        }
+        return this._instance;
+    }
     private constructor() {
         super(1);
     }
-    static Init() {
-        this.instance = new Respawner();
-    }
-    private static spawners: IRespawner[] = [];
+    private spawners: IRespawner[] = [];
     /**
      * Pauses all timers for respawning units, very good if you go into a cinematic mode or similar and dont want them respawning.
      */
-    public static paused = false;
+    public paused = false;
 
     step(): void {
-        if (!Respawner.paused) {
-            for (let index = 0; index < Respawner.spawners.length; index++) {
-                let spawner = Respawner.spawners[index];
+        if (!this.paused) {
+            for (let index = 0; index < this.spawners.length; index++) {
+                let spawner = this.spawners[index];
                 spawner.update(this.timerDelay);
                 if (spawner.respawns == 0) {
-                    Quick.Slice(Respawner.spawners, index);
+                    Quick.Slice(this.spawners, index);
                     index -= 1;
                 }
             }
@@ -35,7 +35,7 @@ export class Respawner extends Entity {
     }
 
 
-    public static addSpawner<T extends IRespawner>(spawner: T): T {
+    public addSpawner<T extends IRespawner>(spawner: T): T {
         Quick.Push(this.spawners, spawner);
         return spawner;
     }
@@ -48,7 +48,7 @@ export class Respawner extends Entity {
      * @param doEyeCandy If hero, do respawn animation.
      * @param respawns how many times it will respawn, -1 is infinite.
      */
-    public static createNewUnitRespawner(target: unit, delay: number, respawnAtOriginalLocation?: boolean, doEyeCandy?: boolean, respawns?: number) {
+    public createNewUnitRespawner(target: unit, delay: number, respawnAtOriginalLocation?: boolean, doEyeCandy?: boolean, respawns?: number) {
         return this.addSpawner(new UnitRespawner(target, delay, respawnAtOriginalLocation, doEyeCandy, respawns));
     }
 
@@ -60,7 +60,7 @@ export class Respawner extends Entity {
      * @param doEyeCandy If hero, do respawn animation.
      * @param respawns how many times it will respawn, -1 is infinite.
      */
-    public static createNewUnitCampRespawner(targets: unit[], delay: number, respawnAtOriginalLocation?: boolean, doEyeCandy?: boolean, respawns?: number) {
+    public createNewUnitCampRespawner(targets: unit[], delay: number, respawnAtOriginalLocation?: boolean, doEyeCandy?: boolean, respawns?: number) {
         return this.addSpawner(new UnitCampRespawner(targets, delay, respawnAtOriginalLocation, doEyeCandy, respawns));
     }
 }

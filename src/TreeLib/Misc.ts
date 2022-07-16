@@ -8,6 +8,11 @@ export function ChooseOne<T>(...input: T[]): T {
     return input[random];
 }
 
+export function ChooseOneArr<T>(input: T[]): T {
+    let random = GetRandomInt(0, input.length - 1);
+    return input[random];
+}
+
 export function InverseFourCC(input: number): string {
     return string.pack(">I4", input);
 }

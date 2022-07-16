@@ -95,5 +95,6 @@ export class SimpleTreeCoroutine extends TreeThread {
     }
     protected execute(): void {
         this.func(this);
+        this.destroy();
     }
 }

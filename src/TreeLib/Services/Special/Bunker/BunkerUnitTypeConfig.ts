@@ -16,7 +16,7 @@ export class BunkerUnitTypeConfig {
 
     public isMoveable: boolean = false;
     public doTweaking: boolean = true;
-    public stopDelay: number = 7;
+    public stopDelay: number = 20;
 
     public getPositionFor(index: number) {
         return this.offsetPositions[index] || this.defaultPosition;

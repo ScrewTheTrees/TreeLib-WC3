@@ -15,7 +15,7 @@ export class InputManager {
      * @param metaKeys Optional MetaKeys like having to hold shift or ctrl, by default its [MetaKeys.ALL] which works for any key combination.
      */
     public static addKeyboardPressCallback(key: oskeytype, callback: (this: void, key: KeyCallback) => void, metaKeys?: MetaKey[]) {
-        return InputManagerKeyboardHandler.addKeyboardPressCallback(key, callback, metaKeys);
+        return InputManagerKeyboardHandler.getInstance().addKeyboardPressCallback(key, callback, metaKeys);
     }
 
     /**
@@ -25,7 +25,7 @@ export class InputManager {
      * @param metaKeys Optional MetaKeys like having to hold shift or ctrl, by default its [MetaKeys.ALL] which works for any key combination.
      */
     public static addKeyboardReleaseCallback(key: oskeytype, callback: (this: void, key: KeyCallback) => void, metaKeys?: MetaKey[]) {
-        return InputManagerKeyboardHandler.addKeyboardReleaseCallback(key, callback, metaKeys);
+        return InputManagerKeyboardHandler.getInstance().addKeyboardReleaseCallback(key, callback, metaKeys);
     }
 
     /**
@@ -33,14 +33,14 @@ export class InputManager {
      * @param keyCallback the callback to remove
      */
     public static removeKeyCallback(keyCallback: KeyCallback) {
-        return InputManagerKeyboardHandler.removeKeyCallback(keyCallback);
+        return InputManagerKeyboardHandler.getInstance().removeKeyCallback(keyCallback);
     }
 
     /**
      * Used internally for fetching data related to keyboard buttons.
      */
     public static getKeyContainer(key: oskeytype) {
-        return InputManagerKeyboardHandler.getKeyContainer(key);
+        return InputManagerKeyboardHandler.getInstance().getKeyContainer(key);
     }
 
     /**
@@ -49,7 +49,7 @@ export class InputManager {
      * @param triggeringPlayer the player holding the key.
      */
     public static isKeyButtonHeld(key: oskeytype, triggeringPlayer: player) {
-        return InputManagerKeyboardHandler.isKeyButtonHeld(key, triggeringPlayer);
+        return InputManagerKeyboardHandler.getInstance().isKeyButtonHeld(key, triggeringPlayer);
     }
 
     // MOUSE
@@ -59,7 +59,7 @@ export class InputManager {
      * @param callback the function to call when button is pressed.
      */
     public static addMousePressCallback(button: mousebuttontype, callback: (this: any, key: MouseCallback) => void) {
-        return InputManagerMouseHandler.addMousePressCallback(button, callback);
+        return InputManagerMouseHandler.getInstance().addMousePressCallback(button, callback);
     }
 
     /**
@@ -68,7 +68,7 @@ export class InputManager {
      * @param callback the function to call when button is released.
      */
     public static addMouseReleaseCallback(button: mousebuttontype, callback: (this: any, key: MouseCallback) => void) {
-        return InputManagerMouseHandler.addMouseReleaseCallback(button, callback);
+        return InputManagerMouseHandler.getInstance().addMouseReleaseCallback(button, callback);
     }
 
 
@@ -77,14 +77,14 @@ export class InputManager {
      * @param mouseCallback the callback to remove
      */
     public static removeMouseCallback(mouseCallback: MouseCallback) {
-        return InputManagerMouseHandler.removeMouseCallback(mouseCallback);
+        return InputManagerMouseHandler.getInstance().removeMouseCallback(mouseCallback);
     }
 
     /**
      * Used internally for fetching data related to mouse buttons.
      */
     public static getMouseContainer(button: mousebuttontype) {
-        return InputManagerMouseHandler.getMouseContainer(button);
+        return InputManagerMouseHandler.getInstance().getMouseContainer(button);
     }
 
     /**
@@ -92,7 +92,7 @@ export class InputManager {
      * @param button the button
      */
     public static isMouseButtonHeld(button: mousebuttontype) {
-        return InputManagerMouseHandler.isMouseButtonHeld(button);
+        return InputManagerMouseHandler.getInstance().isMouseButtonHeld(button);
     }
 
     /**
@@ -100,7 +100,7 @@ export class InputManager {
      * @param triggeringPlayer the player to get it from.
      */
     public static getLastMousePosition(triggeringPlayer: player) {
-        return InputManagerMouseHandler.getLastMousePosition(triggeringPlayer);
+        return InputManagerMouseHandler.getInstance().getLastMousePosition(triggeringPlayer);
     }
 
     /**
@@ -108,6 +108,6 @@ export class InputManager {
      * @param triggeringPlayer the player to get it from.
      */
     public static getLastMouseCoordinate(triggeringPlayer: player) {
-        return InputManagerMouseHandler.getLastMouseCoordinate(triggeringPlayer);
+        return InputManagerMouseHandler.getInstance().getLastMouseCoordinate(triggeringPlayer);
     }
 }

@@ -1,13 +1,17 @@
-import {Hooks} from "../../Hooks";
 import {Logger} from "../../Logger";
 import {EncodingBase64} from "../../Utility/Encodings/EncodingBase64";
 import {EncodingHex} from "../../Utility/Encodings/EncodingHex";
 import {FilePromise} from "./FilePromise";
 
-Hooks.addBeforeMainHook(() => SyncSaveLoad.Init());
 export class SyncSaveLoad {
-    private constructor() {}
-    static Init() {
+    private static _instance: SyncSaveLoad;
+    public static getInstance() {
+        if (!this._instance) {
+            this._instance = new SyncSaveLoad();
+        }
+        return this._instance;
+    }
+    private constructor() {
         for (let i = 0; i < GetBJMaxPlayers(); i++) {
             BlzTriggerRegisterPlayerSyncEvent(this.syncEvent, Player(i), this.syncPrefix, false);
             BlzTriggerRegisterPlayerSyncEvent(this.syncEvent, Player(i), this.syncPrefixFinish, false);
@@ -15,13 +19,13 @@ export class SyncSaveLoad {
         TriggerAddAction(this.syncEvent, () => this.onSync());
     }
 
-    public static syncPrefix = "S_TIO";
-    public static syncPrefixFinish = "S_TIOF";
-    public static syncEvent: trigger = CreateTrigger();
-    private static allPromises: (FilePromise | undefined)[] = [];
+    public syncPrefix = "S_TIO";
+    public syncPrefixFinish = "S_TIOF";
+    public syncEvent: trigger = CreateTrigger();
+    private allPromises: (FilePromise | undefined)[] = [];
 
 
-    public static writeFile(filename: string, ...data: string[]) {
+    public writeFile(filename: string, ...data: string[]) {
         PreloadGenClear();
         PreloadGenStart();
 
@@ -52,11 +56,11 @@ export class SyncSaveLoad {
         PreloadGenEnd(filename);
     }
 
-    public static isPlayerAllowedToRead(reader: player) {
+    public isPlayerAllowedToRead(reader: player) {
         return (this.allPromises[GetPlayerId(reader)] == null);
     }
 
-    public static read(filename: string, reader: player, onFinish?: (promise: FilePromise) => void): FilePromise {
+    public read(filename: string, reader: player, onFinish?: (promise: FilePromise) => void): FilePromise {
         if (this.allPromises[GetPlayerId(reader)] == null) {
             this.allPromises[GetPlayerId(reader)] = new FilePromise(reader, onFinish);
             if (GetLocalPlayer() == reader) {
@@ -72,7 +76,7 @@ export class SyncSaveLoad {
         return <FilePromise>this.allPromises[GetPlayerId(reader)];
     }
 
-    private static onSync() {
+    private onSync() {
         xpcall(() => {
 
             const readData = BlzGetTriggerSyncData();

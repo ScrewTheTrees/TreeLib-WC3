@@ -14,9 +14,9 @@ export class QueueRespawnIntegrationTests {
     run() {
         xpcall(() => {
 
-            Delay.addDelay(() => {
+            Delay.getInstance().addDelay(() => {
                 let foot = CreateUnit(Players.RED, FourCC("hfoo"), -6000, -6000, 0);
-                let queue = ActionQueue.createUnitQueue(foot,
+                let queue = ActionQueue.getInstance().createUnitQueue(foot,
                     new UnitActionWaypoint(Vector2.new(-6000, -6000), WaypointOrders.attack),
                     new UnitActionWaypoint(Vector2.new(-5500, -6000), WaypointOrders.attack),
                     new UnitActionWaypoint(Vector2.new(-5500, -5500), WaypointOrders.attack),
@@ -25,10 +25,10 @@ export class QueueRespawnIntegrationTests {
                     new UnitActionWaitWhileDead(),
                     new UnitActionGoToAction(0)
                 );
-                let resp = Respawner.createNewUnitRespawner(foot, 5, false, undefined)
+                let resp = Respawner.getInstance().createNewUnitRespawner(foot, 5, false, undefined)
                 resp.onRespawn = (newUnit) => {
                     queue.target = newUnit.target;
-                    ActionQueue.addQueue(queue);
+                    ActionQueue.getInstance().addQueue(queue);
                 };
             }, 2.5, 4);
 

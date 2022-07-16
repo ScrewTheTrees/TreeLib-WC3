@@ -18,18 +18,6 @@ export namespace Hooks {
         Logger.LogDebug("Hooked: " + name)
     }
 
-    /**
-     * This is primarily to make sure they are included in the final build by TSTL.
-     * It will also run any static "Activate" method on it.
-     * @param actualClass
-     */
-    export function activate<T>(actualClass: { }) {
-        // @ts-ignore
-        if (actualClass.Activate) actualClass.Activate();
-        // @ts-ignore
-        if (actualClass.activate) actualClass.activate();
-    }
-
     /**  Hook a function with your own logic that will execute after the original function. */
     export function hookArguments<Args extends any[], T>(oldFunc: (...args: Args) => T, newFunc: (...args: Args) => void) {
         return (...args: Args) => {
@@ -82,30 +70,26 @@ export namespace Hooks {
 }
 
 // @ts-ignore
-_G.main = Hooks.hookArgumentsBefore(_G.main, () => xpcall(() => {
-        for (let i = 0; i < Hooks.beforeMainHooks.length; i++) {
-            Hooks.beforeMainHooks[i]();
-        }
-    }, Logger.critical)
-)
+_G.main = Hooks.hookArgumentsBefore(_G.main, () => {
+    for (let i = 0; i < Hooks.beforeMainHooks.length; i++) {
+        Hooks.beforeMainHooks[i]();
+    }
+});
 // @ts-ignore
-_G.main = Hooks.hookArguments(_G.main, () => xpcall(() => {
-        for (let i = 0; i < Hooks.afterMainHooks.length; i++) {
-            Hooks.afterMainHooks[i]();
-        }
-    }, Logger.critical)
-)
+_G.main = Hooks.hookArguments(_G.main, () => {
+    for (let i = 0; i < Hooks.afterMainHooks.length; i++) {
+        Hooks.afterMainHooks[i]();
+    }
+});
 // @ts-ignore
-_G.config = Hooks.hookArgumentsBefore(_G.config, () => xpcall(() => {
-        for (let i = 0; i < Hooks.beforeConfigHooks.length; i++) {
-            Hooks.beforeConfigHooks[i]();
-        }
-    }, Logger.critical)
-)
+_G.config = Hooks.hookArgumentsBefore(_G.config, () => {
+    for (let i = 0; i < Hooks.beforeConfigHooks.length; i++) {
+        Hooks.beforeConfigHooks[i]();
+    }
+});
 // @ts-ignore
-_G.config = Hooks.hookArguments(_G.config, () => xpcall(() => {
-        for (let i = 0; i < Hooks.afterConfigHooks.length; i++) {
-            Hooks.afterConfigHooks[i]();
-        }
-    }, Logger.critical)
-)
+_G.config = Hooks.hookArguments(_G.config, () => {
+    for (let i = 0; i < Hooks.afterConfigHooks.length; i++) {
+        Hooks.afterConfigHooks[i]();
+    }
+});

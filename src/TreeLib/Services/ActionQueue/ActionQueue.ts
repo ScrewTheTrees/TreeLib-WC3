@@ -1,4 +1,3 @@
-import {Hooks} from "../../Hooks";
 import {Entity} from "../../Entity";
 import {IQueue} from "./Queues/IQueue";
 import {UnitQueue} from "./Queues/UnitQueue";
@@ -17,22 +16,24 @@ import {UnitGroupActionWaypoint} from "./Actions/UnitGroupActionWaypoint";
 import {UnitGroupActionDelay} from "./Actions/UnitGroupActionDelay";
 import {UnitGroupActionGoToAction} from "./Actions/UnitGroupActionGoToAction";
 
-Hooks.addBeforeMainHook(() => ActionQueue.Init());
 /**
  * ActionQueue is a system that allows you to create waypoints and a string of orders, like if a player would
  * hold shift and click in the game, not only that but it allows for special actions like killing and removing the unit too.
  * Also some logic stuff like GoTo action to go to another part of the queue, setting to 0 resets the queue.
  */
 export class ActionQueue extends Entity {
-    private static instance: ActionQueue;
+    private static _instance: ActionQueue;
+    public static getInstance() {
+        if (!this._instance) {
+            this._instance = new ActionQueue();
+        }
+        return this._instance;
+    }
     private constructor() {
         super(1);
     }
-    static Init() {
-        this.instance = new ActionQueue();
-    }
 
-    private static allQueues: IQueue[] = [];
+    private allQueues: IQueue[] = [];
 
 
     /**
@@ -40,7 +41,7 @@ export class ActionQueue extends Entity {
      * @param target The unit that should be handled.
      * @param actions Initial actions, more can be added with a function in the returned object.
      */
-    public static createUnitQueue(target: unit, ...actions: IUnitAction[]): UnitQueue {
+    public createUnitQueue(target: unit, ...actions: IUnitAction[]): UnitQueue {
         let unitQueue = new UnitQueue(target, ...actions);
         this.addQueue(unitQueue);
         Logger.verbose("Created UnitQueue, total: ", this.allQueues.length);
@@ -48,7 +49,7 @@ export class ActionQueue extends Entity {
     }
 
 
-    public static createUnitGroupQueue(targets: unit[], ...actions: IUnitGroupAction[]): UnitGroupQueue {
+    public createUnitGroupQueue(targets: unit[], ...actions: IUnitGroupAction[]): UnitGroupQueue {
         let unitQueue = new UnitGroupQueue(targets, ...actions);
         this.addQueue(unitQueue);
         Logger.verbose("Created UnitQueue, total: ", this.allQueues.length);
@@ -60,7 +61,7 @@ export class ActionQueue extends Entity {
      * Wont add a queue already present.
      * @param queue the queue to enable,
      */
-    public static addQueue(queue: IQueue) {
+    public addQueue(queue: IQueue) {
         if (Quick.Contains(this.allQueues, queue)) {
             Logger.LogVerbose("Queue is missing, adding");
             Quick.Push(this.allQueues, queue);
@@ -74,7 +75,7 @@ export class ActionQueue extends Entity {
      * Great if a queue has lost its purpose or needs replacing.
      * @param queue the queue to disable,
      */
-    public static disableQueue(queue: IQueue) {
+    public disableQueue(queue: IQueue) {
         let index = this.allQueues.indexOf(queue);
         queue.isFinished = true;
         if (index >= 0) {
@@ -86,10 +87,10 @@ export class ActionQueue extends Entity {
     }
 
     step(): void {
-        for (let i = 0; i < ActionQueue.allQueues.length; i++) {
-            let queue = ActionQueue.allQueues[i];
+        for (let i = 0; i < this.allQueues.length; i++) {
+            let queue = this.allQueues[i];
             if (queue.isFinished) {
-                Quick.Slice(ActionQueue.allQueues, i);
+                Quick.Slice(this.allQueues, i);
                 i -= 1;
             }
         }
@@ -106,7 +107,7 @@ export class ActionQueue extends Entity {
      * @param delay The delay on each edge, no delay by default
      */
     public static createSimplePatrol(target: unit, point1: Vector2, point2: Vector2, delay: number = 0) {
-        return this.createUnitQueue(target,
+        return this.getInstance().createUnitQueue(target,
             new UnitActionWaypoint(point1, WaypointOrders.attack),
             new UnitActionDelay(delay),
             new UnitActionWaypoint(point2, WaypointOrders.attack),
@@ -122,7 +123,7 @@ export class ActionQueue extends Entity {
      * @param delay the delay when the unit is ordered back... dont put it too low.
      */
     public static createSimpleGuardPoint(target: unit, point: Vector2, delay: number = 15) {
-        return this.createUnitQueue(target,
+        return this.getInstance().createUnitQueue(target,
             new UnitActionWaypoint(point, WaypointOrders.attack),
             new UnitActionDelay(delay),
             new UnitActionWaitWhileDead(),
@@ -136,7 +137,7 @@ export class ActionQueue extends Entity {
      * @param delay the delay when the unit is ordered back... dont put it too low.
      */
     public static createGroupGuardPoint(targets: unit[], point: Vector2, delay: number = 15) {
-        return this.createUnitGroupQueue(targets,
+        return this.getInstance().createUnitGroupQueue(targets,
             new UnitGroupActionWaypoint(point, WaypointOrders.attack),
             new UnitGroupActionDelay(delay),
             new UnitGroupActionGoToAction(0));

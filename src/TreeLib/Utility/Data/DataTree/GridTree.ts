@@ -140,7 +140,8 @@ export class GridTree<T> {
                 else finalRound = true;
             }
         }
-        for (let value of checkArr) {
+        for (let i = 0; i < checkArr.length; i++) {
+            let value = checkArr[i];
             let pos = this.positionEvaluation.evaluate(value);
             let dist = pos.distanceToSquared(center);
             if (dist <= targetDist) {
@@ -152,7 +153,8 @@ export class GridTree<T> {
     }
 
     public IfFilterDoPush(sourceArr: T[], targetArr: T[], filter?: DataTreeFilter<T>) {
-        for (let e of sourceArr) {
+        for (let i = 0; i < sourceArr.length; i++) {
+            let e = sourceArr[i];
             if (!filter || filter.evaluate(e)) {
                 Quick.Push(targetArr, e);
             }

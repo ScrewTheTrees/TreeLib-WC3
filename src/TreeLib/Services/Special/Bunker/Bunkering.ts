@@ -1,4 +1,3 @@
-import {Hooks} from "../../../Hooks";
 import {Entity} from "../../../Entity";
 import {TriggerAddXPAction} from "../../../Misc";
 import {Orders} from "../../../Structs/Orders";
@@ -9,20 +8,16 @@ import {BunkerUnitTypeConfig} from "./BunkerUnitTypeConfig";
 import {BunkerUnitContainer} from "./BunkerUnitContainer";
 import {Vector2} from "../../../Utility/Data/Vector2";
 
-
-Hooks.addBeforeMainHook(() => Bunkering.Init());
-
 export class Bunkering extends Entity {
-    private static instance: Bunkering;
+    private static _instance: Bunkering;
+    public static getInstance() {
+        if (!this._instance) {
+            this._instance = new Bunkering();
+        }
+        return this._instance;
+    }
     private constructor() {
         super(0.01);
-    }
-    public static deathTrigger: UnitEventTracker;
-    public static removeTrigger: UnitEventTracker;
-
-    static Init() {
-        this.instance = new Bunkering();
-
         this.deathTrigger = UnitEventTracker.registerAction(UnitEventTypes.KILLED, (dead) => {
             this.removeUnitFromBunker(dead);
         });
@@ -55,12 +50,14 @@ export class Bunkering extends Entity {
             }
         );
     }
+    public deathTrigger: UnitEventTracker;
+    public removeTrigger: UnitEventTracker;
 
-    public static allBunkerConfigs: Map<number, BunkerUnitTypeConfig> = new Map();
-    public static allBunkers: Map<unit, BunkerUnitContainer> = new Map();
-    public static allBunkeredUnits: unit[] = [];
+    public allBunkerConfigs: Map<number, BunkerUnitTypeConfig> = new Map();
+    public allBunkers: Map<unit, BunkerUnitContainer> = new Map();
+    public allBunkeredUnits: unit[] = [];
 
-    public static addUnitToBunker(soldier: unit, bunkerUnit: unit) {
+    public addUnitToBunker(soldier: unit, bunkerUnit: unit) {
         let bunkerUnitTypeConfig = this.allBunkerConfigs.get(GetUnitTypeId(bunkerUnit));
         if (bunkerUnitTypeConfig == null) return;
 
@@ -73,7 +70,7 @@ export class Bunkering extends Entity {
         Quick.Push(this.allBunkeredUnits, soldier);
     }
 
-    public static removeAllUnitsFromBunker(bunkerUnit: unit) {
+    public removeAllUnitsFromBunker(bunkerUnit: unit) {
         let bunker = this.allBunkers.get(bunkerUnit);
         if (bunker != null) {
             for (let i = bunker.bunkeredUnits.length - 1; i >= 0; i--) {
@@ -82,13 +79,13 @@ export class Bunkering extends Entity {
         }
     }
 
-    public static addBunkerConfig(config: BunkerUnitTypeConfig) {
+    public addBunkerConfig(config: BunkerUnitTypeConfig) {
         for (let type of config.unitTypes) {
             this.allBunkerConfigs.set(type, config);
         }
     }
 
-    public static removeUnitFromBunker(soldier: unit, bunkerUnit?: unit) {
+    public removeUnitFromBunker(soldier: unit, bunkerUnit?: unit) {
         if (!Quick.Contains(this.allBunkeredUnits, soldier)) return;
 
         if (!bunkerUnit) {
@@ -112,10 +109,10 @@ export class Bunkering extends Entity {
 
     }
 
-    private static checkPoint: Vector2 = Vector2.new(0, 0);
+    private checkPoint: Vector2 = Vector2.new(0, 0);
     step(): void {
-        let point = Bunkering.checkPoint;
-        for (let bunker of Bunkering.allBunkers.values()) {
+        let point = this.checkPoint;
+        for (let bunker of this.allBunkers.values()) {
             bunker.currentStopDelayTimer += this.timerDelay;
             if (bunker.currentStopDelayTimer >= bunker.typeConfig.stopDelay) {
                 for (let u of bunker.bunkeredMapping.values()) {

@@ -25,5 +25,27 @@ export namespace TreeMath {
     export function RandPercent() {
         return GetRandomReal(0, 1);
     }
+
+    /**
+     * Returns a value between -180 and 180.
+     */
+    export function GetDegreeDifference(angle1: number, angle2: number) {
+        angle1 = angle1 % 360;
+        angle2 = angle2 % 360;
+        let diff = angle1 - angle2;
+        if (diff < -180) { //If angle1=10 and angle2=350, convert to "20".
+            diff += 360;
+        } else if (diff > 180) { //If angle1=350 and angle2=10, convert to "-20".
+            diff -= 360;
+        }
+        return diff;
+    }
+
+    /**
+     * Returns a value between 0 and 180.
+     */
+    export function GetDegreeDifferenceAbs(angle1: number, angle2: number) {
+        return math.abs(GetDegreeDifference(angle1, angle2));
+    }
 }
 

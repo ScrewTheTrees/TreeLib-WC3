@@ -11,6 +11,15 @@ export namespace Quick {
         arr.pop();
     }
 
+    export function SliceOrdered<T>(arr: T[], index: number) {
+        let result = arr[index];
+        for (let i = index; i < arr.length - 1; i++) {
+            arr[i] = arr[i+1];
+        }
+        arr.pop();
+        return result;
+    }
+
     export function Remove<T>(arr: T[], value: T) {
         let index = arr.indexOf(value);
         if (index >= 0) {

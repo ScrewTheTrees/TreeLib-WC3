@@ -67,7 +67,7 @@ export class Pathfinder<T extends Node = Node> {
         Quick.Push(nodesInOrder, endNode);
 
         //Logic
-        startNode.setCameFrom(pathFindIndex, null, this.distanceBetweenNodes(startNode, endNode) * startNode.cost);
+        startNode.setCameFrom(pathFindIndex, null, this.distanceBetweenNodes(startNode, endNode, pathFindIndex) * startNode.cost);
         frontier.insertWithPriority(startNode, startNode.getCostSoFar(pathFindIndex) + startNode.cost);
 
         let finalNode: T = startNode;
@@ -96,7 +96,7 @@ export class Pathfinder<T extends Node = Node> {
                             target.setCameFrom(pathFindIndex, current, this.getNodePriority(pathFindIndex, current, target));
                         }
 
-                        let dist = this.distanceBetweenNodes(target, endNode) * target.cost;
+                        let dist = this.distanceBetweenNodes(target, endNode, pathFindIndex) * target.cost;
                         frontier.insertWithPriority(target, current.getCostSoFar(pathFindIndex) + dist);
 
                         if (dist < finalDist) {
@@ -156,7 +156,7 @@ export class Pathfinder<T extends Node = Node> {
         let points: T[] = overrideReturnArray || [];
         for (let i = compileNodes.length - 1; i >= 0; i--) {
             let node = compileNodes[i];
-            points.push(node);
+            Quick.Push(points, node);
         }
 
         // print(os.clock(), "Done?", points.length, " - Index:", pathFindIndex);
@@ -178,7 +178,7 @@ export class Pathfinder<T extends Node = Node> {
     }
 
     public getNodePriority(pathFindIndex: number, current: T, target: T) {
-        return current.getCostSoFar(pathFindIndex) + (this.distanceBetweenNodes(current, target) * target.cost);
+        return current.getCostSoFar(pathFindIndex) + (this.distanceBetweenNodes(current, target, pathFindIndex) * target.cost);
     }
 
     public isNodeBadCompared(pathFindIndex: number, current: T, target: T): boolean {
@@ -190,9 +190,9 @@ export class Pathfinder<T extends Node = Node> {
         return false;
     }
 
-    public distanceBetweenNodes(current: T, target: T): number {
-        let dist = math.abs(current.point.distanceTo(target.point));
-        return dist >= 1 ? dist : 0;
+    public distanceBetweenNodes(current: T, target: T, pathFindIndex: number): number {
+        let dist = current.distanceToPreviousNodeWithIndex(target, pathFindIndex);
+        return dist >= 1 ? dist : 1;
     }
 
     public addNodeWithNeighborsInRange(node: T, distance: number): T {

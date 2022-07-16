@@ -32,11 +32,11 @@ export class QueueTests {
                 new UnitGroupActionGoToAction(0),
             );
 
-            ActionQueue.addQueue(walkAround);
+            ActionQueue.getInstance().addQueue(walkAround);
 
-            Delay.addDelay(() => {
+            Delay.getInstance().addDelay(() => {
                 let mortar = CreateUnit(Players.RED, FourCC("hmtm"), -1400, -3000, 0);
-                ActionQueue.createUnitQueue(mortar,
+                ActionQueue.getInstance().createUnitQueue(mortar,
                     new UnitActionWaypoint(Vector2.new(870, -3064)),
                     new UnitActionWaypoint(Vector2.new(870, -1450), WaypointOrders.smart),
                     new UnitActionImmediate(Vector2.new(870, -1450), ImmediateOrders.holdPosition),

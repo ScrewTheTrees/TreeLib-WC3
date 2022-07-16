@@ -52,11 +52,20 @@ export abstract class DynamicEntity {
     //Logic to execute when the logic beat hits.
     abstract step(): void;
 
-    /** Purges the Entity from the timer system, thus making it no longer run "step()", and also allows it
-     * to properly garbage collect.
+    /** Purges the Entity from the timer system, thus making it no longer run "step()".
      **/
     public remove() {
         this.removeTimer();
+    }
+    /**
+     * Full purge, cleans up the entire thing.
+     */
+    public destroy() {
+        this.remove();
+        // @ts-ignore
+        this.timerLoop = undefined;
+        // @ts-ignore
+        this.timerLoopYield = undefined;
     }
     public add() {
         this.resetTimer();

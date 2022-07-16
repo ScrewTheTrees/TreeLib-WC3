@@ -4,20 +4,23 @@ import {PressType} from "./PressType";
 import {KeyCallback} from "./KeyCallback";
 import {Logger} from "../../Logger";
 import {Quick} from "../../Quick";
-import {Hooks} from "../../Hooks";
-
-
-Hooks.addBeforeMainHook(() => InputManagerKeyboardHandler.Init());
 
 export class InputManagerKeyboardHandler {
-    public static Init() {
+    private static _instance: InputManagerKeyboardHandler;
+    public static getInstance() {
+        if (!this._instance) {
+            this._instance = new InputManagerKeyboardHandler();
+        }
+        return this._instance;
+    }
+    private constructor() {
         TriggerAddAction(this.keyInputTrigger, () => this.onKeyAction());
     }
 
-    public static keyInputTrigger: trigger = CreateTrigger();
-    public static registeredKeys: KeyInputContainer[] = [];
+    public keyInputTrigger: trigger = CreateTrigger();
+    public registeredKeys: KeyInputContainer[] = [];
 
-    private static onKeyAction() {
+    private onKeyAction() {
         let key = BlzGetTriggerPlayerKey();
         let metaKey = BlzGetTriggerPlayerMetaKey();
         let isDown = BlzGetTriggerPlayerIsKeyDown();
@@ -40,7 +43,7 @@ export class InputManagerKeyboardHandler {
         }
     }
 
-    public static registerNewKeyEvent(key: oskeytype) {
+    public registerNewKeyEvent(key: oskeytype) {
         for (let i = 0; i < PLAYER_NEUTRAL_AGGRESSIVE; i++) {
             for (let meta = 0; meta <= MetaKeysMax; meta++) {
                 BlzTriggerRegisterPlayerKeyEvent(this.keyInputTrigger, Player(i), key, meta, true);
@@ -49,14 +52,14 @@ export class InputManagerKeyboardHandler {
         }
     }
 
-    public static removeKeyCallback(keyCallback: KeyCallback) {
+    public removeKeyCallback(keyCallback: KeyCallback) {
         let container = this.getKeyContainer(keyCallback.key);
         if (container.callbacks.indexOf(keyCallback) >= 0) {
             Quick.Slice(container.callbacks, container.callbacks.indexOf(keyCallback));
         }
     }
 
-    public static getKeyContainer(key: oskeytype) {
+    public getKeyContainer(key: oskeytype) {
         let handleId = GetHandleId(key);
         if (this.registeredKeys[handleId] == null) {
             let newKey = new KeyInputContainer(key);
@@ -68,21 +71,21 @@ export class InputManagerKeyboardHandler {
         }
     }
 
-    public static addKeyboardPressCallback(key: oskeytype, callback: (this: void, key: KeyCallback) => void, metaKeys?: MetaKey[]) {
+    public addKeyboardPressCallback(key: oskeytype, callback: (this: void, key: KeyCallback) => void, metaKeys?: MetaKey[]) {
         let container = this.getKeyContainer(key);
         let input = new KeyCallback(key, callback, PressType.PRESS, metaKeys);
         container.callbacks.push(input);
         return input;
     }
 
-    public static addKeyboardReleaseCallback(key: oskeytype, callback: (this: void, key: KeyCallback) => void, metaKeys?: MetaKey[]) {
+    public addKeyboardReleaseCallback(key: oskeytype, callback: (this: void, key: KeyCallback) => void, metaKeys?: MetaKey[]) {
         let container = this.getKeyContainer(key);
         let input = new KeyCallback(key, callback, PressType.RELEASE, metaKeys);
         container.callbacks.push(input);
         return input;
     }
 
-    public static isKeyButtonHeld(key: oskeytype, triggeringPlayer: player) {
+    public isKeyButtonHeld(key: oskeytype, triggeringPlayer: player) {
         return this.getKeyContainer(key).isDown(GetPlayerId(triggeringPlayer));
     }
 }

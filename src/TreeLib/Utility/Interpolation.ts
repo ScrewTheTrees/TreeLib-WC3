@@ -16,13 +16,17 @@ export namespace Interpolation {
         return a * (1 - f) + b * f;
     }
 
-    export function Lerp(start: number, end: number, maxStep: number = 1) {
+    export function ShoddyLinearInterpolation(start: number, end: number, maxStep: number = 1) {
         let diff = start - end;
         if (diff < 0) {
             return start + (math.max(maxStep, diff));
         } else {
             return start + (math.min(-maxStep, diff));
         }
+    }
+
+    export function Lerp(start: number, end: number, value: number) {
+        return start * (1 - value) + end * value;
     }
 
     export function DivisionSpring(start: number, end: number, divider: number, minimumStep: number = 1) {

@@ -1,11 +1,3 @@
-# 3.0 Warning
-3.0 is now a static API. This means .getInstance() is no longer needed for access to services.
-3.0 also moves a lot of APIs around inside the folders which may require fixing a bunch of paths.
-
-If you are not ready to spend some time upgrading, staying on 2.x is totally fine. 
-It just wont recieve any new API or updates.
-
-
 # TreeLib
 
 Treelib is a library of typescript made for Warcraft 3 v1.32+.

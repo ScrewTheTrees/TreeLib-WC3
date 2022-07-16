@@ -51,8 +51,8 @@ export class BunkeringTests {
             ])
             .setUnitFilter((filterUnit => !IsUnitType(filterUnit, UNIT_TYPE_HERO)));
 
-        Bunkering.addBunkerConfig(bunkerUnitTypeConfig);
-        Bunkering.addBunkerConfig(bunkerUnitTypeConfig2);
-        Bunkering.addBunkerConfig(bunkerUnitTypeConfig3);
+        Bunkering.getInstance().addBunkerConfig(bunkerUnitTypeConfig);
+        Bunkering.getInstance().addBunkerConfig(bunkerUnitTypeConfig2);
+        Bunkering.getInstance().addBunkerConfig(bunkerUnitTypeConfig3);
     }
 }
