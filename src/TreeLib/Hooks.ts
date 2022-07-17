@@ -22,9 +22,7 @@ export namespace Hooks {
     export function hookArguments<Args extends any[], T>(oldFunc: (...args: Args) => T, newFunc: (...args: Args) => void) {
         return (...args: Args) => {
             let val = oldFunc(...args);
-            xpcall(() => {
-                newFunc(...args);
-            }, Logger.critical)
+            newFunc(...args);
             return val;
         };
     }
@@ -32,9 +30,7 @@ export namespace Hooks {
     /**  Hook a function with your own logic that will execute before the original function. */
     export function hookArgumentsBefore<Args extends any[], T>(oldFunc: (...args: Args) => T, newFunc: (...args: Args) => void) {
         return (...args: Args) => {
-            xpcall(() => {
-                newFunc(...args);
-            }, Logger.critical)
+            newFunc(...args);
             return oldFunc(...args);
         };
     }
@@ -43,53 +39,8 @@ export namespace Hooks {
     export function hookResult<Args extends any[], T>(hookFunc: (...args: Args) => T, passFunc: (value: T) => void) {
         return (...args: Args) => {
             let value = hookFunc(...args);
-            xpcall(() => {
-                passFunc(value);
-            }, Logger.critical)
+            passFunc(value);
             return value;
         }
     }
-
-    export const beforeMainHooks: ((this: any) => void)[] = [];
-    export function addBeforeMainHook(hookFunc: (this: any) => void) {
-        beforeMainHooks.push(hookFunc);
-    }
-    export const afterMainHooks: (() => void)[] = [];
-    export function addAfterMainHook(hookFunc: (this: any) => void) {
-        afterMainHooks.push(hookFunc);
-    }
-
-    export const beforeConfigHooks: (() => void)[] = [];
-    export function addBeforeConfigHook(hookFunc: (this: any) => void) {
-        beforeConfigHooks.push(hookFunc);
-    }
-    export const afterConfigHooks: (() => void)[] = [];
-    export function addAfterConfigHook(hookFunc: (this: any) => void) {
-        afterConfigHooks.push(hookFunc);
-    }
 }
-
-// @ts-ignore
-_G.main = Hooks.hookArgumentsBefore(_G.main, () => {
-    for (let i = 0; i < Hooks.beforeMainHooks.length; i++) {
-        Hooks.beforeMainHooks[i]();
-    }
-});
-// @ts-ignore
-_G.main = Hooks.hookArguments(_G.main, () => {
-    for (let i = 0; i < Hooks.afterMainHooks.length; i++) {
-        Hooks.afterMainHooks[i]();
-    }
-});
-// @ts-ignore
-_G.config = Hooks.hookArgumentsBefore(_G.config, () => {
-    for (let i = 0; i < Hooks.beforeConfigHooks.length; i++) {
-        Hooks.beforeConfigHooks[i]();
-    }
-});
-// @ts-ignore
-_G.config = Hooks.hookArguments(_G.config, () => {
-    for (let i = 0; i < Hooks.afterConfigHooks.length; i++) {
-        Hooks.afterConfigHooks[i]();
-    }
-});

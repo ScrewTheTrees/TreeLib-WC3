@@ -1,5 +1,4 @@
 import {Entity} from "../../../Entity";
-import {TriggerAddXPAction} from "../../../Misc";
 import {Orders} from "../../../Structs/Orders";
 import {UnitEventTracker} from "../../UnitEventTracker/UnitEventTracker";
 import {UnitEventTypes} from "../../UnitEventTracker/UnitEventTypes";
@@ -7,6 +6,8 @@ import {Quick} from "../../../Quick";
 import {BunkerUnitTypeConfig} from "./BunkerUnitTypeConfig";
 import {BunkerUnitContainer} from "./BunkerUnitContainer";
 import {Vector2} from "../../../Utility/Data/Vector2";
+import {UnitEventContainer} from "../../UnitEventTracker/UnitEventContainer";
+
 
 export class Bunkering extends Entity {
     private static _instance: Bunkering;
@@ -18,10 +19,10 @@ export class Bunkering extends Entity {
     }
     private constructor() {
         super(0.01);
-        this.deathTrigger = UnitEventTracker.registerAction(UnitEventTypes.KILLED, (dead) => {
+        this.deathTrigger = UnitEventTracker.getInstance().registerAction(UnitEventTypes.KILLED, (dead) => {
             this.removeUnitFromBunker(dead);
         });
-        this.removeTrigger = UnitEventTracker.registerAction(UnitEventTypes.REMOVED, (removed) => {
+        this.removeTrigger = UnitEventTracker.getInstance().registerAction(UnitEventTypes.REMOVED, (removed) => {
             this.removeUnitFromBunker(removed);
         });
 
@@ -29,29 +30,29 @@ export class Bunkering extends Entity {
         TriggerRegisterAnyUnitEventBJ(test, EVENT_PLAYER_UNIT_ISSUED_ORDER);
         TriggerRegisterAnyUnitEventBJ(test, EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER);
         TriggerRegisterAnyUnitEventBJ(test, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER);
-        TriggerAddXPAction(test, () => {
+        TriggerAddAction(test, () => {
                 if (GetIssuedOrderId() == Orders.unloadallinstant) {
-                    this.removeAllUnitsFromBunker(GetTriggerUnit());
+                    this.removeAllUnitsFromBunker(GetOrderedUnit());
                 }
 
                 if (GetIssuedOrderId() == Orders.stop
                     || GetIssuedOrderId() == Orders.attack
                     || GetIssuedOrderId() == Orders.smart
                 ) {
-                    this.removeUnitFromBunker(GetTriggerUnit());
+                    this.removeUnitFromBunker(GetOrderedUnit());
                 }
             }
         );
 
         let test2 = CreateTrigger();
         TriggerRegisterAnyUnitEventBJ(test2, EVENT_PLAYER_UNIT_LOADED);
-        TriggerAddXPAction(test2, () => {
+        TriggerAddAction(test2, () => {
                 this.addUnitToBunker(GetLoadedUnit(), GetTransportUnit());
             }
         );
     }
-    public deathTrigger: UnitEventTracker;
-    public removeTrigger: UnitEventTracker;
+    public deathTrigger: UnitEventContainer;
+    public removeTrigger: UnitEventContainer;
 
     public allBunkerConfigs: Map<number, BunkerUnitTypeConfig> = new Map();
     public allBunkers: Map<unit, BunkerUnitContainer> = new Map();

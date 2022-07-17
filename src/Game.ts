@@ -7,7 +7,6 @@ import {RespawnTests} from "./tests/RespawnTests";
 import {QueueRespawnIntegrationTests} from "./tests/QueueRespawnIntegrationTests";
 import {InputManagerTest} from "./tests/InputManagerTest";
 import {UnitEventTracker} from "./TreeLib/Services/UnitEventTracker/UnitEventTracker";
-import {UnitEventTypes} from "./TreeLib/Services/UnitEventTracker/UnitEventTypes";
 import {EntityTests} from "./tests/EntityTests";
 import {Cube} from "./TreeLib/Utility/Data/Cube";
 import {Vector2} from "./TreeLib/Utility/Data/Vector2";
@@ -32,8 +31,7 @@ export class Game {
             new BunkeringTests().run();
 
             PathfindingTests.getInstance();
-            UnitEventTracker.registerAction(UnitEventTypes.CREATED_ANY, (u) => {
-            });
+            UnitEventTracker.getInstance();
 
             Vector2.new(0, 0);
             Vector3.new(0, 0, 0);
