@@ -25,9 +25,21 @@ export class Logger {
         }
     }
 
+    public static LogVerboseSolo(params: any) {
+        if (Logger.doLogVerbose) {
+            print(RGB.textStringSolo(Logger.COLOR_VERBOSE, "Debug: " + params));
+        }
+    }
+
     public static LogDebug(...params: any[]) {
         if (Logger.doLogDebug) {
             print(RGB.textString(Logger.COLOR_DEBUG, "Debug: ", ...params));
+        }
+    }
+
+    public static LogDebugSolo(params: any) {
+        if (Logger.doLogDebug) {
+            print(RGB.textStringSolo(Logger.COLOR_DEBUG, "Debug: " + params));
         }
     }
 
@@ -37,26 +49,48 @@ export class Logger {
         }
     }
 
+    public static LogWarningSolo(params: any) {
+        if (Logger.doLogWarning) {
+            print(RGB.textStringSolo(Logger.COLOR_WARNING, "Warning: " + params));
+        }
+    }
+
     public static LogCritical(...params: any[]) {
         if (Logger.doLogCritical) {
             print(RGB.textString(Logger.COLOR_CRITICAL, "Critical: ", ...params));
         }
     }
 
-    //Quickies since the above functions are a bit too overly explanatory.
+    public static LogCriticalSolo(param: any) {
+        if (Logger.doLogCritical) {
+            print(RGB.textStringSolo(Logger.COLOR_CRITICAL, "Critical: " + param));
+        }
+    }
+
+    /**
+     * @deprecated  use LogVerbose or LogVerboseSolo instead.
+     */
     public static verbose(...args: any[]) {
         Logger.LogVerbose(...args);
     }
 
-    //debug seems to be a reserved codeword, so we are using generic instead
+    /**
+     * @deprecated  use LogDebug or LogDebugSolo instead.
+     */
     public static generic(...args: any[]) {
         Logger.LogDebug(...args);
     }
 
+    /**
+     * @deprecated  use LogWarning or LogWarningSolo instead.
+     */
     public static warning(...args: any[]) {
         Logger.LogWarning(...args);
     }
 
+    /**
+     * @deprecated  use LogCritical or LogCriticalSolo instead.
+     */
     public static critical(...args: any[]) {
         Logger.LogCritical(...args);
     }

@@ -31,9 +31,9 @@ export class Players {
     public static get NEUTRAL_VICTIM() {return Player(GetBJPlayerNeutralVictim())};
     public static get NEUTRAL_EXTRA() {return Player(GetBJPlayerNeutralExtra())};
 
-    private static _idList: player[] = [];
+    private static _idList: player[];
     public static get idList() {
-        if (this._idList) return this._idList;
+        if (this._idList != undefined) return this._idList;
         this._idList = [];
         for (let i = 0; i < Players.MaxPlayers; i++) {
             Quick.Push(this._idList, Player(i));

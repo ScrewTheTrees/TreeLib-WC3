@@ -102,7 +102,7 @@ export class PriorityBucket<T extends Object> implements IRecyclable {
     }
 }
 
-export class PriorityQueue<T> {
+export class PriorityQueue<T extends Object> {
     public entries: PriorityBucket<T>[] = [];
     public bucketSize: number;
 

@@ -43,6 +43,13 @@ export class DamageDetectionSystem {
      * While some parts are unsolveable, i will work on something to allow execution of code after all the DDS passes.
      */
     public allowRecursiveDDS = false;
+
+    /**
+     * Manual Override to prevent events from firing while this is set to true.
+     */
+    public suspendEvents = false;
+
+
     private locked = false;
 
     private isLocked() {
@@ -61,11 +68,13 @@ export class DamageDetectionSystem {
     }
 
     private onBeforeHit() {
+        if (this.suspendEvents) return;
         this.onHitExecute(this.beforeHitCallbacks);
         this.locked = false;
     }
 
     private onAfterHit() {
+        if (this.suspendEvents) return;
         this.onHitExecute(this.afterHitCallbacks);
         this.locked = false;
     }

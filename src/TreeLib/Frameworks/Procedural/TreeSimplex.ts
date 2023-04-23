@@ -8,6 +8,7 @@ export class TreeSimplex {
     private static STRETCH_CONSTANT_2D = -0.211324;
     private static SQUISH_CONSTANT_2D = 0.366025;
     private static NORM_CONSTANT_2D = 47;
+    private static NORM_CONSTANT_01 = 1.4144; //To get it to -0.9999 - 0.9999
 
     private readonly perm: number[];
 
@@ -18,8 +19,35 @@ export class TreeSimplex {
         }
     }
 
+
+
     /**
-     * Gets data at a point, simplex 2d range is ±0.707 and not ±1
+     * Gets a 0 - 0.9999... Abs valley as defined by "ridged multifractal noise"
+     * @param x
+     * @param y
+     */
+    public getRidgedValue(x: number, y: number) {
+        return math.abs(this.getNormalisedValue(x, y));
+    }
+    /**
+     * Gets a 0 - 0.9999... value.
+     * @param x
+     * @param y
+     */
+    public getFactorValue(x: number, y: number) {
+        return (this.getNormalisedValue(x, y) + 1) * 0.5;
+    }
+    /**
+     * Gets a ±0.9999... value.
+     * @param x
+     * @param y
+     */
+    public getNormalisedValue(x: number, y: number) {
+        return this.getValueAt(x, y) * TreeSimplex.NORM_CONSTANT_01;
+    }
+
+    /**
+     * Gets data at a point, simplex 2d range is ±0.707 and not ±0.9999...
      * @param point point of impact.
      */
     public getValueAtPoint(point: Vector2) {

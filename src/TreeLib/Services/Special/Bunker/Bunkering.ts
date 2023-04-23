@@ -122,7 +122,8 @@ export class Bunkering extends Entity {
                 bunker.currentStopDelayTimer = 0;
             }
 
-            for (let u of bunker.bunkeredUnits) {
+            for (let i = 0; i < bunker.bunkeredUnits.length; i++){
+                let u = bunker.bunkeredUnits[i];
                 if (bunker.typeConfig.isMoveable) {
                     let toUpdate = bunker.bunkeredMapping.get(u);
                     if (!toUpdate) continue;

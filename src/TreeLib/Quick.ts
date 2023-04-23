@@ -113,4 +113,11 @@ export namespace Quick {
         }
         return units;
     }
+
+    export function ClearTable(o: Object) {
+        for (let name in o) {
+            // @ts-ignore
+            o[name] = undefined;
+        }
+    }
 }

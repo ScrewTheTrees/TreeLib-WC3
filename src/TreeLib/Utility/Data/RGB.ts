@@ -92,13 +92,28 @@ export class RGB implements IRecyclable {
     }
 
     public static textString(color: RGB, ...input: any[]) {
-        let ret = "|cFF" + string.format('%02x', color.red) + string.format('%02x', color.green) + string.format('%02x', color.blue);
+        const colorer = "|cFF" + string.format('%02x', color.red)
+            + string.format('%02x', color.green)
+            + string.format('%02x', color.blue);
+
+        let ret = colorer;
         for (let i = 0; i < input.length; i++) {
             ret += tostring(input[i]);
             if (i != input.length - 1)
                 ret += " ";
         }
+        ret = ret.replaceAll("|r", colorer);
         ret += "|r";
         return ret
+    }
+
+    public static textStringSolo(color: RGB, input: any) {
+        const colorer = "|cFF" + string.format('%02x', color.red)
+            + string.format('%02x', color.green)
+            + string.format('%02x', color.blue);
+
+        return colorer
+            + (tostring(input).replaceAll("|r", colorer)) //Re add tip color
+            + "|r"
     }
 }

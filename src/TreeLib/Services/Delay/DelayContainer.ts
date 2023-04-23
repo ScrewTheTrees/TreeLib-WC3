@@ -38,6 +38,7 @@ export class DelayContainer implements IRecyclable {
         this.delay = delay;
         this.repeats = repeats;
         this.repeatCounter = 0;
+        this.age = 0;
         return this;
     }
 }

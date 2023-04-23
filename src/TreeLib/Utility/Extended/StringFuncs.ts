@@ -6,6 +6,10 @@ export class StringFuncs {
         return (StringFuncs.blanks.indexOf(s) >= 0);
     }
 
+    public static sanitizeBattleTag(s: string) {
+        return string.gsub(s, "#%d+", "")[0];
+    }
+
     public static UnpackStringNewlines(value: string) {
         let allLines: string[] = [];
         let currentLine = "";
