@@ -83,6 +83,14 @@ export class RGB implements IRecyclable {
         return RGB.new(0, 255, 255);
     }
 
+    public static get yellow() {
+        return RGB.new(255, 255, 0);
+    }
+
+    public static get purple() {
+        return RGB.new(255, 0, 255);
+    }
+
     public static get white() {
         return RGB.new(255, 255, 255);
     }
